@@ -1,18 +1,12 @@
-/* ============================================================
-   PASTE YOUR FIREBASE WEB APP CONFIG HERE
-   Firebase console → Project settings → General → Your apps → Web app → "SDK setup and configuration" → Config
-   ============================================================ */
 window.ADLIEU_FIREBASE_CONFIG = {
-  apiKey: "PASTE_API_KEY",
-  authDomain: "your-project-id.firebaseapp.com",
-  projectId: "your-project-id",
-  storageBucket: "your-project-id.firebasestorage.app",
-  messagingSenderId: "000000000000",
-  appId: "1:000000000000:web:0000000000000000000000"
+  apiKey: "AIzaSyBZ69fFre1s1EDwiGPt1FjmPPEZd1PB_t0",
+  authDomain: "adiue-a7fb4.firebaseapp.com",
+  projectId: "adiue-a7fb4",
+  storageBucket: "adiue-a7fb4.firebasestorage.app",
+  messagingSenderId: "472700211537",
+  appId: "1:472700211537:web:e587b4970b99590ac14370"
 };
 
-/* Region where you deploy the Cloud Functions (Adlieu AI). Asia: "asia-southeast1" (Singapore). */
 window.ADLIEU_FUNCTIONS_REGION = "asia-southeast1";
 
-/* Local testing with the Firebase Emulator Suite: set to true while running "firebase emulators:start". */
 window.ADLIEU_USE_EMULATORS = location.hostname === "localhost" || location.hostname === "127.0.0.1";
