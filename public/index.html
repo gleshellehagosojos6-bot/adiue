@@ -1,0 +1,1782 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="theme-color" content="#2c3530">
+<meta name="mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+<meta name="apple-mobile-web-app-title" content="ADLIEU">
+<title>ADLIEU — A Personal AI Diary</title>
+<link rel="icon" href="icon.png">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700&family=Roboto:wght@400;500&family=Lora:ital,wght@0,400;0,500;1,400&display=swap" rel="stylesheet">
+<style>
+:root{
+  --navy:#2c3530; --navy2:#36413a; --navy3:#3f4b43;
+  --paper:#c3c1de; --paper2:#d9d7ee; --ink:#1b2440;
+  --orange:#e8935a; --pink:#f4a3b4; --rose:#e0607a; --sky:#7dbcee; --mint:#c9f2d3; --sage:#8fae86;
+  --muted:#a9b6ab; --line:rgba(178,200,176,.22);
+}
+*{box-sizing:border-box}
+html,body{margin:0;min-height:100%;background:var(--navy);color:#f0f3ee;font-family:Roboto,system-ui,sans-serif}
+body{background:
+  radial-gradient(1200px 600px at 80% -10%,rgba(170,195,160,.16),transparent 60%),
+  radial-gradient(900px 500px at -10% 110%,rgba(232,147,90,.12),transparent 60%),var(--navy);
+  background-attachment:fixed}
+#stars{position:fixed;inset:0;pointer-events:none;z-index:0}
+button,input,textarea,select{font:inherit;color:inherit}
+button{cursor:pointer}
+.hidden{display:none!important}
+h1,h2,h3{font-family:Poppins,sans-serif;margin:0}
+a{color:var(--sky)}
+
+/* layout */
+.app{position:relative;z-index:1;display:grid;grid-template-columns:230px 1fr;min-height:100vh}
+nav.side{padding:28px 18px;border-right:1px solid var(--line);display:flex;flex-direction:column;gap:6px;position:sticky;top:0;height:100vh}
+.brand{font-family:Poppins;font-weight:700;letter-spacing:.18em;color:var(--orange);font-size:28px}
+.brand-sub{font-family:Poppins;letter-spacing:.2em;font-size:10px;color:var(--mint);margin:2px 0 26px}
+.navbtn{display:flex;align-items:center;gap:10px;background:none;border:0;padding:11px 12px;border-radius:10px;text-align:left;color:#e2e8e1;font-weight:500}
+.navbtn:hover{background:rgba(255,255,255,.05)}
+.navbtn.active{background:rgba(232,147,90,.16);color:var(--orange)}
+.navbtn svg{width:18px;height:18px;flex:none}
+.side .spacer{flex:1}
+.who{font-size:13px;color:var(--muted);padding:10px 12px;border-top:1px solid var(--line)}
+.who b{color:#fff;display:block;font-weight:500}
+main{padding:34px 40px 60px;max-width:1100px;width:100%}
+.view-title{font-size:34px;font-weight:700;letter-spacing:.02em;margin-bottom:4px}
+.view-title .hl{color:var(--sky)}
+.view-sub{color:var(--muted);margin-bottom:26px}
+
+/* torn paper card */
+.paper{background:var(--paper);color:var(--ink);border-radius:6px;padding:22px 24px;position:relative;
+  box-shadow:0 10px 30px rgba(0,0,0,.35);
+  background-image:radial-gradient(rgba(255,255,255,.18) 1px,transparent 1px);background-size:5px 5px}
+.paper.torn{clip-path:polygon(0 3%,4% 0,9% 2%,15% 0,22% 3%,30% 1%,38% 3%,46% 0,55% 2%,63% 0,71% 3%,80% 1%,88% 3%,95% 0,100% 2%,99% 50%,100% 97%,94% 100%,86% 98%,78% 100%,69% 97%,60% 100%,51% 98%,42% 100%,33% 97%,24% 100%,16% 98%,8% 100%,0 97%,1% 50%);padding:30px 28px}
+.card{background:rgba(255,255,255,.04);border:1px solid var(--line);border-radius:14px;padding:18px}
+.grid2{display:grid;grid-template-columns:1fr 1fr;gap:18px}
+label.f{display:block;font-size:12px;font-weight:600;letter-spacing:.06em;text-transform:uppercase;color:#4a4f74;margin:14px 0 6px}
+.dark label.f{color:var(--muted)}
+input.t,textarea.t,select.t{width:100%;padding:10px 12px;border-radius:8px;border:1px solid rgba(27,36,64,.2);background:rgba(255,255,255,.55);color:var(--ink);outline:none}
+.dark input.t,.dark textarea.t,.dark select.t{background:rgba(255,255,255,.06);border-color:var(--line);color:#f0f3ee}
+input.t:focus,textarea.t:focus{border-color:var(--orange)}
+textarea.t{resize:vertical;font-family:Lora,serif;line-height:1.6}
+.btn{border:0;border-radius:999px;padding:10px 20px;font-weight:600;font-family:Poppins;background:var(--orange);color:var(--onacc,#2a1508)}
+.btn:hover{filter:brightness(1.07)}
+.btn.ghost{background:transparent;border:1px solid var(--line);color:#e2e8e1}
+.paper .btn.ghost{border-color:rgba(27,36,64,.3);color:var(--ink)}
+.btn.sm{padding:6px 14px;font-size:13px}
+.btn:disabled{opacity:.5;cursor:default}
+.row{display:flex;gap:10px;align-items:center;flex-wrap:wrap}
+.chip{display:inline-flex;align-items:center;gap:4px;padding:3px 10px;border-radius:999px;font-size:12px;background:rgba(178,200,176,.16);color:#d3e6d4;border:0}
+.paper .chip{background:rgba(27,36,64,.1);color:#2b3561}
+.chip.tag{background:rgba(244,163,180,.2);color:#ffd2dc}
+.paper .chip.tag{background:rgba(224,96,122,.15);color:#8c2b40}
+.chip.vis{background:rgba(201,242,211,.15);color:var(--mint)}
+.chip.on{background:var(--orange);color:var(--onacc,#2a1508)}
+.toast{position:fixed;bottom:24px;left:50%;transform:translateX(-50%);background:#1e2521;border:1px solid var(--line);padding:10px 18px;border-radius:999px;z-index:50;font-size:14px}
+.banner{background:rgba(232,147,90,.15);border:1px solid rgba(232,147,90,.4);color:#ffd9bf;padding:10px 14px;border-radius:10px;font-size:13px;margin-bottom:18px}
+
+/* gate */
+.gate{position:relative;z-index:2;min-height:100vh;display:flex;align-items:center;justify-content:center;padding:30px}
+.gate .paper{max-width:520px;width:100%}
+.gate .brand{font-size:56px;text-align:center}
+.gate .brand-sub{text-align:center;font-size:13px;color:#2f7a52;margin-bottom:8px}
+.gate #regForm{margin-top:4px}
+.tabs{display:flex;background:rgba(27,36,64,.12);border-radius:999px;padding:4px;margin-bottom:6px}
+.tabs button{flex:1;border:0;background:none;padding:9px;border-radius:999px;font-family:Poppins;font-weight:600;color:#4a4f74}
+.tabs button.on{background:var(--navy);color:var(--orange)}
+.pw{position:relative}.pw .eye{position:absolute;right:6px;top:50%;transform:translateY(-50%);border:0;background:none;color:#4a4f74;font-size:12px;font-weight:600}
+.check{display:flex;gap:8px;align-items:center;font-size:14px;margin-top:12px}
+.err{color:#a02b45;min-height:20px;margin:10px 0 4px;font-size:14px}
+.btn.wide{width:100%;padding:12px}
+.switch{text-align:center;font-size:14px;margin:14px 0 0}.switch a{color:#9a4a1c;font-weight:600}
+.meter{height:5px;background:rgba(27,36,64,.12);border-radius:3px;margin-top:8px;overflow:hidden}.meter i{display:block;height:100%;width:0;transition:.2s}
+.logout{margin-top:8px;background:none;border:1px solid var(--line);color:#e2e8e1;border-radius:999px;padding:5px 12px;font-size:12px}
+
+/* today */
+.quick{display:flex;gap:10px}
+.quick input{flex:1}
+.notes{display:flex;flex-direction:column;gap:8px;margin-top:14px}
+.note{display:flex;gap:10px;align-items:flex-start;background:rgba(255,255,255,.04);border-left:3px solid var(--pink);padding:9px 12px;border-radius:6px}
+.note time{color:var(--muted);font-size:12px;white-space:nowrap;padding-top:2px}
+.note p{margin:0;flex:1;font-family:Lora,serif}
+.x{background:none;border:0;color:var(--muted);font-size:16px;line-height:1;padding:2px 4px}
+.x:hover{color:var(--rose)}
+.moods{display:flex;gap:6px}
+.moods button{background:rgba(255,255,255,.4);border:2px solid transparent;border-radius:10px;font-size:20px;padding:4px 8px}
+.moods button.on{border-color:var(--rose);background:#fff}
+.photos{display:flex;gap:8px;flex-wrap:wrap;margin-top:8px}
+.photos .ph{position:relative}
+.photos img{width:92px;height:92px;object-fit:cover;border-radius:6px;border:3px solid #fff;box-shadow:0 3px 8px rgba(0,0,0,.25)}
+.photos .ph .x{position:absolute;top:-6px;right:-6px;background:#fff;border-radius:50%;width:20px;height:20px;color:var(--rose)}
+.drop{border:2px dashed rgba(27,36,64,.25);border-radius:8px;padding:12px;text-align:center;font-size:13px;color:#4a4f74;cursor:pointer}
+
+/* journal */
+.filters{display:flex;gap:10px;flex-wrap:wrap;margin-bottom:18px;align-items:center}
+.filters input{flex:1;min-width:220px}
+.entries{display:grid;grid-template-columns:repeat(auto-fill,minmax(300px,1fr));gap:18px}
+.ecard{cursor:pointer;transition:transform .15s}
+.ecard:hover{transform:translateY(-3px) rotate(-.3deg)}
+.ecard h3{font-size:18px;margin:4px 0 6px}
+.ecard .meta{font-size:12px;color:#4a4f74}
+.ecard p{font-family:Lora,serif;font-size:14px;line-height:1.55;margin:8px 0;display:-webkit-box;-webkit-line-clamp:4;-webkit-box-orient:vertical;overflow:hidden}
+.ecard .thumb{width:100%;height:140px;object-fit:cover;border-radius:4px;margin-top:6px}
+.empty{color:var(--muted);text-align:center;padding:50px 20px;border:1px dashed var(--line);border-radius:14px}
+
+/* modal */
+.modal{position:fixed;inset:0;background:rgba(15,20,17,.75);z-index:40;display:flex;align-items:flex-start;justify-content:center;overflow:auto;padding:40px 16px}
+.modal .paper{max-width:720px;width:100%}
+.entry-body{font-family:Lora,serif;font-size:16px;line-height:1.75;white-space:pre-wrap;margin:16px 0}
+.summary{background:rgba(255,255,255,.45);border-left:4px solid var(--orange);padding:12px 14px;border-radius:6px;font-size:14px;line-height:1.6;white-space:pre-wrap}
+
+/* constellation */
+.sky{position:relative;border-radius:16px;overflow:hidden;border:1px solid var(--line);background:radial-gradient(ellipse at center,#435248 0%,#28312c 55%,#1b221e 100%);height:620px}
+.sky svg{width:100%;height:100%;display:block;cursor:grab}
+.sky .legend{position:absolute;left:14px;bottom:12px;font-size:12px;color:var(--muted);display:flex;gap:14px;flex-wrap:wrap}
+.sky .legend i{display:inline-block;width:10px;height:10px;border-radius:50%;margin-right:5px;vertical-align:-1px}
+.tip{position:absolute;pointer-events:none;background:#1e2521ee;border:1px solid var(--line);padding:8px 10px;border-radius:8px;font-size:13px;max-width:240px}
+.clusters{display:flex;flex-wrap:wrap;gap:8px;margin-top:14px}
+
+/* ---- v7 polish ---- */
+.view{animation:rise .35s ease both}
+@keyframes rise{from{opacity:0;transform:translateY(10px)}to{opacity:1;transform:none}}
+.shoot{position:fixed;top:12%;left:-10%;width:140px;height:2px;background:linear-gradient(90deg,transparent,#fff);opacity:0;z-index:0;pointer-events:none;transform:rotate(-18deg);animation:shoot 9s ease-in 3s infinite}
+@keyframes shoot{0%{opacity:0;left:-10%;top:10%}3%{opacity:.9}10%{opacity:0;left:70%;top:34%}100%{opacity:0;left:70%;top:34%}}
+.hearts{position:absolute;inset:0;pointer-events:none;overflow:hidden;z-index:-1}
+.hearts i{position:absolute;bottom:-30px;color:var(--pink);font-style:normal;animation:float 14s linear infinite;opacity:.0}
+@keyframes float{0%{transform:translateY(0) rotate(0);opacity:0}10%{opacity:.75}100%{transform:translateY(-110vh) rotate(25deg);opacity:0}}
+.paper.ecard::before,.paper.tape::before{content:"";position:absolute;top:-9px;left:50%;width:84px;height:20px;transform:translateX(-50%) rotate(-3deg);background:rgba(244,163,180,.55);box-shadow:0 1px 3px rgba(0,0,0,.15)}
+.paper.ecard:nth-child(3n+2)::before{background:rgba(125,188,238,.5);transform:translateX(-50%) rotate(2deg)}
+.paper.ecard:nth-child(3n)::before{background:rgba(201,242,211,.6);transform:translateX(-50%) rotate(-1deg)}
+.stats{display:grid;grid-template-columns:repeat(4,1fr);gap:14px;margin-bottom:18px}
+.stat{background:linear-gradient(160deg,rgba(255,255,255,.07),rgba(255,255,255,.02));border:1px solid var(--line);border-radius:14px;padding:14px 16px;position:relative;overflow:hidden}
+.stat .k{font-size:12px;color:var(--muted);letter-spacing:.06em;text-transform:uppercase}
+.stat .v{font-family:Poppins;font-weight:700;font-size:28px;margin-top:2px}
+.stat .v small{font-size:13px;font-weight:500;color:var(--muted);margin-left:4px}
+.stat.glow{box-shadow:0 0 0 1px rgba(232,147,90,.35),0 0 24px rgba(232,147,90,.15)}
+.week{display:flex;gap:4px;margin-top:6px}
+.week span{flex:1;text-align:center;font-size:18px;line-height:1}
+.week em{display:block;font-style:normal;font-size:10px;color:var(--muted);margin-top:4px}
+.week .none{opacity:.25;font-size:12px;line-height:18px}
+.inspo{display:grid;grid-template-columns:1fr 1fr;gap:14px;margin-bottom:18px}
+.inspo .card h4{margin:0 0 6px;font-family:Poppins;font-size:12px;letter-spacing:.08em;text-transform:uppercase;color:var(--orange)}
+.inspo .card p{margin:0 0 10px;font-family:Lora,serif;font-size:16px;line-height:1.5}
+.throw{cursor:pointer}
+.throw .when{font-size:12px;color:var(--muted)}
+.mic{border:1px solid rgba(27,36,64,.25);background:rgba(255,255,255,.5);border-radius:999px;padding:5px 12px;font-size:13px;color:var(--ink);display:inline-flex;gap:6px;align-items:center}
+.mic.on{background:var(--rose);color:#fff;border-color:var(--rose);animation:pulse 1.2s infinite}
+.dark .mic{background:rgba(255,255,255,.06);border-color:var(--line);color:#e2e8e1}
+@keyframes pulse{50%{box-shadow:0 0 0 6px rgba(224,96,122,.2)}}
+.partial{font-size:13px;color:#4a4f74;font-style:italic;min-height:18px;margin-top:4px}
+.lab-row{display:flex;justify-content:space-between;align-items:flex-end}
+.seg{display:inline-flex;background:rgba(255,255,255,.05);border:1px solid var(--line);border-radius:999px;padding:3px}
+.seg button{border:0;background:none;padding:7px 14px;border-radius:999px;font-size:13px;font-weight:600;color:#d8e2d8}
+.seg button.on{background:var(--orange);color:var(--onacc,#2a1508)}
+.cal{background:rgba(255,255,255,.03);border:1px solid var(--line);border-radius:16px;padding:16px}
+.cal-head{display:flex;justify-content:space-between;align-items:center;margin-bottom:12px}
+.cal-head h3{font-size:18px}
+.cal-grid{display:grid;grid-template-columns:repeat(7,minmax(0,1fr));gap:6px}
+.cal-grid .dow{font-size:11px;color:var(--muted);text-align:center;letter-spacing:.06em}
+.cal-grid .d{height:64px;border-radius:10px;background:rgba(255,255,255,.04);border:1px solid transparent;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:2px;cursor:pointer;color:#e2e8e1;font-size:12px;padding:2px}
+.cal-grid .d b{font-weight:500;font-size:11px;color:var(--muted)}
+.cal-grid .d .m{font-size:20px;line-height:1}
+.cal-grid .d.has{background:rgba(232,147,90,.12)}
+.cal-grid .d.today{border-color:var(--orange)}
+.cal-grid .d.pad{visibility:hidden}
+.cal-grid .d .dots{font-size:9px;color:var(--pink);letter-spacing:1px}
+.star{position:absolute;top:10px;right:12px;background:none;border:0;font-size:18px;line-height:1;opacity:.35;filter:grayscale(1)}
+.star.on{opacity:1;filter:none}
+.sealed{background:repeating-linear-gradient(45deg,rgba(27,36,64,.06) 0 8px,transparent 8px 16px);border-radius:6px;padding:16px;text-align:center;font-family:Lora,serif;color:#3b4270;margin:8px 0}
+.about-hero{text-align:center;padding:34px 26px}
+.about-hero .brand{font-size:54px}
+.about-hero p{font-family:Lora,serif;font-size:18px;max-width:620px;margin:10px auto 0;line-height:1.6}
+.pillars{display:grid;grid-template-columns:repeat(4,1fr);gap:14px}
+.pillars .card h4{margin:6px 0 4px;font-family:Poppins;font-size:15px}
+.pillars .card p{margin:0;font-size:13px;color:#cbd6cc;line-height:1.5}
+.pillars .ic{font-size:26px}
+.mv{display:grid;grid-template-columns:1fr 1fr;gap:18px}
+.mv h3{font-size:14px;letter-spacing:.12em;text-transform:uppercase;color:#9a4a1c;margin-bottom:6px}
+.mv p{font-family:Lora,serif;font-size:16px;line-height:1.65;margin:0}
+.road{position:relative;margin-left:10px;border-left:2px dashed var(--line);padding-left:22px}
+.road .ph{position:relative;margin-bottom:22px}
+.road .ph::before{content:"";position:absolute;left:-31px;top:4px;width:16px;height:16px;border-radius:50%;background:var(--navy);border:3px solid var(--muted)}
+.road .ph.done::before{background:var(--mint);border-color:var(--mint)}
+.road .ph.now::before{background:var(--orange);border-color:var(--orange);box-shadow:0 0 12px var(--orange)}
+.road .ph h4{margin:0;font-family:Poppins;font-size:16px}
+.road .ph .tagline{font-size:12px;color:var(--muted);margin:2px 0 8px;letter-spacing:.05em;text-transform:uppercase}
+.road ul{margin:0;padding-left:18px;color:#dbe3da;font-size:14px;line-height:1.7}
+.team{display:grid;grid-template-columns:repeat(5,1fr);gap:12px}
+.team .m{text-align:center;padding:16px 10px}
+.team .av{width:54px;height:54px;border-radius:50%;margin:0 auto 8px;display:flex;align-items:center;justify-content:center;font-family:Poppins;font-weight:700;font-size:18px;color:#2a1508}
+.team .m b{display:block;font-size:13px;line-height:1.3}
+.team .m span{font-size:12px;color:var(--orange)}
+.sec-h{font-size:20px;margin:34px 0 14px}
+.sec-h .hl{color:var(--sky)}
+.mtop .ib{background:none;border:1px solid var(--line);color:#e2e8e1;border-radius:999px;width:32px;height:30px;font-size:14px}
+
+/* ---- v10 Today ---- */
+.affirm{display:inline-flex;gap:8px;align-items:center;font-family:Lora,serif;font-style:italic;color:var(--mint);background:rgba(201,242,211,.07);border:1px solid rgba(201,242,211,.18);border-radius:999px;padding:6px 14px;margin:-12px 0 20px;font-size:14px}
+.checkin{display:grid;grid-template-columns:1fr 1fr;gap:14px;margin-bottom:18px}
+.checkin .card h4{margin:0 0 4px;font-family:Poppins;font-size:12px;letter-spacing:.08em;text-transform:uppercase;color:var(--orange)}
+.checkin .card .sub{font-size:13px;color:var(--muted);margin-bottom:10px}
+.cmoods{display:flex;gap:6px;flex-wrap:wrap}
+.cmoods button{background:rgba(255,255,255,.06);border:1px solid var(--line);border-radius:12px;font-size:22px;padding:5px 9px;transition:transform .12s}
+.cmoods button:hover{transform:scale(1.15)}
+.cmoods button.on{border-color:var(--orange);background:rgba(232,147,90,.18)}
+.cnote{display:flex;gap:8px;margin-top:10px}.cnote input{flex:1}
+.grat{display:flex;flex-direction:column;gap:7px}
+.grat .gi{display:flex;gap:8px;align-items:center}
+.grat .gi b{color:var(--pink);font-family:Poppins;width:16px}
+.grat input{flex:1}
+.gdone{font-family:Lora,serif;font-size:15px;line-height:1.7}
+.gdone div::before{content:"✓ ";color:var(--mint)}
+.tl{position:relative;border-left:2px solid var(--line);margin-left:6px;padding-left:14px;display:flex;flex-direction:column;gap:10px;margin-top:14px}
+.tl .it{position:relative;cursor:default}
+.tl .it::before{content:"";position:absolute;left:-20px;top:7px;width:10px;height:10px;border-radius:50%;background:var(--pink);box-shadow:0 0 0 3px var(--navy)}
+.tl .it.entry::before{background:var(--orange)}
+.tl .it.mood::before{background:var(--mint)}
+.tl .it time{font-size:11.5px;color:var(--muted)}
+.tl .it p{margin:2px 0 0;font-family:Lora,serif;font-size:15px}
+.tl .it.entry p{cursor:pointer}
+.tl .it .x{position:absolute;right:0;top:0}
+
+/* ---- v10 Journal insights ---- */
+.ins-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:12px;margin-bottom:16px}
+.ins-row{display:grid;grid-template-columns:1.2fr 1fr;gap:14px;margin-bottom:14px}
+.ins h4{margin:0 0 10px;font-family:Poppins;font-size:12px;letter-spacing:.08em;text-transform:uppercase;color:var(--orange)}
+.bar{display:flex;align-items:center;gap:10px;margin:6px 0;font-size:13px}
+.bar .e{width:26px;font-size:18px;text-align:center}
+.bar .tr{flex:1;height:10px;background:rgba(255,255,255,.06);border-radius:6px;overflow:hidden}
+.bar .tr i{display:block;height:100%;border-radius:6px;background:linear-gradient(90deg,var(--orange),var(--pink))}
+.bar .n{width:30px;text-align:right;color:var(--muted)}
+.heat{display:grid;grid-template-rows:repeat(7,1fr);grid-auto-flow:column;gap:3px;justify-content:start}
+.heat i{width:13px;height:13px;border-radius:3px;background:rgba(255,255,255,.06)}
+.heat i.l1{background:rgba(232,147,90,.35)}.heat i.l2{background:rgba(232,147,90,.6)}.heat i.l3{background:rgba(232,147,90,.85)}.heat i.l4{background:var(--orange);box-shadow:0 0 6px rgba(232,147,90,.6)}
+.heat i.today{outline:1.5px solid #fff}
+.toplist{display:flex;flex-direction:column;gap:6px;font-size:14px}
+.toplist div{display:flex;justify-content:space-between;border-bottom:1px dashed var(--line);padding-bottom:5px}
+.toplist span{color:var(--muted)}
+.wk{display:flex;gap:6px;align-items:flex-end;height:90px}
+.wk div{flex:1;display:flex;flex-direction:column;align-items:center;gap:4px;font-size:11px;color:var(--muted)}
+.wk div i{width:100%;border-radius:6px 6px 2px 2px;background:linear-gradient(180deg,var(--pink),rgba(244,163,180,.35));min-height:3px}
+.wk div.best{color:var(--orange);font-weight:600}
+.copybox{width:100%;height:260px;font-family:ui-monospace,monospace;font-size:12px}
+
+/* ---- v10 Constellation ---- */
+.skyctl{position:absolute;right:12px;top:12px;display:flex;flex-direction:column;gap:6px;z-index:2}
+.skyctl button{width:34px;height:34px;border-radius:10px;border:1px solid var(--line);background:rgba(30,37,33,.85);color:#e2e8e1;font-size:17px;line-height:1}
+.skyctl button:hover{background:rgba(232,147,90,.25)}
+.sky svg.panning{cursor:grabbing}
+.sky .mem .core{animation:tw 3.2s ease-in-out infinite}
+@keyframes tw{0%,100%{opacity:1}50%{opacity:.45}}
+.sky .dim{opacity:.12;transition:opacity .2s}
+.sky .hit .core{fill:#ffd36e}
+.sky line.hl{stroke-opacity:.95!important;stroke-width:2}
+.sky .hubg.sel circle{stroke:#fff;stroke-width:2}
+.sky-tools{display:flex;gap:10px;flex-wrap:wrap;margin-bottom:14px}
+.sky-tools input{flex:1;min-width:200px}
+.cgrid{display:grid;grid-template-columns:1.3fr 1fr;gap:14px;margin-top:16px}
+.ccard h3{font-size:18px;margin-bottom:2px}
+.ccard .mlist{display:flex;flex-direction:column;gap:6px;margin-top:10px;max-height:260px;overflow:auto}
+.ccard .mlist button{text-align:left;background:rgba(255,255,255,.04);border:1px solid var(--line);border-radius:10px;padding:8px 12px;color:#e2e8e1;font-size:14px}
+.ccard .mlist button small{color:var(--muted);display:block;font-size:11.5px}
+.ccard .mlist button:hover{border-color:var(--orange)}
+.pairs div{display:flex;justify-content:space-between;align-items:center;padding:7px 0;border-bottom:1px dashed var(--line);font-size:14px}
+.pairs span{color:var(--muted);font-size:12px}
+
+/* ---- v10 Adlieu AI ---- */
+.wcats{display:flex;gap:4px;padding:8px 12px 0;overflow-x:auto;scrollbar-width:none}
+.wcats::-webkit-scrollbar{display:none}
+.wcats button{flex:none;border:0;background:none;color:#a9b6ab;font-size:12px;font-weight:600;padding:5px 10px;border-radius:999px}
+.wcats button.on{background:rgba(139,124,246,.2);color:#fff}
+.macts{display:flex;gap:4px;margin-top:6px;flex-wrap:wrap}
+.macts button{border:0;background:rgba(255,255,255,.06);color:#cfd8cf;font-size:11.5px;border-radius:999px;padding:3px 9px}
+.macts button:hover{background:rgba(139,124,246,.25);color:#fff}
+
+/* ---- v10 Profile ---- */
+.phero{display:flex;gap:20px;align-items:center;margin-bottom:20px;flex-wrap:wrap}
+.avatar{width:96px;height:96px;border-radius:50%;flex:none;position:relative;background:linear-gradient(135deg,var(--orange),var(--pink));display:flex;align-items:center;justify-content:center;font-family:Poppins;font-weight:700;font-size:34px;color:#2a1508;overflow:hidden;box-shadow:0 0 0 4px rgba(255,255,255,.08),0 0 0 6px var(--orange)}
+.avatar img{width:100%;height:100%;object-fit:cover}
+.avatar.sm{width:38px;height:38px;font-size:14px;box-shadow:0 0 0 2px var(--orange)}
+.avwrap{position:relative}
+.avwrap label{position:absolute;right:-4px;bottom:-4px;background:var(--navy);border:1px solid var(--line);border-radius:50%;width:32px;height:32px;display:flex;align-items:center;justify-content:center;cursor:pointer;font-size:15px}
+.phero h2{font-size:26px}
+.phero .meta{color:var(--muted);font-size:14px;margin-top:2px}
+.level{display:inline-flex;gap:6px;align-items:center;margin-top:8px;background:rgba(232,147,90,.15);color:var(--orange);border:1px solid rgba(232,147,90,.35);border-radius:999px;padding:4px 12px;font-size:13px;font-weight:600}
+.pstats{display:grid;grid-template-columns:repeat(4,1fr);gap:12px;margin-bottom:20px}
+.bdgs{display:grid;grid-template-columns:repeat(4,1fr);gap:12px}
+.bdg{border:1px solid var(--line);border-radius:14px;padding:14px;text-align:center;background:rgba(255,255,255,.03);position:relative}
+.bdg .ic{font-size:30px;line-height:1}
+.bdg b{display:block;font-family:Poppins;font-size:13.5px;margin-top:6px}
+.bdg small{display:block;color:var(--muted);font-size:11.5px;margin-top:2px;min-height:28px}
+.bdg .pb{height:5px;background:rgba(255,255,255,.08);border-radius:3px;margin-top:8px;overflow:hidden}.bdg .pb i{display:block;height:100%;background:var(--orange)}
+.bdg.locked .ic{filter:grayscale(1);opacity:.35}
+.bdg.got{border-color:rgba(232,147,90,.5);background:linear-gradient(160deg,rgba(232,147,90,.14),rgba(255,255,255,.02))}
+.bdg.got::after{content:"✓";position:absolute;top:8px;right:10px;color:var(--mint);font-weight:700}
+.swatches{display:flex;gap:10px;flex-wrap:wrap}
+.swatches button{width:38px;height:38px;border-radius:50%;border:3px solid transparent;box-shadow:0 0 0 1px var(--line)}
+.swatches button.on{border-color:#fff}
+.psec{max-width:900px;margin-top:26px}
+.psec>h2{font-size:19px;margin-bottom:12px}
+.psec>h2 .hl{color:var(--sky)}
+.danger{border:1px solid rgba(224,96,122,.4);background:rgba(224,96,122,.06)}
+body.big-text .entry-body{font-size:19px}
+body.big-text .ecard p,body.big-text .tl .it p,body.big-text .note p{font-size:16.5px}
+body.big-text .msg{font-size:16.5px}
+
+/* ---- v11 entry composer ---- */
+.ecomp{container-type:inline-size;padding:24px 24px 20px}
+.ehead{display:flex;gap:12px;align-items:center;margin-bottom:14px}
+.eicon{width:44px;height:44px;flex:none;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:22px;background:#fff8;box-shadow:0 0 0 2px var(--orange)}
+.ehead h3{font-size:19px}
+.esub{font-size:13px;color:#4a4f74}
+.edraft{font-size:11.5px;color:#3d7a55;white-space:nowrap}
+.etitle{width:100%;border:0;border-bottom:2px dashed rgba(27,36,64,.22);background:transparent;font-family:Lora,serif;font-size:23px;color:var(--ink);padding:8px 2px;outline:none}
+.etitle:focus{border-bottom-color:var(--orange)}
+.etitle::placeholder{color:#7a7fa3}
+.edate{display:inline-flex;align-items:center;gap:6px;margin-top:10px;background:rgba(255,255,255,.55);border-radius:999px;padding:3px 6px 3px 12px;font-size:13px}
+.edate input{border:0;background:transparent;color:var(--ink);font-size:13px;outline:none}
+.sec-lab{display:flex;justify-content:space-between;align-items:center;margin:20px 0 8px;font-size:12px;font-weight:600;letter-spacing:.08em;text-transform:uppercase;color:#4a4f74}
+.sec-lab b{text-transform:none;letter-spacing:0;font-size:13px;color:var(--ink);font-weight:600}
+.ecomp .moods{flex-wrap:wrap;gap:6px}
+.ecomp .moods button{font-size:22px;width:44px;height:44px;padding:0;display:flex;align-items:center;justify-content:center;transition:transform .12s}
+.ecomp .moods button:hover{transform:translateY(-2px) scale(1.08)}
+.ecomp .moods button.on{border-color:var(--orange);background:#fff;transform:scale(1.1);box-shadow:0 4px 12px rgba(0,0,0,.12)}
+.estory{width:100%;resize:vertical;min-height:230px;border:1px solid rgba(27,36,64,.15);border-radius:12px;outline:none;color:var(--ink);
+  font-family:Lora,serif;font-size:16.5px;line-height:32px;padding:6px 16px;
+  background:#fffaf3 repeating-linear-gradient(180deg,transparent 0 31px,rgba(122,140,190,.25) 31px 32px);background-attachment:local;
+  box-shadow:inset 3px 0 0 rgba(224,96,122,.35)}
+.estory:focus{border-color:var(--orange)}
+.ebar{display:flex;justify-content:space-between;align-items:center;gap:10px;margin-top:4px}
+.ebar #wc{font-size:12px;color:#4a4f74;white-space:nowrap}
+.ebar .partial{margin:0;flex:1}
+.efields{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+.efields .wide{grid-column:1/-1}
+.ef{display:flex;align-items:center;gap:8px;background:rgba(255,255,255,.6);border:1px solid rgba(27,36,64,.14);border-radius:12px;padding:0 12px;min-width:0}
+.ef:focus-within{border-color:var(--orange);background:#fff}
+.ef span{font-size:16px}
+.ef input{flex:1;min-width:0;border:0;background:transparent;padding:12px 0;color:var(--ink);outline:none;font-size:15px}
+.tagsug{display:flex;gap:6px;flex-wrap:wrap;margin-top:-2px}
+.tagsug:empty{display:none}
+.tagsug button{border:1px dashed rgba(140,43,64,.4);background:transparent;color:#8c2b40;border-radius:999px;padding:3px 10px;font-size:12px}
+.tagsug button:hover{background:rgba(224,96,122,.12)}
+.vis{display:flex;gap:8px;flex-wrap:wrap}
+.vis label{flex:1;min-width:110px}
+.vis input{position:absolute;opacity:0;pointer-events:none}
+.vis span{display:block;text-align:center;padding:10px 12px;border-radius:12px;border:1px solid rgba(27,36,64,.18);background:rgba(255,255,255,.45);font-size:14px;font-weight:500;cursor:pointer;transition:.15s}
+.vis input:checked+span{background:var(--orange);color:var(--onacc,#2a1508);border-color:var(--orange);box-shadow:0 4px 12px rgba(0,0,0,.12)}
+.vis input:focus-visible+span{outline:2px solid var(--ink)}
+.capsule{margin-top:16px;background:rgba(255,255,255,.4);border:1px dashed rgba(27,36,64,.2);border-radius:12px;padding:12px 14px}
+.sw{display:flex;align-items:center;gap:10px;cursor:pointer;font-size:14.5px;font-weight:500}
+.sw input{position:absolute;opacity:0}
+.sw i{width:40px;height:22px;border-radius:999px;background:rgba(27,36,64,.25);position:relative;flex:none;transition:.2s}
+.sw i::after{content:"";position:absolute;top:3px;left:3px;width:16px;height:16px;border-radius:50%;background:#fff;transition:.2s}
+.sw input:checked+i{background:var(--orange)}
+.sw input:checked+i::after{left:21px}
+.sealwrap{display:flex;align-items:center;gap:10px;margin-top:10px;font-size:14px}
+.sealwrap input{max-width:200px}
+.ecomp .drop{display:flex;flex-direction:column;align-items:center;gap:2px;padding:18px;border-radius:12px;background:rgba(255,255,255,.35)}
+.ecomp .drop:hover{border-color:var(--orange);background:rgba(255,255,255,.6)}
+.ecomp .drop small{color:#4a4f74;font-size:12px}
+.efoot{display:flex;justify-content:space-between;align-items:center;margin-top:20px;padding-top:16px;border-top:1px dashed rgba(27,36,64,.2)}
+.efoot .btn:not(.ghost){padding:12px 26px;font-size:15px}
+.ecomp.editing{box-shadow:0 0 0 3px var(--orange),0 10px 30px rgba(0,0,0,.35)}
+@container (max-width:520px){
+  .efields{grid-template-columns:1fr}
+  .ecomp .moods{display:grid;grid-template-columns:repeat(9,1fr);gap:4px}
+  .ecomp .moods button{width:auto;height:auto;aspect-ratio:1/1;font-size:clamp(16px,5.2cqi,21px)}
+  .ehead{flex-wrap:wrap}
+  .edraft{order:3;width:100%;padding-left:56px;margin-top:-6px}
+  .etitle{font-size:20px}
+  .vis label{min-width:0}
+  .vis span{padding:9px 6px;font-size:13px}
+}
+
+/* assistant */
+.chat{display:flex;flex-direction:column;gap:14px;min-height:320px;max-height:60vh;overflow:auto;padding:4px 4px 10px}
+.msg{max-width:85%;padding:12px 16px;border-radius:14px;line-height:1.6;white-space:pre-wrap;font-size:15px}
+.msg.u{align-self:flex-end;background:var(--violet);color:#fff;border-radius:18px 18px 4px 18px}
+.msg.a{align-self:flex-start;background:#313b35;color:#eceaf7;border:1px solid rgba(255,255,255,.07);border-radius:18px 18px 18px 4px}
+.msg.a .cite{display:inline-flex;margin:0 2px;padding:1px 8px;border-radius:999px;background:var(--orange);color:#2a1508;font-size:12px;font-weight:600;border:0;vertical-align:1px}
+.msg .tools{font-size:11.5px;color:#9d98c4;margin-top:6px;font-style:italic}
+.typing{display:inline-flex;gap:4px;padding:4px 2px}.typing i{width:7px;height:7px;border-radius:50%;background:#b7b0ea;animation:bob 1.2s infinite}.typing i:nth-child(2){animation-delay:.15s}.typing i:nth-child(3){animation-delay:.3s}
+@keyframes bob{0%,60%,100%{transform:none;opacity:.5}30%{transform:translateY(-5px);opacity:1}}
+
+/* ---- Adlieu AI floating chat ---- */
+:root{--violet:#8b7cf6;--violet2:#a99cff;--wbg:#242c27}
+.fab{position:fixed;right:36px;bottom:32px;z-index:35;width:66px;height:66px;border-radius:50%;border:0;padding:0;background:none;cursor:pointer;filter:drop-shadow(0 8px 22px rgba(122,12,27,.45));transition:transform .2s}
+.fab{touch-action:none;user-select:none;-webkit-user-select:none;cursor:grab;transition:transform .2s,filter .2s}
+.fab:hover{transform:scale(1.08)}
+.fab.snapping{transition:left .3s cubic-bezier(.3,1.4,.5,1),top .3s ease,transform .2s}
+.fab.dragging{cursor:grabbing;transform:scale(1.15);filter:drop-shadow(0 14px 30px rgba(139,124,246,.75));transition:filter .2s}
+.fab.dragging .orb{animation-play-state:paused}
+.fab .orb{animation:bob 3.4s ease-in-out infinite}
+@keyframes bob{0%,100%{transform:translateY(0) rotate(0)}25%{transform:translateY(-6px) rotate(-4deg)}50%{transform:translateY(-2px) rotate(0)}75%{transform:translateY(-7px) rotate(4deg)}}
+.orb svg path{transform-box:fill-box;transform-origin:center}
+.orb .s1{animation:twinkle 2.6s ease-in-out infinite}
+.orb .s2{animation:twirl 4s linear infinite}
+.orb .s3{animation:beat 1.6s ease-in-out infinite}
+@keyframes twinkle{0%,100%{transform:scale(1) rotate(0);opacity:1}40%{transform:scale(.78) rotate(20deg);opacity:.8}55%{transform:scale(1.12) rotate(45deg);opacity:1}}
+@keyframes twirl{0%{transform:rotate(0) scale(1)}50%{transform:rotate(180deg) scale(1.35)}100%{transform:rotate(360deg) scale(1)}}
+@keyframes beat{0%,100%{transform:scale(1)}15%{transform:scale(1.22)}30%{transform:scale(.95)}45%{transform:scale(1.12)}}
+.fab .orb .dot{animation:online 2s ease-out infinite}
+@keyframes online{0%{box-shadow:0 0 0 0 rgba(58,210,122,.7)}70%{box-shadow:0 0 0 8px rgba(58,210,122,0)}100%{box-shadow:0 0 0 0 rgba(58,210,122,0)}}
+.fab::after{content:"";position:absolute;inset:-6px;border-radius:50%;border:2px solid rgba(217,165,91,.6);animation:ring 2.8s ease-out infinite;pointer-events:none}
+@keyframes ring{0%{transform:scale(.85);opacity:.9}100%{transform:scale(1.35);opacity:0}}
+.fabtip{position:fixed;z-index:37;background:#313b35;color:#ecebfb;border:1px solid rgba(169,156,255,.35);font-size:12.5px;padding:7px 12px;border-radius:999px;white-space:nowrap;pointer-events:none;animation:pop .25s ease both;box-shadow:0 6px 18px rgba(0,0,0,.4)}
+@media (prefers-reduced-motion:reduce){.fab .orb,.orb svg path,.fab::after,.fab .orb .dot{animation:none!important}}
+.fab.hidden{display:none}
+.orb{position:relative;width:100%;height:100%;border-radius:50%;display:block}
+.orb::before{content:"";position:absolute;inset:0;border-radius:50%;background:conic-gradient(from 0deg,#7a0c1b,#c9923f,#f6dfa6,#c9923f,#7a0c1b,#b5333f,#7a0c1b);animation:spin 6s linear infinite}
+.orb::after{content:"";position:absolute;inset:3px;border-radius:50%;background:radial-gradient(circle at 35% 30%,#fffdf8,#f3e9d8 75%)}
+.orb .logo{position:absolute;inset:11%;z-index:1;background:url(data:image/webp;base64,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) center/contain no-repeat;border-radius:50%}
+.fab .orb .logo{animation:glint 4s ease-in-out infinite}
+@keyframes glint{0%,100%{transform:scale(1) rotate(0)}45%{transform:scale(1.06) rotate(-3deg)}60%{transform:scale(1) rotate(2deg)}}
+.fab .orb .shine{position:absolute;inset:3px;border-radius:50%;z-index:2;overflow:hidden;pointer-events:none}
+.fab .orb .shine::before{content:"";position:absolute;top:-20%;left:-60%;width:40%;height:140%;background:linear-gradient(90deg,transparent,rgba(255,255,255,.75),transparent);transform:rotate(25deg);animation:shine 4.5s ease-in-out infinite}
+@keyframes shine{0%,55%{left:-60%}80%,100%{left:130%}}
+.orb svg{position:absolute;inset:0;margin:auto;width:56%;height:56%;z-index:1}
+.orb .dot{position:absolute;right:1px;bottom:3px;width:25%;height:25%;min-width:9px;min-height:9px;border-radius:50%;background:#3ad27a;border:2.5px solid #1c231f;z-index:2}
+@keyframes spin{to{transform:rotate(360deg)}}
+.fab .bdg{position:absolute;top:-2px;right:-2px;z-index:3;background:var(--rose);color:#fff;font-size:11px;font-weight:700;border-radius:999px;min-width:20px;height:20px;line-height:20px;text-align:center;padding:0 5px;border:2px solid var(--navy)}
+.wchat{position:fixed;right:24px;bottom:104px;z-index:36;width:390px;height:580px;max-height:calc(100vh - 130px);background:var(--wbg);border:1px solid rgba(169,156,255,.22);border-radius:20px;box-shadow:0 24px 60px rgba(0,0,0,.55);display:flex;flex-direction:column;overflow:hidden;transform-origin:bottom right;animation:pop .22s ease both}
+.wchat.hidden{display:none}
+.wchat.big{width:min(760px,calc(100vw - 48px));height:calc(100vh - 130px)}
+@keyframes pop{from{opacity:0;transform:scale(.85) translateY(20px)}to{opacity:1;transform:none}}
+.whead{display:flex;align-items:center;gap:12px;padding:14px 14px 12px 16px;border-bottom:1px solid rgba(255,255,255,.07);background:linear-gradient(180deg,rgba(139,124,246,.12),transparent)}
+.whead .orb{width:42px;height:42px;flex:none}
+.whead .orb::before{animation:none}
+.whead .nm{flex:1;min-width:0}
+.whead .nm b{display:block;font-family:Poppins;font-size:16px;color:#fff}
+.whead .nm span{font-size:12px;color:#3ad27a}
+.whead .nm span.speaking{color:var(--violet2)}
+.wbtn{background:none;border:0;color:#cfcbe9;width:34px;height:34px;border-radius:10px;display:flex;align-items:center;justify-content:center}
+.wbtn:hover{background:rgba(255,255,255,.07)}
+.wbtn.on{color:var(--violet2);background:rgba(139,124,246,.16)}
+.wbtn svg{width:19px;height:19px}
+.wbody{flex:1;overflow-y:auto;padding:16px 14px;display:flex;flex-direction:column;gap:12px;scroll-behavior:smooth}
+.wbody .msg{max-width:84%;font-size:14.5px;padding:10px 14px}
+.wbody .hello{align-self:center;text-align:center;color:#b9b4dd;font-size:13px;padding:6px 10px 4px}
+.wbody .hello .orb{width:58px;height:58px;margin:0 auto 10px}
+.wbody .hello b{display:block;color:#fff;font-family:Poppins;font-size:17px;margin-bottom:2px}
+.wchips{display:flex;gap:8px;overflow-x:auto;padding:8px 12px 10px;scrollbar-width:none}
+.wchips::-webkit-scrollbar{display:none}
+.wchips button{flex:none;border:1px solid var(--violet);background:transparent;color:#ecebfb;border-radius:999px;padding:7px 13px;font-size:13px;white-space:nowrap}
+.wchips button:hover{background:rgba(139,124,246,.18)}
+.wform{display:flex;gap:8px;align-items:center;padding:10px 12px calc(12px + env(safe-area-inset-bottom));border-top:1px solid rgba(255,255,255,.06)}
+.wform input{flex:1;min-width:0;background:#313b35;border:1px solid rgba(255,255,255,.08);border-radius:999px;padding:11px 16px;color:#fff;outline:none;font-size:15px}
+.wform input:focus{border-color:var(--violet)}
+.wround{flex:none;width:42px;height:42px;border-radius:50%;border:0;display:flex;align-items:center;justify-content:center}
+.wround svg{width:20px;height:20px}
+.wmic{background:#313b35;color:var(--violet2)}
+.wmic.on{background:var(--rose);color:#fff;animation:pulse 1.2s infinite}
+.wsend{background:var(--violet);color:#fff}
+.wsend:disabled{opacity:.45}
+.wlock{font-size:12.5px;line-height:1.55;color:var(--mint);background:rgba(201,242,211,.07);border-bottom:1px solid rgba(201,242,211,.18);padding:12px 16px}
+.wlock label{color:#e2e8e1;display:inline-flex;gap:5px;align-items:center}
+.wlock .btn.ghost{color:#e2e8e1;border-color:rgba(255,255,255,.2);padding:5px 12px;font-size:12px}
+.wfoot{font-size:10.5px;color:#7f7aa6;text-align:center;padding:0 12px 8px}
+@media (max-width:720px){
+  .fab{right:22px;bottom:calc(86px + env(safe-area-inset-bottom));width:58px;height:58px}
+  .wchat,.wchat.big{left:0;right:0;bottom:0;width:100%;height:88vh;max-height:none;border-radius:22px 22px 0 0;transform-origin:bottom center;z-index:45}
+  .wbody .msg{max-width:88%;font-size:15px}
+  .wfoot{display:none}
+}
+.lock{display:flex;gap:10px;align-items:flex-start;font-size:13px;color:var(--mint);background:rgba(201,242,211,.07);border:1px solid rgba(201,242,211,.25);padding:10px 14px;border-radius:10px;margin-bottom:14px}
+.composer{display:flex;gap:10px;margin-top:12px}
+.composer input{flex:1}
+.suggest{display:flex;gap:8px;flex-wrap:wrap;margin-top:10px}
+.suggest button{background:rgba(255,255,255,.05);border:1px solid var(--line);border-radius:999px;padding:6px 12px;font-size:13px;color:#d8e2d8}
+
+.today-grid{grid-template-columns:1fr 1.25fr;align-items:start}
+.grid2>*{min-width:0}
+.mtop{display:none}
+html,body{overflow-x:hidden;-webkit-tap-highlight-color:transparent}
+.gate{padding:max(30px,env(safe-area-inset-top)) 16px max(30px,env(safe-area-inset-bottom))}
+
+/* tablet */
+@media (max-width:1000px){
+  .bdgs,.pstats{grid-template-columns:repeat(2,1fr)}
+  .cgrid{grid-template-columns:1fr}
+  .ins-grid{grid-template-columns:repeat(2,1fr)}
+  .ins-row{grid-template-columns:1fr}
+  .stats{grid-template-columns:repeat(2,1fr)}
+  .pillars{grid-template-columns:repeat(2,1fr)}
+  .team{grid-template-columns:repeat(3,1fr)}
+  .app{grid-template-columns:200px 1fr}
+  main{padding:28px 24px 60px}
+  .today-grid{grid-template-columns:1fr}
+}
+/* phone */
+@media (max-width:720px){
+  .app{display:block}
+  .mtop{display:flex;align-items:center;justify-content:space-between;position:sticky;top:0;z-index:20;
+    padding:calc(10px + env(safe-area-inset-top)) 16px 10px;background:rgba(44,53,48,.92);backdrop-filter:blur(10px);-webkit-backdrop-filter:blur(10px);border-bottom:1px solid var(--line)}
+  .mtop .brand{font-size:20px}
+  .mtop .logout{margin:0}
+  nav.side{position:fixed;left:0;right:0;bottom:0;top:auto;height:auto;z-index:30;flex-direction:row;justify-content:space-around;gap:0;
+    padding:6px 4px calc(6px + env(safe-area-inset-bottom));background:rgba(30,37,33,.96);backdrop-filter:blur(10px);-webkit-backdrop-filter:blur(10px);border-right:0;border-top:1px solid var(--line)}
+  nav.side .brand,nav.side .brand-sub,.side .spacer,.who{display:none}
+  .navbtn{flex:1;flex-direction:column;gap:3px;padding:7px 2px;font-size:10.5px;border-radius:10px;justify-content:center;align-items:center;text-align:center;min-width:0}
+  .navbtn svg{width:22px;height:22px}
+  .navbtn span{display:block;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;max-width:100%}
+  .navbtn.active{background:none}
+  .nav-about{display:none!important}
+  main{padding:18px 14px calc(96px + env(safe-area-inset-bottom));max-width:none}
+  .view-title{font-size:26px}
+  .view-sub{font-size:14px;margin-bottom:18px}
+  .grid2,.today-grid{grid-template-columns:1fr;gap:14px}
+  .paper{padding:18px 16px}
+  .paper.torn{padding:26px 18px}
+  input.t,textarea.t,select.t,.composer input,.quick input{font-size:16px}
+  .btn{padding:12px 20px}
+  .btn.sm{padding:9px 16px;font-size:14px}
+  .moods{flex-wrap:wrap}
+  .moods button{font-size:22px;padding:6px 9px}
+  .gate .brand{font-size:44px}
+  .tabs button{font-size:14px;padding:10px 6px}
+  .entries{grid-template-columns:1fr}
+  .filters input,.filters select{flex:1 1 100%;min-width:0}
+  .sky{height:62vh;min-height:380px}
+  .modal{padding:0;align-items:stretch}
+  .modal .paper{border-radius:0;min-height:100%;padding:calc(20px + env(safe-area-inset-top)) 18px calc(30px + env(safe-area-inset-bottom))}
+  .modal .paper.torn{clip-path:none}
+  .entry-body{font-size:17px}
+  .chat{max-height:none;min-height:240px}
+  .msg{max-width:92%;font-size:15px}
+  .lock .row{gap:12px}
+  .toast{bottom:calc(84px + env(safe-area-inset-bottom));max-width:90vw;text-align:center}
+  .x{padding:8px}
+  .photos img{width:80px;height:80px}
+  .inspo,.mv,.checkin{grid-template-columns:1fr}
+  .stats{gap:10px}.stat{padding:12px}.stat .v{font-size:22px}
+  .team{grid-template-columns:repeat(2,1fr)}
+  .pillars{grid-template-columns:1fr 1fr;gap:10px}
+  .about-hero .brand{font-size:40px}
+  .cal{padding:10px}.cal-grid{gap:4px}.cal-grid .d{height:auto;aspect-ratio:1/1}.cal-grid .d .m{font-size:16px}
+}
+@media (hover:none){ .ecard:hover{transform:none} }
+</style>
+</head>
+<body>
+<canvas id="stars"></canvas>
+<div class="shoot"></div>
+
+<!-- Loading -->
+<div id="loading" class="gate"><div style="text-align:center"><div class="brand" style="font-size:48px">ADLIEU</div><div class="brand-sub">A PERSONAL AI DIARY</div><p style="color:var(--muted)">Opening your diary…</p></div></div>
+
+<!-- Auth: Log in / Register -->
+<div id="auth" class="gate hidden">
+  <div class="hearts" id="hearts"></div>
+  <div class="paper torn">
+    <div class="brand">ADLIEU</div>
+    <div class="brand-sub">A PERSONAL AI DIARY</div>
+    <p style="text-align:center;margin:6px 0 14px;font-family:Lora,serif;font-style:italic">Your journal, your connections, always with you.</p>
+    <div class="tabs"><button type="button" data-tab="login" class="on">Log In</button><button type="button" data-tab="register">Register Account</button></div>
+
+    <form id="loginForm" autocomplete="on">
+      <label class="f">Username</label><input class="t" name="username" autocomplete="username" required maxlength="40">
+      <label class="f">Password</label>
+      <div class="pw"><input class="t" type="password" name="password" autocomplete="current-password" required><button type="button" class="eye">Show</button></div>
+      <label class="check"><input type="checkbox" name="remember" checked> Keep me logged in</label>
+      <p class="err" id="loginErr"></p>
+      <button class="btn wide" type="submit">Log In</button>
+      <p class="switch">No account yet? <a href="#" data-go="register">Register here</a></p>
+    </form>
+
+    <form id="regForm" class="hidden" autocomplete="on">
+      <div class="grid2">
+        <div><label class="f">Full name</label><input class="t" name="name" required maxlength="60" autocomplete="name"></div>
+        <div><label class="f">Username</label><input class="t" name="username" required maxlength="40" autocomplete="username"></div>
+      </div>
+      <div class="grid2">
+        <div><label class="f">Email (optional)</label><input class="t" type="email" name="email" maxlength="80" autocomplete="email"></div>
+        <div><label class="f">Birthday</label><input class="t" type="date" name="birthday"></div>
+      </div>
+      <div class="grid2">
+        <div><label class="f">Password</label><div class="pw"><input class="t" type="password" name="password" required minlength="6" autocomplete="new-password"><button type="button" class="eye">Show</button></div></div>
+        <div><label class="f">Confirm password</label><div class="pw"><input class="t" type="password" name="confirm" required autocomplete="new-password"><button type="button" class="eye">Show</button></div></div>
+      </div>
+      <div class="meter"><i id="pwMeter"></i></div>
+      <div class="grid2">
+        <div><label class="f">Registered beneficiary</label><input class="t" name="benName" maxlength="60" placeholder="Who may keep this diary"></div>
+        <div><label class="f">Relationship</label><input class="t" name="benRel" maxlength="40" placeholder="e.g. Mother"></div>
+      </div>
+      <p class="err" id="regErr"></p>
+      <button class="btn wide" type="submit">Create Account</button>
+      <p class="switch">Already have an account? <a href="#" data-go="login">Log in</a></p>
+    </form>
+  </div>
+</div>
+
+<!-- App -->
+<div id="app" class="app hidden">
+  <header class="mtop"><div class="brand">ADLIEU</div><div class="row" style="gap:8px"><button class="ib" id="aboutMob" title="About ADLIEU">ⓘ</button><button class="logout" id="logoutBtn3">Log out</button></div></header>
+  <nav class="side">
+    <div class="brand">ADLIEU</div>
+    <div class="brand-sub">A PERSONAL AI DIARY</div>
+    <button class="navbtn" data-view="today"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="4"/><path d="M12 2v2M12 20v2M4.9 4.9l1.4 1.4M17.7 17.7l1.4 1.4M2 12h2M20 12h2M4.9 19.1l1.4-1.4M17.7 6.3l1.4-1.4"/></svg><span>Today</span></button>
+    <button class="navbtn" data-view="journal"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M4 4h12a4 4 0 0 1 4 4v12H8a4 4 0 0 1-4-4z"/><path d="M8 8h8M8 12h6"/></svg><span>Journal</span></button>
+    <button class="navbtn" data-view="constellation"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="5" cy="6" r="2"/><circle cx="18" cy="5" r="2"/><circle cx="12" cy="13" r="2"/><circle cx="19" cy="19" r="2"/><circle cx="5" cy="19" r="2"/><path d="M6.7 7.2l3.7 4.3M13.6 11.6l3-5M13.5 14.5l4 3.3M10.3 14.2l-3.6 3.6"/></svg><span>Constellation</span></button>
+    <button class="navbtn" data-view="assistant" id="navAI"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 3l1.8 4.7L18.5 9.5l-4.7 1.8L12 16l-1.8-4.7L5.5 9.5l4.7-1.8z"/><path d="M19 15l.8 2.2L22 18l-2.2.8L19 21l-.8-2.2L16 18l2.2-.8z"/></svg><span>Adlieu AI</span></button>
+    <button class="navbtn" data-view="profile"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="8" r="4"/><path d="M4 21c1-4 4.5-6 8-6s7 2 8 6"/></svg><span>Profile</span></button>
+    <button class="navbtn nav-about" data-view="about"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="9"/><path d="M12 11v6M12 7.5v.01"/></svg><span>About</span></button>
+    <div class="spacer"></div>
+    <div class="who"><div class="row" style="gap:10px;margin-bottom:6px"><div class="avatar sm" id="whoAv"></div><div><b id="whoName"></b><span id="whoUser"></span></div></div><button class="logout" id="logoutBtn">Log out</button></div>
+  </nav>
+  <main>
+    <div id="storeBanner" class="banner hidden"></div>
+
+    <!-- TODAY -->
+    <section id="v-today" class="view">
+      <h1 class="view-title" id="todayTitle">Today</h1>
+      <div class="view-sub" id="todayDate"></div>
+      <div class="affirm" id="affirm"></div>
+      <div class="stats">
+        <div class="stat glow"><div class="k">🔥 Writing streak</div><div class="v" id="stStreak">0<small>days</small></div></div>
+        <div class="stat"><div class="k">📖 Memories</div><div class="v" id="stTotal">0</div></div>
+        <div class="stat"><div class="k">⭐ Favorites</div><div class="v" id="stFav">0</div></div>
+        <div class="stat"><div class="k">💗 Mood this week</div><div class="week" id="stWeek"></div></div>
+      </div>
+      <div class="checkin">
+        <div class="card dark"><h4>💗 Mood check-in</h4><div class="sub" id="ciSub">How are you feeling right now? One tap is enough.</div>
+          <div class="cmoods" id="ciMoods"></div>
+          <form class="cnote hidden" id="ciForm"><input class="t" id="ciNote" maxlength="140" placeholder="Want to add why? (optional)"><button class="btn sm">Save</button></form></div>
+        <div class="card dark"><h4>🌻 3 good things today</h4><div class="sub">Gratitude, even small — it trains your heart to notice joy.</div>
+          <div id="gratBox"></div></div>
+      </div>
+      <div class="inspo">
+        <div class="card dark"><h4>✍️ Prompt of the day</h4><p id="promptText"></p>
+          <div class="row"><button class="btn sm" id="usePrompt">Write about this</button><button class="btn ghost sm" id="nextPrompt">Another one</button></div></div>
+        <div class="card dark throw" id="throwCard"><h4>🕰️ Memory lane</h4><div id="throwBody"></div></div>
+      </div>
+      <div class="grid2 today-grid">
+        <div class="card dark">
+          <h3 style="font-size:16px;margin-bottom:10px">Today's timeline <span style="color:var(--muted);font-weight:400;font-size:13px">— quick notes, check-ins &amp; entries</span></h3>
+          <form class="quick" id="noteForm"><input class="t" id="noteInput" maxlength="280" placeholder="What just happened?"><button type="button" class="mic hidden" data-mic="noteInput" title="Speak">🎙️</button><button class="btn sm">Add</button></form>
+          <div class="notes" id="todayNotes"></div>
+        </div>
+        <div class="paper ecomp" id="entryCard">
+          <div class="ehead"><div class="eicon">🪶</div><div style="flex:1;min-width:0"><h3 id="eHeadTitle">Owner entry</h3><div class="esub" id="eHeadSub">Deeper reflections &amp; storytelling</div></div><span class="edraft" id="draftNote"></span></div>
+          <form id="entryForm" autocomplete="off">
+            <input type="hidden" name="id">
+            <input class="etitle" name="title" maxlength="120" placeholder="Give today a title…">
+            <div class="edate"><span>📅</span><input type="date" name="date" aria-label="Date"></div>
+
+            <div class="sec-lab"><span>How are you feeling?</span><b id="moodName"></b></div>
+            <div class="moods" id="moodPick"></div>
+
+            <div class="sec-lab"><span>Your story</span><button type="button" class="mic hidden" data-mic="bodyInput">🎙️ Speak</button></div>
+            <textarea class="estory" name="body" id="bodyInput" rows="9" maxlength="60000" placeholder="Dear diary…" required></textarea>
+            <div class="ebar"><div class="partial" id="partial"></div><span id="wc">0 words</span></div>
+
+            <div class="sec-lab"><span>Details</span></div>
+            <div class="efields">
+              <label class="ef wide"><span>🏷️</span><input name="tags" placeholder="Tags — family, ideas, nature"></label>
+              <div class="tagsug wide" id="tagSug"></div>
+              <label class="ef"><span>📍</span><input name="location" placeholder="Where were you?"></label>
+              <label class="ef"><span>👤</span><input name="people" placeholder="Who was with you?"></label>
+            </div>
+
+            <div class="sec-lab"><span>Who can see this</span></div>
+            <div class="vis" role="radiogroup">
+              <label><input type="radio" name="visibility" value="private" checked><span>🔒 Only me</span></label>
+              <label><input type="radio" name="visibility" value="family"><span>👪 Family</span></label>
+              <label><input type="radio" name="visibility" value="beneficiary"><span>💌 Beneficiary</span></label>
+            </div>
+
+            <div class="capsule"><label class="sw"><input type="checkbox" id="sealOn"><i></i><span>⏳ Seal as a time capsule</span></label>
+              <div class="sealwrap hidden" id="sealWrap"><span>Opens on</span><input class="t" type="date" name="sealUntil"></div></div>
+
+            <div class="sec-lab"><span>Photos</span></div>
+            <label class="drop"><b>📷 Add photos</b><small>Tap to choose · up to 6</small><input type="file" accept="image/*" multiple id="photoInput" class="hidden"></label>
+            <div class="photos" id="photoPreview"></div>
+
+            <div class="efoot">
+              <button type="button" class="btn ghost sm" id="entryReset">Clear</button>
+              <button class="btn" id="entrySave">💾 Save entry</button>
+            </div>
+          </form>
+        </div>
+      </div>
+    </section>
+
+    <!-- JOURNAL -->
+    <section id="v-journal" class="view hidden">
+      <h1 class="view-title">Your <span class="hl">Journal</span></h1>
+      <div class="view-sub">Every note and entry, searchable by word, tag, place or person.</div>
+      <div class="row" style="justify-content:space-between;margin-bottom:14px"><div class="seg" id="jMode"><button data-m="list" class="on">📋 List</button><button data-m="cal">📅 Calendar</button><button data-m="ins">📊 Insights</button></div>
+        <div class="row"><button class="chip" id="favOnly" style="padding:7px 14px;font-size:13px">⭐ Favorites only</button><button class="chip" id="copyDiary" style="padding:7px 14px;font-size:13px">📋 Copy diary</button></div></div>
+      <div id="calWrap" class="hidden"></div>
+      <div id="insWrap" class="hidden"></div>
+      <div id="listWrap">
+      <div class="filters dark">
+        <input class="t" id="search" placeholder="Search your diary…">
+        <select class="t" id="typeFilter" style="width:auto"><option value="all">All types</option><option value="entry">Owner entries</option><option value="note">Quick notes</option><option value="checkin">Mood check-ins</option></select>
+        <select class="t" id="moodFilter" style="width:auto"><option value="">Any mood</option></select>
+        <select class="t" id="sortBy" style="width:auto"><option value="new">Newest first</option><option value="old">Oldest first</option><option value="az">Title A–Z</option></select>
+      </div>
+      <div class="row" id="tagFilters" style="margin:-6px 0 18px"></div>
+      <div class="entries" id="entryList"></div>
+      </div>
+    </section>
+
+    <!-- CONSTELLATION -->
+    <section id="v-constellation" class="view hidden">
+      <h1 class="view-title">CONSTELLA<span class="hl">TION</span></h1>
+      <div class="view-sub">Stay connected. Share your story. Together. — each star is a memory, linked by the people, places and tags it shares.</div>
+      <div class="filters dark">
+        <label style="font-size:13px;color:var(--muted)">Show</label>
+        <select class="t" id="visFilter" style="width:auto"><option value="all">All memories</option><option value="private">Private only</option><option value="family">Shared with family</option><option value="beneficiary">Shared with beneficiary</option></select>
+        <label style="font-size:13px;color:var(--muted)">Link by</label>
+        <select class="t" id="linkBy" style="width:auto"><option value="all">Tags, places &amp; people</option><option value="tags">Tags</option><option value="location">Places</option><option value="people">People</option></select>
+      </div>
+      <div class="sky-tools dark"><input class="t" id="starFind" placeholder="✨ Find a star — a word, person, place or #tag"><button class="btn ghost sm" id="skyShuffle">🔀 New layout</button></div>
+      <div class="sky" id="sky"><svg id="skySvg"></svg><div class="tip hidden" id="skyTip"></div>
+        <div class="skyctl"><button id="zIn" title="Zoom in">+</button><button id="zOut" title="Zoom out">−</button><button id="zReset" title="Reset view">⟲</button></div>
+        <div class="legend"><span><i style="background:#fff;box-shadow:0 0 8px #fff"></i>memory</span><span><i style="background:var(--pink)"></i>tag</span><span><i style="background:var(--sky)"></i>place</span><span><i style="background:var(--orange)"></i>person</span></div>
+      </div>
+      <p style="font-size:12.5px;color:var(--muted);margin:8px 2px 0">Drag to move around · scroll or use +/− to zoom · tap a colored dot to see its cluster · tap a star to open the memory.</p>
+      <div class="cgrid">
+        <div class="card dark ccard" id="clusterCard"><h4 style="margin:0 0 6px;font-family:Poppins;font-size:12px;letter-spacing:.08em;text-transform:uppercase;color:var(--orange)">🌌 Cluster</h4><div id="clusterBody" style="color:var(--muted);font-size:14px">Tap a colored dot (a tag, place or person) to see every memory connected to it.</div></div>
+        <div class="card dark"><h4 style="margin:0 0 6px;font-family:Poppins;font-size:12px;letter-spacing:.08em;text-transform:uppercase;color:var(--orange)">🔗 Strongest connections</h4><div class="pairs" id="pairs"></div></div>
+      </div>
+      <h3 style="font-size:15px;margin-top:22px">All clusters</h3>
+      <div class="clusters" id="clusters"></div>
+    </section>
+
+
+    <!-- ABOUT -->
+    <section id="v-about" class="view hidden">
+      <div class="paper torn about-hero">
+        <div class="brand">ADLIEU</div>
+        <div class="brand-sub" style="color:#2f7a52;margin-bottom:0">A PERSONAL AI DIARY</div>
+        <p>A secure, AI-enhanced digital diary for personal reflection and family connection — a place to keep your story, understand yourself better, and one day pass your memories on to the people you love.</p>
+      </div>
+
+      <h2 class="sec-h">Where ADLIEU is <span class="hl">headed</span></h2>
+      <div class="mv">
+        <div class="paper tape"><h3>Mission</h3><p>To give every person a private, beautiful space to write their life down every day — and an AI companion that helps them reflect on it, without ever taking their story away from them.</p></div>
+        <div class="paper tape"><h3>Vision</h3><p>A world where no family memory is lost: where today's quick notes become tomorrow's legacy, safely handed to a trusted beneficiary when the time comes.</p></div>
+      </div>
+
+      <h2 class="sec-h">Our <span class="hl">goals</span></h2>
+      <div class="card dark"><ul style="margin:0;padding-left:20px;line-height:1.9;color:#e2e8e1">
+        <li><b>Build the habit</b> — make writing quick and rewarding with daily notes, prompts, streaks and voice writing.</li>
+        <li><b>Help people understand themselves</b> — mood tracking, a mood calendar, Memory Lane and Adlieu AI summaries turn entries into insight.</li>
+        <li><b>Connect memories</b> — the Constellation links stories by the people, places and themes they share.</li>
+        <li><b>Protect privacy first</b> — hashed passwords, private storage per account, and an AI that can only see what the owner allows.</li>
+        <li><b>Preserve a legacy</b> — time capsules and a registered beneficiary so memories can be passed on.</li>
+      </ul></div>
+
+      <h2 class="sec-h">Who it's <span class="hl">for</span></h2>
+      <div class="pillars">
+        <div class="card"><div class="ic">🎓</div><h4>Students</h4><p>Reflect on school life, track stress and wins, and see growth over a semester.</p></div>
+        <div class="card"><div class="ic">👪</div><h4>Families</h4><p>Record everyday moments with loved ones and choose what to pass on.</p></div>
+        <div class="card"><div class="ic">💼</div><h4>Busy people</h4><p>Quick notes and voice writing for when there's no time for long entries.</p></div>
+        <div class="card"><div class="ic">🌱</div><h4>Anyone healing or growing</h4><p>A judgment-free space to process feelings and notice patterns.</p></div>
+      </div>
+
+      <h2 class="sec-h">Core <span class="hl">features</span></h2>
+      <div class="pillars">
+        <div class="card"><div class="ic">🔐</div><h4>Registration &amp; Login</h4><p>Personal accounts with hashed passwords, profile, beneficiary and auto log-out.</p></div>
+        <div class="card"><div class="ic">✨</div><h4>Constellation</h4><p>Auto-generated memory stars linked by tags, places and people, with permission filters.</p></div>
+        <div class="card"><div class="ic">📔</div><h4>Daily Notes &amp; Entries</h4><p>Quick notes, deep reflections, moods, tags, photos, favorites and time capsules.</p></div>
+        <div class="card"><div class="ic">🤖</div><h4>Adlieu AI</h4><p>Summaries and cited answers using only the owner's permitted entries — Perspective Lock.</p></div>
+      </div>
+
+      <h2 class="sec-h">How your <span class="hl">privacy</span> is protected</h2>
+      <div class="card dark" style="line-height:1.8;color:#e2e8e1;font-size:15px">
+        Your password is never stored — only a salted PBKDF2 hash. Each account's entries and photos live in private storage tied to your sign-in. Adlieu AI cannot read your diary directly: it can only call search tools over the entries you allow, it skips sealed time capsules, and it is instructed never to invent personal facts and to cite every claim.
+      </div>
+
+      <h2 class="sec-h">Roadmap — what <span class="hl">comes next</span></h2>
+      <div class="road">
+        <div class="ph done"><h4>Phase 1 · Foundation</h4><div class="tagline">Completed</div>
+          <ul><li>Register / log in accounts with profile and beneficiary</li><li>Daily notes and owner entries with tags, location, people and photos</li><li>Search, tag filters and the Constellation map</li><li>Adlieu AI with cited answers and Perspective Lock</li><li>Works on computer, tablet and phone</li></ul></div>
+        <div class="ph now"><h4>Phase 2 · Habit &amp; Insight</h4><div class="tagline">This version</div>
+          <ul><li>Writing streaks, favorites and a weekly mood strip</li><li>Prompt of the day and Memory Lane throwbacks</li><li>Mood calendar view</li><li>Time capsules that stay sealed until a chosen date</li><li>Voice writing (dictation) and auto log-out</li></ul></div>
+        <div class="ph"><h4>Phase 3 · Family Connection</h4><div class="tagline">Planned</div>
+          <ul><li>Real sharing: invite family members to see entries marked Family</li><li>Shared family timeline and comments on shared memories</li><li>Legacy hand-over: release chosen entries to the beneficiary</li><li>Filipino / Tagalog language option</li></ul></div>
+        <div class="ph"><h4>Phase 4 · Deeper AI &amp; Security</h4><div class="tagline">Future</div>
+          <ul><li>Monthly AI mood insights and "year in review" stories</li><li>End-to-end encryption of entries with the user's password</li><li>Export the diary as a printable memory book (PDF)</li><li>Daily reminders, offline writing and an installable mobile app</li></ul></div>
+      </div>
+
+      <h2 class="sec-h">The <span class="hl">team</span></h2>
+      <div class="team">
+        <div class="card m"><div class="av" style="background:var(--pink)">IB</div><b>Ingrid Bermeo</b><span>QA</span></div>
+        <div class="card m"><div class="av" style="background:var(--sky)">JC</div><b>Jackielyn Cesista</b><span>UI/UX</span></div>
+        <div class="card m"><div class="av" style="background:var(--orange)">EG</div><b>Erich Gerero</b><span>Backend</span></div>
+        <div class="card m"><div class="av" style="background:var(--mint)">MG</div><b>Merssa Gutlay</b><span>Documentator</span></div>
+        <div class="card m"><div class="av" style="background:var(--paper)">GH</div><b>Gleshelle Mae Hagosojos</b><span>Frontend</span></div>
+      </div>
+      <p style="text-align:center;color:var(--muted);font-size:13px;margin-top:22px">BSCS 4-2 · November 10, 2026 · Stay connected. Share your story. Together. <span style="color:var(--pink)">♥</span></p>
+    </section>
+
+    <!-- PROFILE -->
+    <section id="v-profile" class="view hidden">
+      <div class="phero">
+        <div class="avwrap"><div class="avatar" id="pAvatar"></div><label title="Change photo">📷<input type="file" accept="image/*" id="avInput" class="hidden"></label></div>
+        <div><h2 id="pName"></h2><div class="meta" id="pMeta"></div><div class="level" id="pLevel"></div></div>
+      </div>
+      <div class="pstats" id="pStats"></div>
+
+      <div class="psec" style="margin-top:0"><h2>🏅 Your <span class="hl">achievements</span></h2><div class="bdgs" id="badges"></div></div>
+
+      <div class="psec"><h2>🎨 <span class="hl">Appearance</span></h2>
+        <div class="card dark"><div class="grid2">
+          <div><div style="font-size:13px;color:var(--muted);margin-bottom:8px">Accent color</div><div class="swatches" id="swatches"></div></div>
+          <div><div style="font-size:13px;color:var(--muted);margin-bottom:8px">Reading text size</div><div class="seg" id="textSize"><button data-s="normal">Aa Normal</button><button data-s="large">Aa Large</button></div></div>
+        </div></div></div>
+
+      <div class="psec"><h2>💌 Letter to my <span class="hl">beneficiary</span></h2>
+        <div class="paper tape"><p style="margin:0 0 10px;font-family:Lora,serif;font-size:15px">A private message for <b id="benLabel">your beneficiary</b> — the person you trust to keep your story. Write what you'd want them to know someday.</p>
+          <textarea class="t" id="legacy" rows="6" maxlength="5000" placeholder="Dear …"></textarea>
+          <div class="row" style="justify-content:space-between;margin-top:10px"><span id="legacyMeta" style="font-size:12.5px;color:#4a4f74"></span><button class="btn sm" id="legacySave">Save letter</button></div></div></div>
+
+      <div class="psec"><h2>👤 Account <span class="hl">details</span></h2></div>
+      <div class="paper" style="max-width:640px">
+        <form id="profForm">
+          <div class="grid2">
+            <div><label class="f">Name</label><input class="t" name="name" required maxlength="60"></div>
+            <div><label class="f">Birthday</label><input class="t" type="date" name="birthday"></div>
+          </div>
+          <label class="f">A line about you</label><input class="t" name="bio" maxlength="140">
+          <div class="grid2">
+            <div><label class="f">Registered beneficiary</label><input class="t" name="benName" maxlength="60"></div>
+            <div><label class="f">Relationship</label><input class="t" name="benRel" maxlength="40"></div>
+          </div>
+          <div class="grid2"><div><label class="f">Email</label><input class="t" type="email" name="email" maxlength="80"></div>
+          <div><label class="f">Auto log-out when idle</label><select class="t" name="autoLock"><option value="0">Never</option><option value="5">After 5 minutes</option><option value="15">After 15 minutes</option><option value="30">After 30 minutes</option></select></div></div>
+          <div class="row" style="margin-top:18px;justify-content:space-between">
+            <span id="stats" style="font-size:13px;color:#4a4f74"></span>
+            <button class="btn">Save profile</button>
+          </div>
+        </form>
+      </div>
+      <div class="paper" style="max-width:640px;margin-top:20px">
+        <h3 style="font-size:17px">Change password</h3>
+        <form id="pwForm">
+          <label class="f">Current password</label><input class="t" type="password" name="current" required autocomplete="current-password">
+          <div class="grid2">
+            <div><label class="f">New password</label><input class="t" type="password" name="password" required minlength="6" autocomplete="new-password"></div>
+            <div><label class="f">Confirm new password</label><input class="t" type="password" name="confirm" required autocomplete="new-password"></div>
+          </div>
+          <p class="err" id="pwErr"></p>
+          <div class="row" style="justify-content:space-between"><span style="font-size:13px;color:#4a4f74">Signed in as <b id="profUser"></b></span><div class="row"><button type="button" class="btn ghost sm" id="logoutBtn2">Log out</button><button class="btn">Update password</button></div></div>
+        </form>
+      </div>
+      <div class="psec"><h2>🗂️ Your <span class="hl">data</span></h2>
+        <div class="card dark"><div class="row" style="justify-content:space-between"><div><b>Back up your diary</b><div style="font-size:13px;color:var(--muted)">Copy every entry as text to paste into a document or notes app.</div></div><button class="btn sm" id="copyDiary2">📋 Copy my diary</button></div></div>
+        <div class="card danger" style="margin-top:12px"><b style="color:#ffb3c0">Delete account</b><div style="font-size:13px;color:var(--muted);margin:4px 0 10px">Permanently removes this account, every entry, photo, letter and chat. This can't be undone.</div>
+          <div class="row"><input class="t" type="password" id="delPw" placeholder="Type your password to confirm" style="flex:1;min-width:200px;background:rgba(255,255,255,.06);border-color:var(--line);color:#fff"><button class="btn sm" id="delAcct" style="background:var(--rose);color:#fff">Delete forever</button></div>
+          <p class="err" id="delErr" style="color:#ffb3c0"></p></div></div>
+    </section>
+  </main>
+</div>
+
+
+<!-- Adlieu AI floating chat -->
+<button class="fab hidden" id="fab" title="Tap to chat · drag to move along the left or right side" aria-label="Open Adlieu AI"><span class="orb"><i class="logo"></i><i class="shine"></i><i class="dot"></i></span><span class="badge hidden" id="fabBadge">1</span></button>
+<div class="fabtip hidden" id="fabTip">✨ Drag me up, down or to the other side · tap to chat</div>
+<div class="wchat hidden" id="wchat" role="dialog" aria-label="Adlieu AI chat">
+  <div class="whead"><span class="orb"><i class="logo"></i><i class="dot"></i></span>
+    <div class="nm"><b>Adlieu AI</b><span id="wStatus">● Active now</span></div>
+    <button class="wbtn" id="wLock" title="Perspective Lock settings"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="5" y="11" width="14" height="10" rx="2"/><path d="M8 11V8a4 4 0 0 1 8 0v3"/></svg></button>
+    <button class="wbtn hidden" id="wSpeak" title="Read replies aloud"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M4 9v6h4l5 4V5L8 9z" fill="currentColor" stroke="none"/><path d="M16 8.5a4.5 4.5 0 0 1 0 7M18.5 6a8 8 0 0 1 0 12"/></svg></button>
+    <button class="wbtn" id="wBig" title="Expand"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M14 4h6v6M10 20H4v-6M20 4l-7 7M4 20l7-7"/></svg></button>
+    <button class="wbtn" id="wMin" title="Minimize"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><path d="M5 12h14"/></svg></button>
+    <button class="wbtn" id="wClose" title="Close"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><path d="M6 6l12 12M18 6L6 18"/></svg></button>
+  </div>
+  <div class="wlock hidden" id="wLockPanel">🔒 <b>Perspective Lock is on.</b> Adlieu AI can't read your vault directly — it only searches the entries you allow, never opens sealed time capsules, and won't invent personal facts.
+    <div class="row" style="margin-top:8px;gap:14px"><span style="opacity:.7">Allow:</span>
+      <label><input type="checkbox" class="aiVis" value="private" checked> Private</label>
+      <label><input type="checkbox" class="aiVis" value="family" checked> Family</label>
+      <label><input type="checkbox" class="aiVis" value="beneficiary" checked> Beneficiary</label></div>
+    <div class="row" style="margin-top:10px;justify-content:space-between"><button type="button" class="btn ghost sm" id="wClear">🗑 New chat</button><span style="opacity:.6;font-size:11px">Your chat is saved privately with your diary</span></div></div>
+  <div class="wbody" id="wChat"></div>
+  <div class="wcats" id="wCats"></div>
+  <div class="wchips" id="wChips"></div>
+  <form class="wform" id="wForm">
+    <button type="button" class="wround wmic hidden" data-mic="wInput" title="Speak"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="9" y="3" width="6" height="11" rx="3"/><path d="M5 11a7 7 0 0 0 14 0M12 18v3"/></svg></button>
+    <input id="wInput" placeholder="Message Adlieu AI…" autocomplete="off" maxlength="600">
+    <button class="wround wsend" id="wSend" title="Send"><svg viewBox="0 0 24 24" fill="currentColor"><path d="M3.4 20.4l17.4-7.5a1 1 0 0 0 0-1.8L3.4 3.6a.9.9 0 0 0-1.3 1l2.1 6.4 9.3 1-9.3 1-2.1 6.4a.9.9 0 0 0 1.3 1z"/></svg></button>
+  </form>
+  <div class="wfoot">Adlieu AI only sees the diary entries you allow · Perspective Lock on</div>
+</div>
+<div id="modal" class="modal hidden"></div>
+<div id="toast" class="toast hidden"></div>
+
+<script src="vendor/firebase-bundle.js"></script>
+<script src="firebase-config.js"></script>
+<script src="adlieu-firebase.js"></script>
+<script>
+/* ---------- helpers ---------- */
+const $ = s => document.querySelector(s), $$ = s => [...document.querySelectorAll(s)];
+const esc = s => String(s ?? '').replace(/[&<>"']/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
+const todayISO = () => { const d = new Date(); return new Date(d - d.getTimezoneOffset()*6e4).toISOString().slice(0,10); };
+const fmtDate = iso => { try { return new Date(iso+'T00:00').toLocaleDateString(undefined,{weekday:'short',month:'long',day:'numeric',year:'numeric'}); } catch { return iso; } };
+const splitList = s => [...new Set(String(s||'').split(',').map(x=>x.trim().toLowerCase()).filter(Boolean))].slice(0,12);
+const uid = () => Date.now().toString(36) + Math.random().toString(36).slice(2,8);
+const MOODS = ['😊','😌','🥰','🤩','😐','😔','😢','😤','😴'];
+function toast(msg){ const t=$('#toast'); t.textContent=msg; t.classList.remove('hidden'); clearTimeout(toast._t); toast._t=setTimeout(()=>t.classList.add('hidden'),2600); }
+const hex = b => [...new Uint8Array(b)].map(x=>x.toString(16).padStart(2,'0')).join('');
+async function hashPassword(pw, saltHex){
+  const salt = saltHex || hex(crypto.getRandomValues(new Uint8Array(16)));
+  const key = await crypto.subtle.importKey('raw', new TextEncoder().encode(pw), 'PBKDF2', false, ['deriveBits']);
+  const bits = await crypto.subtle.deriveBits({name:'PBKDF2', hash:'SHA-256', salt:new TextEncoder().encode(salt), iterations:150000}, key, 256);
+  return {salt, hash:hex(bits)};
+}
+const cleanUser = u => String(u||'').trim().replace(/\s+/g,' ');
+const normUser = u => cleanUser(u).toLowerCase();
+const validUser = u => u.length>=1 && u.length<=40;
+/* any username (spaces, ñ, emoji…) maps to a safe storage key */
+async function userKey(u){ const b=await crypto.subtle.digest('SHA-256',new TextEncoder().encode('adlieu-user:'+normUser(u))); return hex(b).slice(0,40); }
+
+/* ---------- friendly error safety net ---------- */
+function friendlyError(e){ const c=e&&e.code;
+  return c==='quota_exceeded'?'Your diary storage is full — remove some photos or old entries.'
+    : c==='resource_exhausted'?'Too many changes at once — please wait a moment and try again.'
+    : c==='revoked'?'Your access to this diary changed. Please reopen ADLIEU.'
+    : c==='invalid_argument'?'That couldn\'t be saved here (it may be too large, or this view is read-only).'
+    : c==='unavailable'?'Connection hiccup — please try again in a moment.'
+    : 'Something went wrong — please try again.'; }
+addEventListener('unhandledrejection',ev=>{ const r=ev.reason; if(r&&(r.code||r instanceof Error)){ ev.preventDefault(); try{ toast(friendlyError(r)); }catch{} } });
+
+/* ---------- starfield ---------- */
+(function stars(){ const c=$('#stars'), x=c.getContext('2d'); function draw(){ c.width=innerWidth; c.height=innerHeight; x.clearRect(0,0,c.width,c.height);
+  for(let i=0;i<Math.min(220,c.width*c.height/7000);i++){ const r=Math.random()*1.3+.2; x.globalAlpha=Math.random()*.7+.15; x.fillStyle=Math.random()<.1?'#f4a3b4':'#fff'; x.beginPath(); x.arc(Math.random()*c.width,Math.random()*c.height,r,0,7); x.fill(); } }
+  draw(); addEventListener('resize',draw); })();
+
+/* ---------- storage: private per-user db, local fallback ---------- */
+const Store = {
+  mode:'local', db:null, uid:null, entries:[], onChange:()=>{},
+  async init(){
+    let db=null, user=null;
+    if (window.ADLIEU_FB && ADLIEU_FB.ready) { this.db=ADLIEU_FB.db; this.mode='cloud';
+    } else {
+      $('#storeBanner').textContent = 'Firebase is not set up yet — saving to this browser only. Paste your Firebase config in firebase-config.js (see README).';
+      $('#storeBanner').classList.remove('hidden');
+    }
+  },
+  /* account = one diary; all its data lives under acct-<username> */
+  user:null, unsub:null,
+  local(k,v){ try{ if(v===undefined) return JSON.parse(localStorage.getItem('adlieu:'+k)||'null'); localStorage.setItem('adlieu:'+k,JSON.stringify(v)); }catch{ return null; } },
+  acctRef(u){ return this.db.doc('users/'+u); }, /* u = Firebase Auth uid */
+  async getAccount(u){
+    if(this.mode==='cloud'){ const s=await this.acctRef(u).get(); return s.exists? s.data(): null; }
+    return this.local('acct:'+u);
+  },
+  async setAccount(u,a){
+    if(this.mode==='cloud') return this.acctRef(u).set(a);
+    this.local('acct:'+u,a);
+  },
+  use(u){ this.user=u; this.photoCache={}; this.entries=[]; if(this.mode==='cloud') this.root=this.acctRef(u); },
+  logout(){ if(this.unsub){ this.unsub(); this.unsub=null; } this.user=null; this.root=null; this.entries=[]; this.photoCache={}; },
+  async getProfile(){ return this.getAccount(this.user); },
+  async deleteAccount(){ for(const e of [...this.entries]) await this.deleteEntry(e.id);
+    if(this.mode==='cloud'){ await this.root.collection('meta').doc('chat').delete(); await this.acctRef(this.user).delete(); }
+    else { try{ ['chat','entries'].forEach(k=>localStorage.removeItem('adlieu:'+this.user+':'+k)); localStorage.removeItem('adlieu:acct:'+this.user); }catch{} } },
+  async getChat(){ if(this.mode==='cloud'){ const s=await this.root.collection('meta').doc('chat').get(); return s.exists? s.data().log : []; } return this.local(this.user+':chat')||[]; },
+  async setChat(log){ if(this.mode==='cloud') return this.root.collection('meta').doc('chat').set({log,updatedAt:new Date().toISOString()}); this.local(this.user+':chat',log); },
+  async setProfile(p){ return this.setAccount(this.user,p); },
+  subscribe(cb){
+    this.onChange=cb;
+    if(this.mode==='cloud'){
+      const timer=setTimeout(()=>{ $('#storeBanner').textContent='Your diary is taking a while to load — it may be out of date.'; $('#storeBanner').classList.remove('hidden'); },10000);
+      this.unsub=this.root.collection('entries').onSnapshot(snap=>{
+        if(!snap.metadata.fromCache){ clearTimeout(timer); if($('#storeBanner').textContent.startsWith('Your diary is taking')) $('#storeBanner').classList.add('hidden'); }
+        this.entries = snap.docs.map(d=>({id:d.id,...d.data()})); cb(this.entries);
+      }, e=>{ clearTimeout(timer); $('#storeBanner').textContent='Could not reach your diary right now.'; $('#storeBanner').classList.remove('hidden'); });
+    } else { this.entries=this.local(this.user+':entries')||[]; cb(this.entries); }
+  },
+  async saveEntry(e){
+    const {id,...data}=e;
+    if(this.mode==='cloud') return this.root.collection('entries').doc(id).set(data);
+    const i=this.entries.findIndex(x=>x.id===id); if(i>=0) this.entries[i]=e; else this.entries.push(e);
+    this.local(this.user+':entries',this.entries); this.onChange(this.entries);
+  },
+  async deleteEntry(id){
+    const e=this.entries.find(x=>x.id===id);
+    for(const p of (e?.photos||[])) await this.deletePhoto(p);
+    if(this.mode==='cloud') return this.root.collection('entries').doc(id).delete();
+    this.entries=this.entries.filter(x=>x.id!==id); this.local(this.user+':entries',this.entries); this.onChange(this.entries);
+  },
+  photoCache:{},
+  async savePhoto(dataUrl){ const id=uid(); this.photoCache[id]=dataUrl;
+    if(this.mode==='cloud') await this.root.collection('photos').doc(id).set({data:dataUrl});
+    else this.local(this.user+':photo:'+id,dataUrl);
+    return id; },
+  async getPhoto(id){ if(this.photoCache[id]) return this.photoCache[id];
+    let d=null; if(this.mode==='cloud'){ const s=await this.root.collection('photos').doc(id).get(); d=s.exists?s.data().data:null; } else d=this.local(this.user+':photo:'+id);
+    if(d) this.photoCache[id]=d; return d; },
+  async deletePhoto(id){ delete this.photoCache[id]; if(this.mode==='cloud') return this.root.collection('photos').doc(id).delete(); try{localStorage.removeItem('adlieu:'+this.user+':photo:'+id);}catch{} }
+};
+
+function shrinkImage(file, max=900, q=.72){
+  return new Promise((res,rej)=>{ const img=new Image(); const url=URL.createObjectURL(file);
+    img.onload=()=>{ const s=Math.min(1,max/Math.max(img.width,img.height)); const c=document.createElement('canvas'); c.width=Math.round(img.width*s); c.height=Math.round(img.height*s);
+      c.getContext('2d').drawImage(img,0,0,c.width,c.height); URL.revokeObjectURL(url); let d=c.toDataURL('image/jpeg',q);
+      if(d.length>230000) d=c.toDataURL('image/jpeg',.5); res(d); };
+    img.onerror=rej; img.src=url; });
+}
+
+/* ---------- state ---------- */
+let profile=null, entries=[], activeTag=null, activeDate=null, favOnly=false, jMode='list', calMonth=null, promptIdx=null;
+const isSealed = e => !!(e && e.sealUntil && e.sealUntil > todayISO());
+const PROMPTS=['What made you smile today, even for a second?','Describe a place that feels like home to you.','Who are you grateful for right now, and why?','Write a letter to yourself five years from now.','What is a small win you had this week?','Describe a meal that reminds you of family.','What is something you want to remember about this year?','What worried you today? What would you tell a friend in your place?','Write about a song that takes you back in time.','What is one lesson your parents or grandparents taught you?','Describe your perfect slow Sunday.','What is something you are proud of that nobody noticed?','Write about the last time you laughed really hard.','What does your future home look like?','Who would you like to reconnect with, and what would you say?','What is a memory you never want to forget?','What are three things that made today different from yesterday?','Describe a moment of kindness you witnessed.','What dream are you quietly working toward?','If today had a title, what would it be?','What is your favorite family tradition?','Write about a challenge you overcame.','What made you feel loved recently?','Describe the view from where you are right now.','What would you like your beneficiary to know about you?'];
+const dayOfYear = () => { const d=new Date(); return Math.floor((d-new Date(d.getFullYear(),0,0))/864e5); };
+const shiftISO = (iso,days) => { const d=new Date(iso+'T00:00'); d.setDate(d.getDate()+days); return new Date(d-d.getTimezoneOffset()*6e4).toISOString().slice(0,10); };
+
+/* ---------- gate: log in & register account ---------- */
+const SESSION_KEY='adlieu:session';
+function getSession(){ try{ return sessionStorage.getItem(SESSION_KEY)||localStorage.getItem(SESSION_KEY); }catch{ return null; } }
+function setSession(u,remember){ try{ sessionStorage.setItem(SESSION_KEY,u); if(remember) localStorage.setItem(SESSION_KEY,u); else localStorage.removeItem(SESSION_KEY); }catch{} }
+function clearSession(){ try{ sessionStorage.removeItem(SESSION_KEY); localStorage.removeItem(SESSION_KEY); }catch{} }
+
+async function boot(){
+  await Store.init();
+  if(Store.mode==='cloud'){
+    const fuid=await ADLIEU_FB.onFirstAuthState();
+    $('#loading').classList.add('hidden');
+    if(fuid){ try{ const a=await Store.getAccount(fuid); if(a){ Store.use(fuid); profile=a; return enterApp(); } }catch{} await ADLIEU_FB.logout(); }
+    return showAuth('login');
+  }
+  $('#loading').classList.add('hidden');
+  const u=getSession();
+  if(u){ try{ const a=await Store.getAccount(u); if(a){ Store.use(u); profile=a; return enterApp(); } }catch{} clearSession(); }
+  showAuth('login');
+}
+function showAuth(tab){
+  $('#app').classList.add('hidden'); $('#auth').classList.remove('hidden');
+  $$('.tabs button').forEach(b=>b.classList.toggle('on',b.dataset.tab===tab));
+  $('#loginForm').classList.toggle('hidden',tab!=='login'); $('#regForm').classList.toggle('hidden',tab!=='register');
+  $('#loginErr').textContent=''; $('#regErr').textContent='';
+  if(matchMedia('(hover:hover) and (pointer:fine)').matches) setTimeout(()=>(tab==='login'?$('#loginForm'):$('#regForm')).querySelector('input').focus(),30);
+}
+$$('.tabs button').forEach(b=>b.onclick=()=>showAuth(b.dataset.tab));
+$('#hearts').innerHTML=Array.from({length:14},(_,i)=>`<i style="left:${(i*7.3+3)%100}%;font-size:${12+(i*5)%16}px;animation-delay:${(i*1.1)%14}s;animation-duration:${11+(i*3)%9}s">♥</i>`).join('');
+$$('[data-go]').forEach(a=>a.onclick=e=>{ e.preventDefault(); showAuth(a.dataset.go); });
+$$('.pw .eye').forEach(b=>b.onclick=()=>{ const i=b.previousElementSibling; i.type=i.type==='password'?'text':'password'; b.textContent=i.type==='password'?'Show':'Hide'; });
+$('#regForm').password.addEventListener('input',e=>{ const v=e.target.value; let s=0; if(v.length>=6)s++; if(v.length>=10)s++; if(/[A-Z]/.test(v)&&/[a-z]/.test(v))s++; if(/\d/.test(v))s++; if(/[^A-Za-z0-9]/.test(v))s++;
+  const m=$('#pwMeter'); m.style.width=(s*20)+'%'; m.style.background=s<=2?'#e0607a':s<=3?'#e8935a':'#5fae7a'; });
+
+$('#regForm').addEventListener('submit', async ev=>{
+  ev.preventDefault(); const f=ev.target, err=$('#regErr'), btn=f.querySelector('button[type=submit]'); err.textContent='';
+  const display=cleanUser(f.username.value);
+  if(!validUser(display)) return err.textContent='Please enter a username.';
+  if(f.password.value.length<6) return err.textContent='Password must be at least 6 characters.';
+  if(f.password.value!==f.confirm.value) return err.textContent='Passwords do not match.';
+  btn.disabled=true; btn.textContent='Creating account…';
+  if(Store.mode==='cloud'){
+    try{
+      const fuid=await ADLIEU_FB.register(display, f.password.value);
+      const acct={ username:display, name:f.name.value.trim(), email:f.email.value.trim(), birthday:f.birthday.value||'', bio:'',
+        beneficiary:{name:f.benName.value.trim(), relation:f.benRel.value.trim()}, createdAt:new Date().toISOString() };
+      try{ await Store.setAccount(fuid,acct); }catch(e){ await ADLIEU_FB.deleteLogin().catch(()=>{}); throw new Error('Could not create the account. Please try again.'); }
+      Store.use(fuid); profile=acct; f.reset(); $('#pwMeter').style.width='0';
+      enterApp(); toast('Account created — welcome to ADLIEU, '+acct.name.split(' ')[0]+' ✨');
+    }catch(e){ err.textContent=e.message||'Could not create the account. Please try again.'; }
+    finally{ btn.disabled=false; btn.textContent='Create Account'; }
+    return;
+  }
+  try{
+    const u=await userKey(display);
+    if(await Store.getAccount(u)){ err.textContent='That username is already taken.'; return; }
+    const pw=await hashPassword(f.password.value);
+    const acct={ username:display, name:f.name.value.trim(), email:f.email.value.trim(), birthday:f.birthday.value||'', bio:'',
+      beneficiary:{name:f.benName.value.trim(), relation:f.benRel.value.trim()}, passSalt:pw.salt, passHash:pw.hash, createdAt:new Date().toISOString() };
+    await Store.setAccount(u,acct);
+    Store.use(u); profile=acct; setSession(u,true); f.reset(); $('#pwMeter').style.width='0';
+    enterApp(); toast('Account created — welcome to ADLIEU, '+acct.name.split(' ')[0]+' ✨');
+  }catch(e){ err.textContent='Could not create the account. Please try again.'; }
+  finally{ btn.disabled=false; btn.textContent='Create Account'; }
+});
+
+let failCount=0;
+$('#loginForm').addEventListener('submit', async ev=>{
+  ev.preventDefault(); const f=ev.target, err=$('#loginErr'), btn=f.querySelector('button[type=submit]'); err.textContent='';
+  const display=cleanUser(f.username.value);
+  btn.disabled=true; btn.textContent='Logging in…';
+  if(Store.mode==='cloud'){
+    try{
+      if(!validUser(display)) throw new Error('Incorrect username or password.');
+      const fuid=await ADLIEU_FB.login(display, f.password.value, f.remember.checked);
+      let a=await Store.getAccount(fuid);
+      if(!a){ a={ username:display, name:display, email:'', birthday:'', bio:'', beneficiary:{name:'',relation:''}, createdAt:new Date().toISOString() }; await Store.setAccount(fuid,a); }
+      Store.use(fuid); profile=a; f.password.value='';
+      enterApp(); toast('Welcome back, '+a.name.split(' ')[0]+' ♥');
+    }catch(e){ err.textContent=e.message||'Could not log in right now. Please try again.'; f.password.value=''; }
+    finally{ btn.disabled=false; btn.textContent='Log In'; }
+    return;
+  }
+  try{
+    if(failCount>=3) await new Promise(r=>setTimeout(r,Math.min(8000,1000*(failCount-2))));
+    const u=validUser(display)? await userKey(display): null;
+    const a=u? await Store.getAccount(u): null;
+    const ok=a && (await hashPassword(f.password.value,a.passSalt)).hash===a.passHash;
+    if(!ok){ failCount++; err.textContent='Incorrect username or password.'; f.password.value=''; f.password.focus(); return; }
+    failCount=0; Store.use(u); profile=a; setSession(u,f.remember.checked); f.password.value='';
+    enterApp(); toast('Welcome back, '+a.name.split(' ')[0]+' ♥');
+  }catch(e){ err.textContent='Could not log in right now. Please try again.'; }
+  finally{ btn.disabled=false; btn.textContent='Log In'; }
+});
+
+function logout(){
+  document.documentElement.style.removeProperty('--orange'); document.documentElement.style.removeProperty('--onacc'); document.body.classList.remove('big-text');
+  if(Store.mode==='cloud') ADLIEU_FB.logout();
+  Store.logout(); clearSession(); profile=null; entries=[]; activeTag=null; activeDate=null; favOnly=false; skyState=null; if(dict?.active()) dict.stop().catch(()=>{}); chatLog=[]; seenIds=new Set();
+  closeModal(); resetEditor(); closeW(); unread=0; $('#fabBadge').classList.add('hidden'); renderChat(); $('#fab').classList.add('hidden'); location.hash=''; showAuth('login'); toast('You have been logged out');
+}
+$('#logoutBtn').onclick=logout; $('#logoutBtn2').onclick=logout; $('#logoutBtn3').onclick=logout;
+
+let aiInit=false;
+function enterApp(){
+  $('#auth').classList.add('hidden'); $('#app').classList.remove('hidden');
+  renderProfileBits(); entries=[]; renderAll();
+  Store.subscribe(list=>{ entries=list; renderAll(); });
+  loadChat(); resetEditor(); restoreDraft();
+  lastAct=Date.now();
+  if(!aiInit){ aiInit=true; initAI(); initDictation(); initVoice(); }
+  fabVisibility();
+  route();
+}
+
+/* ---------- routing ---------- */
+const VIEWS=['today','journal','constellation','profile','about'];
+function route(){ if(!profile) return; if(location.hash==='#assistant'){ history.replaceState(null,'',location.pathname+location.search+'#today'); setTimeout(openW,0); }
+  const v=VIEWS.includes(location.hash.slice(1))? location.hash.slice(1):'today';
+  VIEWS.forEach(x=>$('#v-'+x).classList.toggle('hidden',x!==v));
+  $$('.navbtn').forEach(b=>b.classList.toggle('active',b.dataset.view===v || (b.id==='navAI' && wOpen())));
+  if(v==='constellation') drawSky(); scrollTo(0,0); }
+addEventListener('hashchange',route);
+$$('.navbtn').forEach(b=>b.onclick=()=>{ if(b.dataset.view==='assistant'){ wOpen()?closeW():openW(); return; } location.hash=b.dataset.view; });
+$('#aboutMob').onclick=()=>{ location.hash='about'; };
+
+/* ---------- profile ---------- */
+function renderProfileBits(){
+  $('#whoName').textContent=profile.name; $('#whoUser').textContent='@'+profile.username;
+  const h=new Date().getHours(); $('#todayTitle').innerHTML=esc((h<12?'Good morning':h<18?'Good afternoon':'Good evening')+', '+profile.name.split(' ')[0])+' <span style="color:var(--pink)">♥</span>';
+  $('#todayDate').textContent=fmtDate(todayISO());
+  const f=$('#profForm'); f.name.value=profile.name; f.birthday.value=profile.birthday||''; f.bio.value=profile.bio||''; f.email.value=profile.email||'';
+  f.benName.value=profile.beneficiary?.name||''; f.benRel.value=profile.beneficiary?.relation||''; f.autoLock.value=String(profile.autoLock||0);
+  $('#profUser').textContent='@'+profile.username;
+  renderProfileExtras(); applyPrefs();
+}
+const ACCENTS={Orange:'#e8935a',Rose:'#e0607a',Gold:'#d9a55b',Maroon:'#c0394b',Sage:'#8fae86',Sky:'#7dbcee',Lavender:'#a99cff'};
+function applyPrefs(){ const c=profile?.accent||ACCENTS.Orange; document.documentElement.style.setProperty('--orange',c); document.documentElement.style.setProperty('--onacc',['#e0607a','#c0394b'].includes(c)?'#fff':'#2a1508'); document.body.classList.toggle('big-text',profile?.textSize==='large'); }
+function avatarHTML(){ return profile.avatar? `<img src="${profile.avatar}" alt="">` : esc((profile.name||'?').split(' ').map(w=>w[0]).slice(0,2).join('').toUpperCase()); }
+function badgeList(){
+  const n=entries.length, ent=entries.filter(e=>e.type==='entry').length, ls=longestStreak(), ph=entries.some(e=>e.photos?.length)?1:0,
+    gr=entries.filter(e=>(e.tags||[]).includes('gratitude')).length, ci=entries.filter(e=>e.checkin).length, cap=entries.some(e=>e.sealUntil)?1:0,
+    fav=entries.filter(e=>e.fav).length, hubs=new Set(entries.flatMap(e=>[...(e.tags||[]).map(t=>'t'+t),...(e.people||[]).map(p=>'p'+p),...(e.location?['l'+e.location]:[])])).size,
+    talk=chatLog.filter(m=>m.role==='user').length;
+  return [['🌱','First page','Write your first memory',n,1],['✍️','Storyteller','Write 10 owner entries',ent,10],['📚','Chronicler','Keep 50 memories',n,50],['🔥','On a roll','Write 3 days in a row',ls,3],
+    ['🏆','Habit hero','Write 7 days in a row',ls,7],['📷','Picture perfect','Attach your first photo',ph,1],['🌻','Grateful heart','Save gratitude 5 times',gr,5],['💗','In touch','Do 10 mood check-ins',ci,10],
+    ['🔒','Time traveler','Seal a time capsule',cap,1],['⭐','Treasured','Favorite 5 memories',fav,5],['🌌','Stargazer','Light up 10 tags, places or people',hubs,10],['🤖','Deep talk','Chat with Adlieu AI',talk,1]];
+}
+function renderProfileExtras(){
+  if(!profile) return;
+  $('#pAvatar').innerHTML=avatarHTML(); $('#whoAv').innerHTML=avatarHTML();
+  $('#pName').textContent=profile.name;
+  const since=profile.createdAt? new Date(profile.createdAt).toLocaleDateString(undefined,{month:'long',year:'numeric'}):'';
+  $('#pMeta').textContent=`@${profile.username}${since?' · writing since '+since:''}${profile.bio?' · '+profile.bio:''}`;
+  const n=entries.length, lv=n>=50?['🌳','Evergreen writer']:n>=20?['🌸','Blooming writer']:n>=5?['🌿','Growing writer']:['🌱','Seedling writer'];
+  const next=n>=50?null:n>=20?50:n>=5?20:5;
+  $('#pLevel').textContent=`${lv[0]} ${lv[1]}${next?` · ${next-n} more to level up`:''}`;
+  const words=entries.reduce((a,e)=>a+wordsOf(e),0);
+  $('#pStats').innerHTML=[['📖 Memories',n],['📝 Words',words.toLocaleString()],['🔥 Current streak',streak()+'<small>days</small>'],['🏆 Best streak',longestStreak()+'<small>days</small>']].map(([k,v])=>`<div class="stat"><div class="k">${k}</div><div class="v">${v}</div></div>`).join('');
+  $('#badges').innerHTML=badgeList().map(([ic,t,d,v,goal])=>{ const got=v>=goal; return `<div class="bdg ${got?'got':'locked'}"><div class="ic">${ic}</div><b>${t}</b><small>${d}</small><div class="pb"><i style="width:${Math.min(100,v/goal*100).toFixed(0)}%"></i></div></div>`; }).join('');
+  $('#swatches').innerHTML=Object.entries(ACCENTS).map(([k,c])=>`<button title="${k}" data-c="${c}" style="background:${c}" class="${(profile.accent||ACCENTS.Orange)===c?'on':''}"></button>`).join('');
+  $$('#textSize button').forEach(b=>b.classList.toggle('on',(profile.textSize||'normal')===b.dataset.s));
+  $('#benLabel').textContent=profile.beneficiary?.name? `${profile.beneficiary.name}${profile.beneficiary.relation?' ('+profile.beneficiary.relation+')':''}` : 'your beneficiary';
+  if(document.activeElement!==$('#legacy')) $('#legacy').value=profile.legacyLetter||'';
+  $('#legacyMeta').textContent=profile.legacyUpdated? 'Last saved '+fmtDate(profile.legacyUpdated.slice(0,10)) : 'Only you can read this.';
+}
+async function savePrefs(patch,msg){ const p={...profile,...patch}; try{ await Store.setProfile(p); profile=p; applyPrefs(); renderProfileExtras(); if(msg) toast(msg); }catch(e){ toast(friendlyError(e)); } }
+$('#swatches').onclick=e=>{ const b=e.target.closest('button'); if(b) savePrefs({accent:b.dataset.c},'Accent color updated 🎨'); };
+$('#textSize').onclick=e=>{ const b=e.target.closest('button'); if(b) savePrefs({textSize:b.dataset.s},b.dataset.s==='large'?'Larger reading text on':'Normal text size'); };
+$('#legacySave').onclick=()=>savePrefs({legacyLetter:$('#legacy').value,legacyUpdated:new Date().toISOString()},'Letter saved 💌');
+$('#avInput').addEventListener('change',async ev=>{ const f=ev.target.files[0]; ev.target.value=''; if(!f) return; try{ const d=await shrinkImage(f,220,.8); savePrefs({avatar:d},'Profile photo updated 📷'); }catch{ toast('Could not read that image'); } });
+$('#copyDiary2').onclick=copyDiary;
+$('#delAcct').onclick=async()=>{ const err=$('#delErr'), b=$('#delAcct'); err.textContent='';
+  const pw=$('#delPw').value; if(!pw) return err.textContent='Type your password first.';
+  if(Store.mode==='cloud'){ try{ await ADLIEU_FB.reauth(pw); }catch(e){ return err.textContent=/Incorrect/.test(e.message)?'That password is not correct.':e.message; } }
+  else if((await hashPassword(pw,profile.passSalt)).hash!==profile.passHash) return err.textContent='That password is not correct.';
+  if(b.dataset.c!=='1'){ b.dataset.c='1'; b.textContent='Tap again — delete everything'; return; }
+  b.disabled=true; b.textContent='Deleting…';
+  try{ await Store.deleteAccount(); if(Store.mode==='cloud') await ADLIEU_FB.deleteLogin(); $('#delPw').value=''; b.dataset.c=''; b.textContent='Delete forever'; b.disabled=false; logout(); setTimeout(()=>toast('Your account and diary were deleted.'),60); }
+  catch{ err.textContent='Something went wrong — please try again.'; b.disabled=false; b.textContent='Delete forever'; b.dataset.c=''; }
+};
+$('#profForm').addEventListener('submit', async ev=>{
+  ev.preventDefault(); const f=ev.target;
+  const p={...profile, name:f.name.value.trim(), birthday:f.birthday.value, bio:f.bio.value.trim(), email:f.email.value.trim(), autoLock:Number(f.autoLock.value)||0, beneficiary:{name:f.benName.value.trim(),relation:f.benRel.value.trim()}};
+  try{ await Store.setProfile(p); profile=p; renderProfileBits(); toast('Profile saved'); }catch(e){ toast(friendlyError(e)); }
+});
+$('#pwForm').addEventListener('submit', async ev=>{
+  ev.preventDefault(); const f=ev.target, err=$('#pwErr'); err.textContent='';
+  if(Store.mode==='cloud'){
+    if(f.password.value.length<6) return err.textContent='New password must be at least 6 characters.';
+    if(f.password.value!==f.confirm.value) return err.textContent='New passwords do not match.';
+    try{ await ADLIEU_FB.changePassword(f.current.value, f.password.value); f.reset(); toast('Password updated'); }
+    catch(e){ err.textContent=/Incorrect/.test(e.message)?'Current password is incorrect.':e.message; }
+    return;
+  }
+  if((await hashPassword(f.current.value,profile.passSalt)).hash!==profile.passHash) return err.textContent='Current password is incorrect.';
+  if(f.password.value.length<6) return err.textContent='New password must be at least 6 characters.';
+  if(f.password.value!==f.confirm.value) return err.textContent='New passwords do not match.';
+  const pw=await hashPassword(f.password.value); const p={...profile, passSalt:pw.salt, passHash:pw.hash};
+  try{ await Store.setProfile(p); profile=p; f.reset(); toast('Password updated'); }catch{ err.textContent='Could not update password.'; }
+});
+
+/* ---------- today: notes + entry editor ---------- */
+let draftPhotos=[], draftMood='';
+const MOODNAME={'😊':'Happy','😌':'Calm','🥰':'Loved','🤩':'Excited','😐':'Okay','😔':'Down','😢':'Sad','😤':'Frustrated','😴':'Tired'};
+$('#moodPick').innerHTML=MOODS.map(m=>`<button type="button" data-m="${m}" title="${MOODNAME[m]}" aria-label="${MOODNAME[m]}">${m}</button>`).join('');
+function syncMood(){ $$('#moodPick button').forEach(x=>x.classList.toggle('on',x.dataset.m===draftMood)); $('#moodName').textContent=draftMood? draftMood+' '+MOODNAME[draftMood]:''; }
+$('#moodPick').onclick=e=>{ const b=e.target.closest('button'); if(!b) return; draftMood = draftMood===b.dataset.m?'':b.dataset.m; syncMood(); saveDraft(); };
+function syncSeal(){ const on=$('#sealOn').checked; $('#sealWrap').classList.toggle('hidden',!on); const f=$('#entryForm'); f.sealUntil.min=shiftISO(todayISO(),1); if(on && !f.sealUntil.value) f.sealUntil.value=shiftISO(todayISO(),365); }
+$('#sealOn').onchange=()=>{ syncSeal(); saveDraft(); };
+function wordCount(){ const n=String($('#bodyInput').value).trim().split(/\s+/).filter(Boolean).length; $('#wc').textContent=n+(n===1?' word':' words'); }
+$('#bodyInput').addEventListener('input',wordCount);
+function renderTagSug(){ const f=$('#entryForm'); const cur=splitList(f.tags.value); const m={}; entries.forEach(e=>(e.tags||[]).forEach(t=>m[t]=(m[t]||0)+1));
+  const sug=Object.entries(m).sort((a,b)=>b[1]-a[1]).map(x=>x[0]).filter(t=>!cur.includes(t)&&t!=='check-in').slice(0,8);
+  $('#tagSug').innerHTML=sug.map(t=>`<button type="button" data-t="${esc(t)}">+ #${esc(t)}</button>`).join(''); }
+$('#tagSug').onclick=e=>{ const b=e.target.closest('button'); if(!b) return; const f=$('#entryForm'); const cur=splitList(f.tags.value); cur.push(b.dataset.t); f.tags.value=cur.join(', '); renderTagSug(); saveDraft(); };
+$('#entryForm').tags.addEventListener('input',renderTagSug);
+/* autosave draft (new entries only) */
+const draftKey=()=>'adlieu:draft:'+(Store.user||'');
+let draftT=null;
+function saveDraft(){ const f=$('#entryForm'); if(f.id.value||!Store.user) return; clearTimeout(draftT); draftT=setTimeout(()=>{
+  const d={title:f.title.value,body:f.body.value,tags:f.tags.value,location:f.location.value,people:f.people.value,mood:draftMood};
+  if(!Object.values(d).some(v=>String(v).trim())){ try{localStorage.removeItem(draftKey());}catch{} $('#draftNote').textContent=''; return; }
+  Object.assign(d,{visibility:f.visibility.value,seal:$('#sealOn').checked?f.sealUntil.value:'',date:f.date.value});
+  if(f.id.value) return;
+  try{ localStorage.setItem(draftKey(),JSON.stringify(d)); $('#draftNote').textContent='✓ Draft saved '+TIME(new Date().toISOString()); }catch{} },600); }
+function clearDraft(){ clearTimeout(draftT); try{localStorage.removeItem(draftKey());}catch{} $('#draftNote').textContent=''; }
+function restoreDraft(){ let d=null; try{ d=JSON.parse(localStorage.getItem(draftKey())||'null'); }catch{} const f=$('#entryForm'); if(!d||f.id.value||f.body.value) return;
+  f.title.value=d.title||''; f.body.value=d.body||''; f.tags.value=d.tags||''; f.location.value=d.location||''; f.people.value=d.people||''; draftMood=d.mood||''; syncMood(); wordCount(); renderTagSug();
+  if(d.visibility) f.visibility.value=d.visibility; if(d.date) f.date.value=d.date; if(d.seal){ $('#sealOn').checked=true; f.sealUntil.value=d.seal; } syncSeal();
+  $('#draftNote').textContent='✓ Unsaved draft restored'; }
+$('#entryForm').addEventListener('input',e=>{ if(e.target.type!=='file') saveDraft(); });
+$('#noteForm').addEventListener('submit', async ev=>{
+  ev.preventDefault(); const t=$('#noteInput').value.trim(); if(!t) return;
+  try{ await Store.saveEntry({id:uid(), type:'note', title:'', body:t, tags:[], people:[], location:'', mood:'', visibility:'private', date:todayISO(), createdAt:new Date().toISOString(), photos:[]}); $('#noteInput').value=''; }
+  catch(e){ toast(friendlyError(e)); }
+});
+function resetEditor(){ const f=$('#entryForm'); f.reset(); f.id.value=''; f.date.value=todayISO(); draftPhotos=[]; draftMood=''; syncMood(); syncSeal(); wordCount(); renderDraftPhotos(); renderTagSug();
+  $('#entrySave').textContent='💾 Save entry'; $('#entryCard').classList.remove('editing'); $('#eHeadTitle').textContent='Owner entry'; $('#eHeadSub').textContent='Deeper reflections & storytelling'; $('#entryReset').textContent='Clear'; }
+$('#entryReset').onclick=()=>{ if(!$('#entryForm').id.value) clearDraft(); resetEditor(); };
+$('#photoInput').addEventListener('change', async ev=>{
+  for(const file of [...ev.target.files].slice(0,6)){ try{ draftPhotos.push({data:await shrinkImage(file)}); }catch{ toast('Could not read '+file.name); } }
+  ev.target.value=''; renderDraftPhotos();
+});
+async function renderDraftPhotos(){
+  const box=$('#photoPreview'); box.innerHTML='';
+  for(const [i,p] of draftPhotos.entries()){ const src=p.data || await Store.getPhoto(p.id); const d=document.createElement('div'); d.className='ph';
+    d.innerHTML=`<img alt=""><button type="button" class="x" title="Remove">×</button>`; d.querySelector('img').src=src||'';
+    d.querySelector('button').onclick=()=>{ draftPhotos.splice(i,1); renderDraftPhotos(); }; box.appendChild(d); }
+}
+$('#entryForm').addEventListener('submit', async ev=>{
+  ev.preventDefault(); const f=ev.target; const btn=$('#entrySave');
+  const seal=$('#sealOn').checked? f.sealUntil.value : '';
+  if($('#sealOn').checked && !(seal>todayISO())) return toast('Pick a future date for your time capsule ⏳');
+  btn.disabled=true;
+  try{
+    const id=f.id.value||uid(); const prev=entries.find(x=>x.id===id);
+    const photoIds=[]; for(const p of draftPhotos) photoIds.push(p.id || await Store.savePhoto(p.data));
+    for(const old of (prev?.photos||[])) if(!photoIds.includes(old)) await Store.deletePhoto(old);
+    await Store.saveEntry({id, type:'entry', title:f.title.value.trim()||'Untitled memory', body:f.body.value, tags:splitList(f.tags.value), people:splitList(f.people.value),
+      location:f.location.value.trim().toLowerCase(), mood:draftMood, visibility:f.visibility.value, date:f.date.value||todayISO(), sealUntil:seal, fav:!!prev?.fav,
+      createdAt:prev?.createdAt||new Date().toISOString(), updatedAt:new Date().toISOString(), photos:photoIds});
+    toast(seal?'Time capsule sealed until '+fmtDate(seal)+' 🔒':prev?'Entry updated':'Entry saved ✨'); if(!prev) clearDraft(); resetEditor();
+  }catch(e){ toast(e?.code==='quota_exceeded'?'Your diary storage is full — remove some photos.':'Could not save — please try again'); }
+  btn.disabled=false;
+});
+function editEntry(e){
+  closeModal(); location.hash='today'; const f=$('#entryForm');
+  f.id.value=e.id; f.title.value=e.title||''; f.body.value=e.body||''; f.tags.value=(e.tags||[]).join(', '); f.people.value=(e.people||[]).join(', ');
+  f.location.value=e.location||''; f.visibility.value=e.visibility||'private'; f.date.value=e.date||todayISO(); f.sealUntil.value=e.sealUntil||''; $('#sealOn').checked=!!e.sealUntil; syncSeal();
+  draftMood=e.mood||''; syncMood(); wordCount(); renderTagSug();
+  clearTimeout(draftT); $('#entryCard').classList.add('editing'); $('#eHeadTitle').textContent='Editing a memory'; $('#eHeadSub').textContent=fmtDate(e.date||todayISO()); $('#entryReset').textContent='Cancel'; $('#draftNote').textContent='';
+  draftPhotos=(e.photos||[]).map(id=>({id})); renderDraftPhotos(); $('#entrySave').textContent='💾 Update entry'; $('#entryForm').scrollIntoView({behavior:'smooth',block:'start'});
+}
+
+/* ---------- render ---------- */
+function renderAll(){ renderToday(); renderDash(); renderJournal(); renderProfileExtras(); renderTagSug(); if(location.hash==='#constellation') drawSky();
+  const n=entries.filter(e=>e.type==='entry').length, q=entries.length-n;
+  $('#stats').textContent=`${n} entr${n===1?'y':'ies'} · ${q} note${q===1?'':'s'}`; }
+function streak(){
+  const days=new Set(entries.map(e=>e.date)); let d=todayISO(); if(!days.has(d)) d=shiftISO(d,-1);
+  let n=0; while(days.has(d)){ n++; d=shiftISO(d,-1); } return n; }
+function renderDash(){
+  const st=streak(); $('#stStreak').innerHTML=st+'<small>day'+(st===1?'':'s')+'</small>';
+  $('#stTotal').textContent=entries.length; $('#stFav').textContent=entries.filter(e=>e.fav).length;
+  const wk=[]; for(let i=6;i>=0;i--){ const d=shiftISO(todayISO(),-i); const m=entries.filter(e=>e.date===d&&e.mood&&!isSealed(e)).sort((a,b)=>(b.createdAt||'').localeCompare(a.createdAt||''))[0]?.mood;
+    wk.push(`<span title="${esc(fmtDate(d))}">${m?m:'<span class="none">●</span>'}<em>${new Date(d+'T00:00').toLocaleDateString(undefined,{weekday:'narrow'})}</em></span>`); }
+  $('#stWeek').innerHTML=wk.join('');
+  if(promptIdx===null) promptIdx=dayOfYear()%PROMPTS.length;
+  $('#promptText').textContent=PROMPTS[promptIdx];
+  // memory lane
+  const today=todayISO(), md=today.slice(5), dd=today.slice(8);
+  const past=entries.filter(e=>e.date<today && !isSealed(e));
+  let pick=past.filter(e=>e.date.slice(5)===md)[0], label='On this day, '+(pick?(Number(today.slice(0,4))-Number(pick.date.slice(0,4)))+' year(s) ago':'');
+  if(!pick){ pick=past.filter(e=>e.date.slice(8)===dd).sort((a,b)=>b.date.localeCompare(a.date))[0]; label='On this day in a past month'; }
+  if(!pick){ const older=past.filter(e=>e.date<=shiftISO(today,-3)); if(older.length){ pick=older[dayOfYear()%older.length]; label='A memory from the past'; } }
+  const tb=$('#throwBody'), card=$('#throwCard');
+  const opening=entries.filter(e=>e.sealUntil && e.sealUntil<=today && e.sealUntil>=shiftISO(today,-7))[0];
+  if(opening){ tb.innerHTML=`<div class="when">🎁 A time capsule just opened</div><p>${esc(opening.title||'A sealed memory')}</p><span class="chip">Tap to read</span>`; card.onclick=()=>openEntry(opening.id); }
+  else if(pick){ tb.innerHTML=`<div class="when">${esc(label)} · ${esc(fmtDate(pick.date))}</div><p>${esc(pick.type==='entry'?pick.title:'“'+pick.body.slice(0,90)+'”')} ${pick.mood||''}</p><span class="chip">Tap to revisit</span>`; card.onclick=()=>openEntry(pick.id); }
+  else { tb.innerHTML=`<p style="color:var(--muted);font-size:14px;font-family:Roboto">Keep writing — old memories will resurface here on their anniversaries.</p>`; card.onclick=null; }
+}
+$('#nextPrompt').onclick=()=>{ promptIdx=(promptIdx+1+Math.floor(Math.random()*5))%PROMPTS.length; $('#promptText').textContent=PROMPTS[promptIdx]; };
+$('#usePrompt').onclick=()=>{ const f=$('#entryForm'); if(!f.title.value) f.title.value=PROMPTS[promptIdx]; f.body.focus(); f.scrollIntoView({behavior:'smooth',block:'start'}); };
+const AFFIRM=['You are allowed to take things one page at a time.','Your story matters — even the quiet chapters.','Small steps are still steps forward.','Be as kind to yourself as you are to others.','Today is a fresh page.','You have survived every hard day so far.','Rest is part of the journey, not a break from it.','Your feelings are valid, and they will pass.','Progress, not perfection.','Someone is grateful you exist.','Magaling ka. Kaya mo \'to. 💪','Hindi mo kailangang maging perpekto para maging masaya.'];
+const TIME=iso=>new Date(iso).toLocaleTimeString([], {hour:'numeric',minute:'2-digit'});
+function renderToday(){
+  const T=todayISO();
+  $('#affirm').textContent='🌿 '+AFFIRM[dayOfYear()%AFFIRM.length];
+  const items=entries.filter(e=>e.date===T).sort((a,b)=>(b.createdAt||'').localeCompare(a.createdAt||''));
+  $('#todayNotes').innerHTML = items.length? '<div class="tl">'+items.map(n=>{
+      const kind=n.type==='entry'?'entry':(n.checkin?'mood':'note');
+      const txt=n.type==='entry'? (isSealed(n)?'🔒 '+n.title+' (time capsule)':`${n.mood||'📝'} ${n.title}`) : (n.checkin? `${n.mood} ${n.body||'Mood check-in'}` : n.body);
+      return `<div class="it ${kind}"><time>${esc(TIME(n.createdAt||new Date().toISOString()))} · ${kind==='entry'?'Owner entry':kind==='mood'?'Mood check-in':'Quick note'}</time><p ${kind==='entry'?`data-open="${esc(n.id)}"`:''}>${esc(txt)}</p>${kind!=='entry'?`<button class="x" data-del="${esc(n.id)}" title="Delete">×</button>`:''}</div>`; }).join('')+'</div>'
+    : `<div style="color:var(--muted);font-size:14px;padding:10px 0">Nothing yet today — add a quick note, a check-in or an entry.</div>`;
+  $$('#todayNotes [data-del]').forEach(b=>b.onclick=()=>Store.deleteEntry(b.dataset.del).catch(e=>toast(friendlyError(e))));
+  $$('#todayNotes [data-open]').forEach(p=>p.onclick=()=>openEntry(p.dataset.open));
+  // mood check-in
+  const cis=items.filter(e=>e.checkin);
+  $('#ciSub').textContent= cis.length? `Checked in ${cis.length}× today · last: ${cis[0].mood} at ${TIME(cis[0].createdAt)}` : 'How are you feeling right now? One tap is enough.';
+  // gratitude
+  const g=items.find(e=>(e.tags||[]).includes('gratitude') && e.type==='entry');
+  const gb=$('#gratBox');
+  if(g && gb.dataset.mode!=='edit'){ gb.innerHTML=`<div class="gdone">${(g.body||'').split('\n').filter(Boolean).map(l=>`<div>${esc(l.replace(/^\d\.\s*/,''))}</div>`).join('')}</div><button class="btn ghost sm" id="gEdit" style="margin-top:8px">Edit</button>`;
+    $('#gEdit').onclick=()=>{ gb.dataset.mode='edit'; renderToday(); const ins=$$('#gratBox input'); (g.body||'').split('\n').filter(Boolean).forEach((l,i)=>{ if(ins[i]) ins[i].value=l.replace(/^\d\.\s*/,''); }); }; }
+  else if(!gb.querySelector('form')){ gb.innerHTML=`<form class="grat" id="gForm">${[1,2,3].map(i=>`<div class="gi"><b>${i}</b><input class="t" maxlength="120" placeholder="${['Something that made me smile…','Someone I\'m thankful for…','A small win today…'][i-1]}"></div>`).join('')}<div class="row" style="justify-content:flex-end"><button class="btn sm">Save gratitude</button></div></form>`;
+    $('#gForm').onsubmit=async ev=>{ ev.preventDefault(); const vals=$$('#gForm input').map(i=>i.value.trim()).filter(Boolean); if(!vals.length) return toast('Write at least one good thing 🌻');
+      const ex=entries.find(e=>e.date===todayISO()&&(e.tags||[]).includes('gratitude')&&e.type==='entry');
+      try{ await Store.saveEntry({id:ex?.id||uid(),type:'entry',title:'3 good things',body:vals.map((v,i)=>`${i+1}. ${v}`).join('\n'),mood:ex?.mood||'😊',tags:['gratitude'],people:[],location:'',visibility:'private',date:todayISO(),createdAt:ex?.createdAt||new Date().toISOString(),photos:[],fav:!!ex?.fav});
+      }catch(e){ return toast(friendlyError(e)); }
+      delete gb.dataset.mode; gb.innerHTML=''; renderToday(); toast('Gratitude saved 🌻'); }; }
+}
+let ciMood='';
+$('#ciMoods').innerHTML=MOODS.map(m=>`<button type="button" data-m="${m}">${m}</button>`).join('');
+$('#ciMoods').onclick=async e=>{ const b=e.target.closest('button'); if(!b) return; ciMood=b.dataset.m; $$('#ciMoods button').forEach(x=>x.classList.toggle('on',x===b));
+  const id=uid(); $('#ciForm').dataset.id=id; $('#ciForm').classList.remove('hidden');
+  try{ await Store.saveEntry({id,type:'note',checkin:true,title:'',body:'',mood:ciMood,tags:['check-in'],people:[],location:'',visibility:'private',date:todayISO(),createdAt:new Date().toISOString(),photos:[]});
+  toast('Mood logged '+ciMood); }catch(err){ $('#ciForm').classList.add('hidden'); $$('#ciMoods button').forEach(x=>x.classList.remove('on')); toast(friendlyError(err)); } };
+$('#ciForm').onsubmit=async ev=>{ ev.preventDefault(); const id=ev.target.dataset.id, t=$('#ciNote').value.trim(); const e=entries.find(x=>x.id===id);
+  if(e&&t){ try{ await Store.saveEntry({...e,body:t}); }catch(err){ return toast(friendlyError(err)); } } $('#ciNote').value=''; ev.target.classList.add('hidden'); $$('#ciMoods button').forEach(x=>x.classList.remove('on')); if(t) toast('Saved 💗'); };
+function matches(e,q){ if(!q) return true; q=q.toLowerCase(); return [e.title,isSealed(e)?'':e.body,e.location,...(e.tags||[]),...(e.people||[])].some(x=>String(x||'').toLowerCase().includes(q)); }
+function renderJournal(){
+  const tags={}; entries.forEach(e=>(e.tags||[]).forEach(t=>tags[t]=(tags[t]||0)+1));
+  $('#tagFilters').innerHTML=Object.entries(tags).sort((a,b)=>b[1]-a[1]).slice(0,20).map(([t,c])=>`<button class="chip tag ${activeTag===t?'on':''}" data-t="${esc(t)}">#${esc(t)} · ${c}</button>`).join('');
+  $$('#tagFilters button').forEach(b=>b.onclick=()=>{ activeTag=activeTag===b.dataset.t?null:b.dataset.t; renderJournal(); });
+  const q=$('#search').value.trim(), type=$('#typeFilter').value;
+  renderCal();
+  renderInsights(); $('#listWrap').classList.toggle('hidden',jMode==='ins');
+  const mood=$('#moodFilter').value, sort=$('#sortBy').value;
+  const typeOk=e=> type==='all' || (type==='checkin'? !!e.checkin : (type==='note'? e.type==='note'&&!e.checkin : e.type===type));
+  const list=entries.filter(e=>typeOk(e) && (!mood||(e.mood===mood&&!isSealed(e))) && (!activeTag||(e.tags||[]).includes(activeTag)) && (!favOnly||e.fav) && (!activeDate||e.date===activeDate) && matches(e,q))
+    .sort((a,b)=> sort==='old'? (a.date+(a.createdAt||'')).localeCompare(b.date+(b.createdAt||'')) : sort==='az'? (a.title||a.body||'').localeCompare(b.title||b.body||'') : (b.date+(b.createdAt||'')).localeCompare(a.date+(a.createdAt||'')));
+  const box=$('#entryList');
+  const dchip=activeDate?`<div style="grid-column:1/-1"><button class="chip on" id="clrDate">📅 ${esc(fmtDate(activeDate))} ✕</button></div>`:'';
+  if(!list.length){ box.innerHTML=dchip+`<div class="empty" style="grid-column:1/-1">${entries.length?'Nothing matches — try another search or filter.':'Your journal is empty. Write your first entry on the Today page.'}</div>`; if($('#clrDate')) $('#clrDate').onclick=()=>{activeDate=null;renderJournal();}; return; }
+  box.innerHTML=dchip+list.map(e=>`<div class="paper ecard" data-id="${esc(e.id)}">
+    <button class="star ${e.fav?'on':''}" data-fav="${esc(e.id)}" title="Favorite">⭐</button>
+    <div class="meta">${esc(fmtDate(e.date))} ${e.mood&&!isSealed(e)?'· '+e.mood:''} ${e.checkin?'· mood check-in':e.type==='note'?'· quick note':''}</div>
+    ${e.type==='entry'?`<h3>${esc(e.title)}</h3>`:''}
+    ${isSealed(e)?`<div class="sealed">🔒 Time capsule<br><small>Opens on ${esc(fmtDate(e.sealUntil))}</small></div>`:`
+    ${e.photos?.length?`<img class="thumb" data-ph="${esc(e.photos[0])}" alt="">`:''}
+    <p>${esc(e.checkin&&!e.body?'Feeling '+e.mood:e.body)}</p>`}
+    <div class="row" style="gap:6px">${(e.tags||[]).map(t=>`<span class="chip tag">#${esc(t)}</span>`).join('')}${e.location?`<span class="chip">📍 ${esc(e.location)}</span>`:''}${e.visibility&&e.visibility!=='private'?`<span class="chip">👪 ${esc(e.visibility)}</span>`:''}</div></div>`).join('');
+  $$('#entryList .ecard').forEach(c=>c.onclick=()=>openEntry(c.dataset.id));
+  $$('#entryList [data-fav]').forEach(b=>b.onclick=ev=>{ ev.stopPropagation(); toggleFav(b.dataset.fav); });
+  if($('#clrDate')) $('#clrDate').onclick=()=>{activeDate=null;renderJournal();};
+  $$('#entryList img[data-ph]').forEach(async img=>{ img.src=await Store.getPhoto(img.dataset.ph)||''; });
+}
+$('#search').addEventListener('input',renderJournal); $('#typeFilter').addEventListener('change',renderJournal);
+$('#moodFilter').innerHTML='<option value="">Any mood</option>'+MOODS.map(m=>`<option>${m}</option>`).join('');
+$('#moodFilter').onchange=renderJournal; $('#sortBy').onchange=renderJournal;
+function wordsOf(e){ return isSealed(e)?0:String(e.body||'').trim().split(/\s+/).filter(Boolean).length; }
+function longestStreak(){ const ds=[...new Set(entries.map(e=>e.date))].sort(); let best=0,cur=0,prev=null; ds.forEach(d=>{ cur=(prev&&shiftISO(prev,1)===d)?cur+1:1; best=Math.max(best,cur); prev=d; }); return best; }
+function renderInsights(){
+  const w=$('#insWrap'); w.classList.toggle('hidden',jMode!=='ins'); if(jMode!=='ins') return;
+  if(!entries.length){ w.innerHTML='<div class="empty">Write a few entries and your insights will appear here — moods, habits and the people who fill your story.</div>'; return; }
+  const T=todayISO(), words=entries.reduce((a,e)=>a+wordsOf(e),0), photos=entries.reduce((a,e)=>a+(e.photos?.length||0),0), caps=entries.filter(isSealed).length;
+  const vis=entries.filter(e=>!isSealed(e));
+  const mc={}; vis.forEach(e=>{ if(e.mood) mc[e.mood]=(mc[e.mood]||0)+1; }); const mmax=Math.max(1,...Object.values(mc));
+  const top=k=>{ const m={}; vis.forEach(e=>[].concat(e[k]||[]).filter(Boolean).forEach(v=>m[v]=(m[v]||0)+1)); return Object.entries(m).sort((a,b)=>b[1]-a[1]).slice(0,5); };
+  const per={}; entries.forEach(e=>per[e.date]=(per[e.date]||0)+1);
+  let heat=''; const start=shiftISO(T,-(83+ (6-new Date(T+'T00:00').getDay())));
+  for(let i=0;i<84+(6-new Date(T+'T00:00').getDay());i++){ const d=shiftISO(start,i); if(d>T){ heat+='<i style="visibility:hidden"></i>'; continue; } const c=per[d]||0; heat+=`<i class="${c>=4?'l4':c==3?'l3':c==2?'l2':c==1?'l1':''} ${d===T?'today':''}" title="${esc(fmtDate(d))}: ${c} ${c===1?'memory':'memories'}"></i>`; }
+  const wd=[0,0,0,0,0,0,0]; entries.forEach(e=>wd[new Date(e.date+'T00:00').getDay()]++); const wmax=Math.max(1,...wd), best=wd.indexOf(Math.max(...wd));
+  const happy=vis.filter(e=>['😊','🥰','🤩','😌'].includes(e.mood)).length, moodCount=vis.filter(e=>e.mood).length;
+  const tl=(arr,pre)=>arr.length? arr.map(([k,v])=>`<div><b>${esc(pre+k)}</b><span>${v}</span></div>`).join('') : '<span style="color:var(--muted)">None yet</span>';
+  w.innerHTML=`<div class="ins-grid">
+    <div class="stat"><div class="k">📝 Words written</div><div class="v">${words.toLocaleString()}</div></div>
+    <div class="stat"><div class="k">🏆 Longest streak</div><div class="v">${longestStreak()}<small>days</small></div></div>
+    <div class="stat"><div class="k">📷 Photos</div><div class="v">${photos}</div></div>
+    <div class="stat"><div class="k">🔒 Time capsules</div><div class="v">${caps}</div></div></div>
+  <div class="ins-row">
+    <div class="card dark ins"><h4>🗓️ Writing activity · last 12 weeks</h4><div class="heat">${heat}</div><p style="font-size:12px;color:var(--muted);margin:10px 0 0">Each square is a day — brighter means more memories written.</p></div>
+    <div class="card dark ins"><h4>😊 Mood mix</h4>${Object.keys(mc).length? MOODS.filter(m=>mc[m]).map(m=>`<div class="bar"><span class="e">${m}</span><span class="tr"><i style="width:${(mc[m]/mmax*100).toFixed(0)}%"></i></span><span class="n">${mc[m]}</span></div>`).join(''):'<span style="color:var(--muted)">Pick a mood on your entries to see this.</span>'}
+      ${moodCount?`<p style="font-size:13px;color:var(--mint);margin:10px 0 0">💚 ${Math.round(happy/moodCount*100)}% of your logged moods were happy or calm.</p>`:''}</div></div>
+  <div class="ins-row" style="grid-template-columns:1fr 1fr 1fr">
+    <div class="card dark ins"><h4>🏷️ Top tags</h4><div class="toplist">${tl(top('tags'),'#')}</div></div>
+    <div class="card dark ins"><h4>👤 People in your story</h4><div class="toplist">${tl(top('people'),'')}</div></div>
+    <div class="card dark ins"><h4>📍 Favorite places</h4><div class="toplist">${tl(top('location'),'')}</div></div></div>
+  <div class="card dark ins"><h4>📆 When you write most</h4><div class="wk">${['Sun','Mon','Tue','Wed','Thu','Fri','Sat'].map((d,i)=>`<div class="${i===best&&wd[i]?'best':''}"><i style="height:${(wd[i]/wmax*70).toFixed(0)}px"></i>${d}</div>`).join('')}</div>
+    <p style="font-size:13px;color:var(--muted);margin:10px 0 0">${wd[best]?`You write most on <b style="color:var(--orange)">${['Sundays','Mondays','Tuesdays','Wednesdays','Thursdays','Fridays','Saturdays'][best]}</b>.`:''}</p></div>`;
+}
+function diaryText(){
+  const list=[...entries].sort((a,b)=>(a.date+(a.createdAt||'')).localeCompare(b.date+(b.createdAt||'')));
+  return `ADLIEU — ${profile.name}'s diary\nExported ${fmtDate(todayISO())}\n\n`+list.map(e=>{
+    const head=`${fmtDate(e.date)} — ${e.type==='entry'?e.title:(e.checkin?'Mood check-in':'Quick note')}${e.mood&&!isSealed(e)?' '+e.mood:''}`;
+    const body=isSealed(e)?`[Time capsule — sealed until ${fmtDate(e.sealUntil)}]`:(e.body||'');
+    const meta=[(e.tags||[]).map(t=>'#'+t).join(' '),e.location?'📍 '+e.location:'',(e.people||[]).length?'with '+e.people.join(', '):''].filter(Boolean).join(' · ');
+    return head+'\n'+body+(meta?'\n'+meta:'');
+  }).join('\n\n———\n\n');
+}
+async function copyDiary(){
+  if(!entries.length) return toast('Your diary is still empty');
+  const t=diaryText();
+  try{ await navigator.clipboard.writeText(t); toast('Whole diary copied 📋 — paste it anywhere to keep a backup'); }
+  catch{ const m=$('#modal'); m.classList.remove('hidden'); m.innerHTML=`<div class="paper"><div class="row" style="justify-content:space-between"><h3>Your diary as text</h3><button class="x" id="mClose" style="font-size:24px">×</button></div><p style="font-size:13px">Select all and copy:</p><textarea class="t copybox" readonly>${esc(t)}</textarea></div>`; $('#mClose').onclick=closeModal; }
+}
+$('#copyDiary').onclick=copyDiary;
+async function toggleFav(id){ const e=entries.find(x=>x.id===id); if(!e) return; try{ await Store.saveEntry({...e,fav:!e.fav}); toast(!e.fav?'Added to favorites ⭐':'Removed from favorites'); }catch(e){ toast(friendlyError(e)); } }
+$('#favOnly').onclick=()=>{ favOnly=!favOnly; $('#favOnly').classList.toggle('on',favOnly); renderJournal(); };
+$('#jMode').onclick=e=>{ const b=e.target.closest('button'); if(!b) return; jMode=b.dataset.m; $$('#jMode button').forEach(x=>x.classList.toggle('on',x===b)); renderJournal(); };
+function renderCal(){
+  const w=$('#calWrap'); w.classList.toggle('hidden',jMode!=='cal'); if(jMode!=='cal') return;
+  if(!calMonth){ const t=new Date(); calMonth=new Date(t.getFullYear(),t.getMonth(),1); }
+  const y=calMonth.getFullYear(), m=calMonth.getMonth(), first=new Date(y,m,1).getDay(), n=new Date(y,m+1,0).getDate();
+  const byDay={}; entries.forEach(e=>{ if(e.date.startsWith(`${y}-${String(m+1).padStart(2,'0')}`)) (byDay[e.date]=byDay[e.date]||[]).push(e); });
+  let h=`<div class="cal-head"><button class="btn ghost sm" id="calPrev">‹</button><h3>${calMonth.toLocaleDateString(undefined,{month:'long',year:'numeric'})}</h3><button class="btn ghost sm" id="calNext">›</button></div><div class="cal-grid">`;
+  ['S','M','T','W','T','F','S'].forEach(d=>h+=`<div class="dow">${d}</div>`);
+  for(let i=0;i<first;i++) h+='<div class="d pad"></div>';
+  for(let d=1;d<=n;d++){ const iso=`${y}-${String(m+1).padStart(2,'0')}-${String(d).padStart(2,'0')}`; const list=byDay[iso]||[]; const mood=list.find(e=>e.mood&&!isSealed(e))?.mood;
+    h+=`<div class="d ${list.length?'has':''} ${iso===todayISO()?'today':''}" data-d="${iso}"><b>${d}</b>${mood?`<span class="m">${mood}</span>`:''}${list.length?`<span class="dots">${'•'.repeat(Math.min(list.length,4))}</span>`:''}</div>`; }
+  w.innerHTML=h+'</div><p style="color:var(--muted);font-size:13px;margin:10px 2px 0">Tap a day to see its memories below.</p>'; w.className='cal'; w.style.marginBottom='18px';
+  $('#calPrev').onclick=()=>{ calMonth=new Date(y,m-1,1); renderJournal(); };
+  $('#calNext').onclick=()=>{ calMonth=new Date(y,m+1,1); renderJournal(); };
+  $$('#calWrap .d[data-d]').forEach(c=>c.onclick=()=>{ activeDate=activeDate===c.dataset.d?null:c.dataset.d; renderJournal(); $('#entryList').scrollIntoView({behavior:'smooth',block:'start'}); });
+}
+
+/* ---------- entry modal ---------- */
+function closeModal(){ $('#modal').classList.add('hidden'); $('#modal').innerHTML=''; }
+$('#modal').addEventListener('click',e=>{ if(e.target.id==='modal') closeModal(); });
+addEventListener('keydown',e=>{ if(e.key==='Escape') closeModal(); });
+function openEntry(id){
+  const e=entries.find(x=>x.id===id); if(!e) return;
+  const m=$('#modal'); m.classList.remove('hidden');
+  m.innerHTML=`<div class="paper torn">
+    <div class="row" style="justify-content:space-between"><div style="font-size:13px;color:#4a4f74">${esc(fmtDate(e.date))} ${e.mood&&!isSealed(e)?'· '+e.mood:''} · ${esc(e.visibility||'private')}</div><button class="x" id="mClose" style="font-size:24px;color:#4a4f74">×</button></div>
+    <h2 style="font-size:26px;margin-top:6px">${esc(e.type==='note'?'Quick note':e.title)} <button class="x" id="mFav" style="font-size:22px;${e.fav?'':'filter:grayscale(1);opacity:.4'}" title="Favorite">⭐</button></h2>
+    ${isSealed(e)?`<div class="sealed" style="padding:30px">🔒 This time capsule is sealed until <b>${esc(fmtDate(e.sealUntil))}</b>.<br><small>Come back then to read it.</small></div>`:`<div class="entry-body">${esc(e.body)}</div>`}
+    <div class="photos" id="mPhotos"></div>
+    <div class="row" style="gap:6px;margin:14px 0">${(e.tags||[]).map(t=>`<span class="chip tag">#${esc(t)}</span>`).join('')}${e.location?`<span class="chip">📍 ${esc(e.location)}</span>`:''}${(e.people||[]).map(p=>`<span class="chip">👤 ${esc(p)}</span>`).join('')}</div>
+    <div id="mSummary"></div>
+    <div class="row" style="justify-content:space-between;margin-top:16px">
+      <button class="btn ghost sm" id="mDel" style="color:#a02b45">Delete</button>
+      <div class="row">${isSealed(e)?'<button class="btn ghost sm" id="mUnseal">Open early</button>':`${aiReady?'<button class="btn ghost sm" id="mSum">✨ Summarize with Adlieu AI</button>':''}<button class="btn sm" id="mEdit">Edit</button>`}</div></div></div>`;
+  $('#mClose').onclick=closeModal;
+  if($('#mEdit')) $('#mEdit').onclick=()=>editEntry(e);
+  $('#mFav').onclick=async()=>{ await toggleFav(e.id); setTimeout(()=>openEntry(e.id),150); };
+  if($('#mUnseal')) $('#mUnseal').onclick=async()=>{ const b=$('#mUnseal'); if(b.dataset.c!=='1'){ b.dataset.c='1'; b.textContent='Tap again to open now'; return; } try{ await Store.saveEntry({...e,sealUntil:''}); }catch(err){ return toast(friendlyError(err)); } toast('Time capsule opened 🎁'); setTimeout(()=>openEntry(e.id),150); };
+  $('#mDel').onclick=async()=>{ const b=$('#mDel'); if(b.dataset.c!=='1'){ b.dataset.c='1'; b.textContent='Tap again to delete'; return; } try{ await Store.deleteEntry(e.id); }catch(err){ return toast(friendlyError(err)); } closeModal(); toast('Entry deleted'); };
+  if($('#mSum')) $('#mSum').onclick=()=>summarize(e);
+  if(!isSealed(e)) (async()=>{ for(const p of e.photos||[]){ const src=await Store.getPhoto(p); if(!src) continue; const d=document.createElement('div'); d.className='ph'; const i=document.createElement('img'); i.src=src; d.appendChild(i); $('#mPhotos')?.appendChild(d);} })();
+}
+
+/* ---------- constellation ---------- */
+let skyState=null;
+function drawSky(){
+  const svg=$('#skySvg'); const W=svg.clientWidth||900, H=svg.clientHeight||620;
+  const vis=$('#visFilter').value, by=$('#linkBy').value;
+  const mem=entries.filter(e=>vis==='all'||(e.visibility||'private')===vis);
+  const hubs=new Map(), links=[];
+  const addHub=(key,label,kind)=>{ if(!hubs.has(key)) hubs.set(key,{id:key,label,kind,hub:true,n:0}); hubs.get(key).n++; return key; };
+  mem.forEach(e=>{
+    if(by==='all'||by==='tags') (e.tags||[]).forEach(t=>links.push([e.id,addHub('t:'+t,'#'+t,'tag')]));
+    if((by==='all'||by==='location') && e.location) links.push([e.id,addHub('l:'+e.location,'📍 '+e.location,'place')]);
+    if(by==='all'||by==='people') (e.people||[]).forEach(p=>links.push([e.id,addHub('p:'+p,p,'person')]));
+  });
+  const nodes=[...mem.map(e=>({id:e.id,label:e.type==='note'?e.body.slice(0,40):e.title,entry:e})),...hubs.values()];
+  const prev=skyState?.pos||{};
+  nodes.forEach(n=>{ const p=prev[n.id]; n.x=p?p.x:W/2+(Math.random()-.5)*W*.6; n.y=p?p.y:H/2+(Math.random()-.5)*H*.6; n.vx=0; n.vy=0; });
+  const byId=Object.fromEntries(nodes.map(n=>[n.id,n]));
+  const PADX=W<500?55:40;
+  for(let it=0;it<260;it++){ const a=.9*(1-it/300);
+    for(let i=0;i<nodes.length;i++) for(let j=i+1;j<nodes.length;j++){ const A=nodes[i],B=nodes[j]; let dx=A.x-B.x,dy=A.y-B.y,d2=dx*dx+dy*dy+.01; if(d2>90000) continue; const f=1400/d2; A.vx+=dx*f;A.vy+=dy*f;B.vx-=dx*f;B.vy-=dy*f; }
+    links.forEach(([s,t])=>{ const A=byId[s],B=byId[t]; const dx=B.x-A.x,dy=B.y-A.y,d=Math.hypot(dx,dy)||1,f=(d-70)*.02; A.vx+=dx/d*f;A.vy+=dy/d*f;B.vx-=dx/d*f;B.vy-=dy/d*f; });
+    nodes.forEach(n=>{ n.vx+=(W/2-n.x)*.004; n.vy+=(H/2-n.y)*.004; n.x+=n.vx*a; n.y+=n.vy*a; n.vx*=.55; n.vy*=.55; n.x=Math.max(PADX,Math.min(W-PADX,n.x)); n.y=Math.max(30,Math.min(H-50,n.y)); });
+  }
+  skyState={pos:Object.fromEntries(nodes.map(n=>[n.id,{x:n.x,y:n.y}]))};
+  const col={tag:'#f4a3b4',place:'#7dbcee',person:'#e8935a'};
+  let h=`<defs><filter id="glow"><feGaussianBlur stdDeviation="3.5" result="b"/><feMerge><feMergeNode in="b"/><feMergeNode in="SourceGraphic"/></feMerge></filter></defs>`;
+  for(let i=0;i<120;i++) h+=`<circle cx="${(Math.random()*W).toFixed(0)}" cy="${(Math.random()*H).toFixed(0)}" r="${(Math.random()*.9+.2).toFixed(2)}" fill="#fff" opacity="${(Math.random()*.5+.1).toFixed(2)}"/>`;
+  links.forEach(([s,t])=>{ const A=byId[s],B=byId[t]; h+=`<line data-s="${esc(s)}" data-t="${esc(t)}" x1="${A.x}" y1="${A.y}" x2="${B.x}" y2="${B.y}" stroke="${col[B.kind]}" stroke-opacity=".35" stroke-width="1"/>`; });
+  nodes.forEach(n=>{ if(n.hub){ const r=5+Math.min(9,n.n*1.5);
+      h+=`<g class="hubg" data-hub="${esc(n.id)}" style="cursor:pointer"><circle cx="${n.x}" cy="${n.y}" r="${r}" fill="${col[n.kind]}" opacity=".9"/><text x="${n.x}" y="${n.y+r+13}" text-anchor="${n.x<90?'start':n.x>W-90?'end':'middle'}" fill="${col[n.kind]}" font-size="11" font-family="Poppins">${esc(n.label)}</text></g>`; }
+    else { const big=n.entry.type==='entry';
+      h+=`<g class="mem" data-id="${esc(n.id)}" style="cursor:pointer"><circle class="core" style="animation-delay:${(Math.random()*3).toFixed(2)}s" cx="${n.x}" cy="${n.y}" r="${big?5:3}" fill="#fff" filter="url(#glow)"/><circle cx="${n.x}" cy="${n.y}" r="12" fill="transparent"/></g>`; } });
+  if(!nodes.length) h+=`<text x="${W/2}" y="${H/2}" text-anchor="middle" fill="#a9b6ab" font-family="Poppins" font-size="15">Your constellation will light up as you write and tag memories.</text>`;
+  svg.setAttribute('viewBox',`0 0 ${W} ${H}`); svg.innerHTML=`<g id="skyWorld">${h}</g>`; skyView.W=W; skyView.H=H; applyView(); skyData={byId,links,hubs}; applyFind();
+  const tip=$('#skyTip');
+  svg.querySelectorAll('g[data-id]').forEach(g=>{ const n=byId[g.dataset.id];
+    g.onmouseenter=()=>{ const sx=n.x*skyView.k+skyView.tx, sy=n.y*skyView.k+skyView.ty; tip.innerHTML=`<b>${esc(isSealed(n.entry)?'🔒 Sealed memory':(n.label||'Memory'))}</b><br><span style="color:var(--muted)">${esc(fmtDate(n.entry.date))} ${n.entry.mood&&!isSealed(n.entry)?n.entry.mood:''}</span>`; tip.style.left=Math.min(sx+14,W-250)+'px'; tip.style.top=(sy+10)+'px'; tip.classList.remove('hidden'); };
+    g.onmouseleave=()=>tip.classList.add('hidden'); g.onclick=()=>openEntry(n.id); });
+  svg.querySelectorAll('g[data-hub]').forEach(g=>{ g.onclick=()=>showCluster(g.dataset.hub);
+    g.onmouseenter=()=>svg.querySelectorAll(`line[data-t="${CSS.escape(g.dataset.hub)}"]`).forEach(l=>l.classList.add('hl'));
+    g.onmouseleave=()=>svg.querySelectorAll('line.hl').forEach(l=>l.classList.remove('hl')); });
+  // strongest connections (hubs that appear together)
+  const pc={}; mem.forEach(e=>{ const hs=[...(e.tags||[]).map(t=>'#'+t),...(e.location?['📍 '+e.location]:[]),...(e.people||[]).map(p=>'👤 '+p)]; for(let i=0;i<hs.length;i++) for(let j=i+1;j<hs.length;j++){ const k=[hs[i],hs[j]].sort().join('  +  '); pc[k]=(pc[k]||0)+1; } });
+  const pairs=Object.entries(pc).filter(x=>x[1]>1).sort((a,b)=>b[1]-a[1]).slice(0,6);
+  $('#pairs').innerHTML=pairs.length? pairs.map(([k,v])=>`<div><b>${esc(k)}</b><span>${v} memories together</span></div>`).join('') : '<span style="color:var(--muted);font-size:14px">When the same people, places or tags show up together in 2+ memories, they\'ll appear here.</span>';
+
+  const groups=[...hubs.values()].sort((a,b)=>b.n-a.n).slice(0,14);
+  $('#clusters').innerHTML=groups.length? groups.map(g=>`<button class="chip" data-hubc="${esc(g.id)}" style="background:${col[g.kind]}22;color:${col[g.kind]};cursor:pointer">${esc(g.label)} · ${g.n} ${g.n===1?'memory':'memories'}</button>`).join('') : '<span style="color:var(--muted);font-size:14px">Add tags, places or people to your entries to form clusters.</span>';
+  $$('#clusters [data-hubc]').forEach(b=>b.onclick=()=>showCluster(b.dataset.hubc));
+  if(selHub && hubs.has(selHub)) showCluster(selHub,true);
+}
+$('#visFilter').onchange=drawSky; $('#linkBy').onchange=()=>{ skyState=null; drawSky(); };
+let skyView={k:1,tx:0,ty:0,W:900,H:620}, skyData=null, selHub=null;
+function applyView(){ const g=$('#skyWorld'); if(g) g.setAttribute('transform',`translate(${skyView.tx} ${skyView.ty}) scale(${skyView.k})`); }
+function zoomAt(f,cx=skyView.W/2,cy=skyView.H/2){ const k=Math.min(4,Math.max(.5,skyView.k*f)); f=k/skyView.k; skyView.tx=cx-(cx-skyView.tx)*f; skyView.ty=cy-(cy-skyView.ty)*f; skyView.k=k; applyView(); }
+$('#zIn').onclick=()=>zoomAt(1.3); $('#zOut').onclick=()=>zoomAt(1/1.3); $('#zReset').onclick=()=>{ skyView.k=1; skyView.tx=0; skyView.ty=0; applyView(); };
+$('#skyShuffle').onclick=()=>{ skyState=null; drawSky(); };
+(function(){ const svg=$('#skySvg'); let pan=null;
+  const toLocal=e=>{ const r=svg.getBoundingClientRect(); return [(e.clientX-r.left)*skyView.W/r.width,(e.clientY-r.top)*skyView.H/r.height]; };
+  svg.addEventListener('wheel',e=>{ e.preventDefault(); const [x,y]=toLocal(e); zoomAt(e.deltaY<0?1.12:1/1.12,x,y); },{passive:false});
+  svg.addEventListener('pointerdown',e=>{ if(e.target.closest('g[data-id],g[data-hub]')) return; pan={x:e.clientX,y:e.clientY,tx:skyView.tx,ty:skyView.ty}; svg.classList.add('panning'); try{svg.setPointerCapture(e.pointerId);}catch{} });
+  svg.addEventListener('pointermove',e=>{ if(!pan) return; const r=svg.getBoundingClientRect(); skyView.tx=pan.tx+(e.clientX-pan.x)*skyView.W/r.width; skyView.ty=pan.ty+(e.clientY-pan.y)*skyView.H/r.height; applyView(); });
+  const end=()=>{ pan=null; svg.classList.remove('panning'); }; svg.addEventListener('pointerup',end); svg.addEventListener('pointercancel',end);
+  svg.style.touchAction='none'; })();
+function applyFind(){ const q=$('#starFind').value.trim().toLowerCase(); const svg=$('#skySvg'); if(!skyData) return;
+  svg.querySelectorAll('g[data-id],g[data-hub],line').forEach(el=>el.classList.remove('dim','hit')); if(!q) return;
+  const hitIds=new Set();
+  Object.values(skyData.byId).forEach(n=>{ const txt=n.hub? n.label.toLowerCase() : [n.label, isSealed(n.entry)?'':n.entry.body, n.entry.location, ...(n.entry.tags||[]).map(t=>'#'+t), ...(n.entry.people||[])].join(' ').toLowerCase(); if(txt.includes(q)) hitIds.add(n.id); });
+  svg.querySelectorAll('g[data-id]').forEach(g=>g.classList.add(hitIds.has(g.dataset.id)?'hit':'dim'));
+  svg.querySelectorAll('g[data-hub]').forEach(g=>{ if(!hitIds.has(g.dataset.hub)) g.classList.add('dim'); });
+  svg.querySelectorAll('line').forEach(l=>{ if(!(hitIds.has(l.dataset.s)||hitIds.has(l.dataset.t))) l.classList.add('dim'); });
+}
+$('#starFind').addEventListener('input',applyFind);
+function showCluster(id,quiet){
+  if(!skyData) return; const n=skyData.byId[id]; if(!n) return; selHub=id;
+  $$('#skySvg .hubg').forEach(g=>g.classList.toggle('sel',g.dataset.hub===id));
+  const mems=skyData.links.filter(([s,t])=>t===id).map(([s])=>skyData.byId[s].entry).sort((a,b)=>b.date.localeCompare(a.date));
+  const moods={}; mems.forEach(e=>{ if(e.mood&&!isSealed(e)) moods[e.mood]=(moods[e.mood]||0)+1; }); const topMood=Object.entries(moods).sort((a,b)=>b[1]-a[1])[0];
+  const kindName={tag:'Tag',place:'Place',person:'Person'}[n.kind];
+  $('#clusterBody').innerHTML=`<h3>${esc(n.label)}</h3><div style="font-size:13px;color:var(--muted)">${kindName} · ${mems.length} ${mems.length===1?'memory':'memories'}${topMood?` · usually feels ${topMood[0]}`:''}${mems.length?` · since ${esc(fmtDate(mems.at(-1).date))}`:''}</div>
+    <div class="mlist">${mems.map(e=>`<button data-open="${esc(e.id)}">${isSealed(e)?'🔒 Sealed memory':esc((e.mood?e.mood+' ':'')+(e.type==='entry'?e.title:(e.body||'Note').slice(0,60)))}<small>${esc(fmtDate(e.date))}</small></button>`).join('')}</div>
+    <div class="row" style="margin-top:10px"><button class="btn ghost sm" id="cJournal">Open in Journal →</button></div>`;
+  $$('#clusterBody [data-open]').forEach(b=>b.onclick=()=>openEntry(b.dataset.open));
+  $('#cJournal').onclick=()=>{ if(n.kind==='tag'){ activeTag=n.label.slice(1); $('#search').value=''; } else { activeTag=null; $('#search').value=n.kind==='place'?n.label.replace('📍 ',''):n.label; } jMode='list'; $$('#jMode button').forEach(x=>x.classList.toggle('on',x.dataset.m==='list')); renderJournal(); location.hash='journal'; };
+  if(!quiet && isPhone()) $('#clusterCard').scrollIntoView({behavior:'smooth',block:'start'});
+}
+addEventListener('resize',()=>{ if(location.hash==='#constellation'){ skyState=null; drawSky(); } });
+
+/* ---------- AI assistant (tool-based, perspective-locked) ---------- */
+let aiChecked=false, sample=null, aiReady=false, chatLog=[], busy=false;
+/* ---------- voice writing (dictation) ---------- */
+let dict=null, dictTarget=null;
+async function initDictation(){
+  try{ dict=await window.claude?.use?.('dictation'); }catch{ dict=null; }
+  if(!dict) return;
+  $$('[data-mic]').forEach(b=>b.classList.remove('hidden'));
+  dict.onFinal(({text})=>{ if(!dictTarget) return; let t=text; if(!dictTarget.value) t=t.replace(/^\s+/,''); dictTarget.value+=t; $('#partial').textContent=''; });
+  dict.onPartial(({text})=>{ if(dictTarget?.id==='bodyInput') $('#partial').textContent=text?('🎙️ '+text):''; });
+  dict.onState(({state,reason})=>{ const on=state!=='idle';
+    $$('[data-mic]').forEach(b=>{ const me=on && dictTarget && b.dataset.mic===dictTarget.id; b.classList.toggle('on',me); if(b.dataset.mic==='bodyInput') b.textContent=me?'⏹ Stop':'🎙️ Speak'; });
+    if(!on){ $('#partial').textContent=''; if(reason==='unavailable'||reason==='not_granted') $$('[data-mic]').forEach(b=>b.classList.add('hidden')); if(reason==='rate_limited') toast('Voice is busy — try again shortly'); if(reason==='upstream_error') toast('Microphone problem — please type instead'); } });
+}
+$$('[data-mic]').forEach(b=>b.onclick=()=>{
+  if(!dict) return;
+  if(dict.active()){ dict.stop().catch(()=>{}); return; }
+  dictTarget=$('#'+b.dataset.mic);
+  dict.start().catch(e=>{ if(e?.code==='not_granted'){ toast('Microphone not allowed — you can still type'); $$('[data-mic]').forEach(x=>x.classList.add('hidden')); } });
+});
+
+/* ---------- auto log-out when idle ---------- */
+let lastAct=Date.now();
+['pointerdown','keydown','scroll','touchstart'].forEach(ev=>addEventListener(ev,()=>{ lastAct=Date.now(); },{passive:true}));
+setInterval(()=>{ if(profile && profile.autoLock && Date.now()-lastAct>profile.autoLock*60000){ const mins=profile.autoLock; logout(); setTimeout(()=>toast('Logged out after '+mins+' minutes idle'),50); } },20000);
+
+async function initAI(){
+  try{ sample=await window.claude?.use?.('sample'); }catch{ sample=null; }
+  aiReady=!!sample; aiChecked=true;
+  renderChat();
+  if(!aiReady){ $('#wForm').classList.add('hidden'); $('#wChips').classList.add('hidden'); $('#wCats').classList.add('hidden'); renderChat(); $('#wStatus').textContent='● Offline here'; $('#wStatus').style.color='#9d98c4'; }
+}
+const allowedVis=()=>$$('.aiVis').filter(c=>c.checked).map(c=>c.value);
+const permitted=()=>entries.filter(e=>allowedVis().includes(e.visibility||'private') && !isSealed(e));
+const brief=e=>({id:e.id,date:e.date,type:e.type,title:e.type==='entry'?e.title:undefined,mood:e.mood||undefined,tags:e.tags,location:e.location||undefined,people:e.people,excerpt:(e.body||'').slice(0,220)});
+let seenIds=new Set();
+const TOOLS=[
+  {name:'search_entries',description:'Search the owner\'s permitted diary entries. All filters optional. Returns up to 15 matches with short excerpts.',
+   inputSchema:{type:'object',properties:{query:{type:'string',description:'words to look for'},tag:{type:'string'},person:{type:'string'},location:{type:'string'},from_date:{type:'string',description:'YYYY-MM-DD'},to_date:{type:'string',description:'YYYY-MM-DD'},type:{type:'string',enum:['entry','note']}}},
+   execute(i){ const words=String(i.query||'').toLowerCase().split(/\s+/).filter(w=>w.length>2);
+     let r=permitted().filter(e=>(!i.tag||(e.tags||[]).includes(String(i.tag).toLowerCase().replace('#','')))&&(!i.person||(e.people||[]).some(p=>p.includes(String(i.person).toLowerCase())))&&(!i.location||(e.location||'').includes(String(i.location).toLowerCase()))&&(!i.from_date||e.date>=i.from_date)&&(!i.to_date||e.date<=i.to_date)&&(!i.type||e.type===i.type));
+     if(words.length){ r=r.map(e=>{ const t=[e.title,e.body,e.location,...(e.tags||[]),...(e.people||[])].join(' ').toLowerCase(); return [e,words.filter(w=>t.includes(w)).length]; }).filter(x=>x[1]>0).sort((a,b)=>b[1]-a[1]).map(x=>x[0]); }
+     else r.sort((a,b)=>b.date.localeCompare(a.date));
+     const out=r.slice(0,15).map(brief); out.forEach(o=>seenIds.add(o.id)); return {count:r.length,results:out}; }},
+  {name:'get_entry',description:'Read the full text of one permitted entry by id.',inputSchema:{type:'object',properties:{id:{type:'string'}},required:['id']},
+   execute(i){ const e=permitted().find(x=>x.id===i.id); if(!e) throw new Error('No permitted entry with that id'); seenIds.add(e.id); return {...brief(e),body:(e.body||'').slice(0,4000)}; }},
+  {name:'diary_overview',description:'Counts of permitted entries, date range, and the most used tags, places and people.',inputSchema:{type:'object',properties:{}},
+   execute(){ const p=permitted(), c=k=>{ const m={}; p.forEach(e=>[].concat(e[k]||[]).filter(Boolean).forEach(v=>m[v]=(m[v]||0)+1)); return Object.entries(m).sort((a,b)=>b[1]-a[1]).slice(0,12); };
+     const ds=p.map(e=>e.date).sort(); return {total:p.length,entries:p.filter(e=>e.type==='entry').length,notes:p.filter(e=>e.type==='note').length,first:ds[0],last:ds.at(-1),today:todayISO(),top_tags:c('tags'),top_places:c('location'),top_people:c('people')}; }}
+];
+const LOCK=`You are Adlieu AI, the warm, caring diary companion inside the ADLIEU personal diary app, chatting with ${'{NAME}'}.
+PERSONALITY: kind, encouraging, a good listener — like a supportive friend. Chat style: short messages (usually 1–4 sentences, max ~120 words), at most one fitting emoji. Reply in the SAME language the owner uses (English, Filipino/Tagalog, Taglish or Bisaya). Plain text only, no markdown headings or bullet symbols unless asked for steps.
+WHAT YOU CAN DO: listen and respond to feelings; give gentle general encouragement, ideas and practical tips; suggest diary prompts; help draft an entry when asked; and answer questions about their own memories using the diary tools.
+PERSPECTIVE LOCK — follow strictly:
+- You know NOTHING about the owner's life except what the diary tools return. Use the tools whenever the question touches their past, people, places, moods or entries.
+- Never invent, guess or embellish personal facts, people, feelings or events. If the tools return nothing relevant, say you couldn't find it in their diary.
+- Cite every personal claim from the diary with the entry id in double brackets right after it, like [[abc123]]. Only cite ids the tools returned.
+- If the owner seems in serious distress or mentions self-harm, respond with care and encourage them to reach out to someone they trust or a local helpline.
+Today's date is ${'{TODAY}'}.`;
+function renderAnswer(el,text){
+  el.innerHTML=''; const parts=String(text).split(/\[\[([^\]]+)\]\]/g); let n=0; const map={};
+  parts.forEach((p,i)=>{ if(i%2===0){ el.appendChild(document.createTextNode(p)); return; }
+    const ids=p.split(/[,\s]+/).filter(Boolean);
+    ids.forEach(id=>{ const e=entries.find(x=>x.id===id); if(!e) return; if(!map[id]) map[id]=++n;
+      const b=document.createElement('button'); b.className='cite'; b.textContent=map[id]; b.title=(e.type==='entry'?e.title:'Note')+' · '+e.date; b.onclick=()=>openEntry(id); el.appendChild(b); }); });
+}
+const ORB=`<span class="orb"><i class="logo"></i></span>`;
+function renderChat(){
+  const first=(profile?.name||'').split(' ')[0];
+  [['#wChat',true]].forEach(([sel,w])=>{
+    const c=$(sel); if(!c) return; c.innerHTML='';
+    if(!chatLog.length){
+      c.innerHTML= w? `<div class="hello">${ORB}<b>Hi${first?', '+esc(first):''}! I'm Adlieu AI 🌙</b>${aiReady===false&&aiChecked?'I\'m not available in this browser right now. Your diary still works — try again later 💗':'How are you feeling today? I can listen, cheer you on, or look back at your memories with you.'}</div>`
+        : `<div style="color:var(--muted);text-align:center;margin:auto;max-width:380px;font-size:14px">Ask anything about your own story — Adlieu AI searches your permitted entries and cites what it finds.</div>`;
+      return; }
+    chatLog.forEach(m=>{ const d=document.createElement('div'); d.className='msg '+(m.role==='user'?'u':'a');
+      if(m.role==='user') d.textContent=m.content;
+      else if(!m.content){ d.innerHTML='<span class="typing"><i></i><i></i><i></i></span>'; }
+      else { const s=document.createElement('div'); renderAnswer(s,m.content); d.appendChild(s); }
+      if(m.role!=='user' && m.tools){ const t=document.createElement('div'); t.className='tools'; t.textContent=m.tools; d.appendChild(t); }
+      if(m.role!=='user' && m.content && !m.error && !(busy && m===chatLog.at(-1))){ const a=document.createElement('div'); a.className='macts'; const i=chatLog.indexOf(m);
+        a.innerHTML=`<button data-act="copy" data-i="${i}">📋 Copy</button>${tts?`<button data-act="say" data-i="${i}">🔊 Listen</button>`:''}<button data-act="save" data-i="${i}">✍️ Save as entry</button>`; d.appendChild(a); }
+      c.appendChild(d); });
+    c.scrollTop=c.scrollHeight; });
+}
+async function ask(text){
+  const q=String(text ?? $('#wInput').value).trim(); if(!q||busy) return;
+  if(!sample){ toast('Adlieu AI isn\'t available in this view'); return; }
+  busy=true; $('#wSend').disabled=true; $('#wInput').value='';
+  $('#wStatus').textContent='● typing…';
+  chatLog.push({role:'user',content:q}); const ans={role:'assistant',content:'',tools:''}; chatLog.push(ans); renderChat();
+  const used=[];
+  const tools=TOOLS.map(t=>({...t,execute:async inp=>{ used.push(t.name.replace(/_/g,' ')); ans.tools='📖 Looked at your diary'; renderChat(); return t.execute(inp||{}); }}));
+  const sys=LOCK.replace('{NAME}',profile.name).replace('{TODAY}',todayISO());
+  const base=chatLog.slice(0,-1); const clean=base.filter((m,i)=>!m.error && !(m.role==='user' && base[i+1]?.error) && m.content);
+  const alt=[]; clean.forEach(m=>{ if(alt.length && alt.at(-1).role===m.role) alt[alt.length-1]=m; else alt.push(m); });
+  let win=alt.slice(-7); while(win.length && win[0].role!=='user') win=win.slice(1);
+  const hist=win.map((m,i,arr)=>({role:m.role,content:(m.role==='user'&&i===arr.length-1? sys+'\n\nOwner says: ':'')+(m.content||'…')}));
+  try{
+    const r=await ADLIEU_FB.chat({ message:q, history:win.slice(0,-1).map(m=>({role:m.role,content:String(m.content).slice(0,4000)})), allow:allowedVis(), today:todayISO() });
+    if(r.usedTools){ ans.tools='📖 Looked at your diary'; }
+    ans.content=r.text||ans.content||'I couldn\'t find anything about that in your diary.';
+    if(wOpen() && voiceOn) speakReply(ans.content);
+    if(!wOpen()){ unread++; $('#fabBadge').textContent=unread; $('#fabBadge').classList.remove('hidden'); }
+  }catch(e){ ans.content = e?.code==='rate_limited'?'I need a short breather — please try again in a minute. 🌙': e?.code==='not_granted'?'Please log in again to chat with Adlieu AI.': e?.code==='ai_unavailable'?'Adlieu AI isn\'t set up on this Firebase project yet (deploy the Cloud Functions and add the API key — see README).':'Sorry, something went wrong. Please try again.'; ans.tools=''; ans.error=true; }
+  busy=false; $('#wSend').disabled=false; $('#wStatus').textContent='● Active now'; renderChat(); saveChat();
+}
+const plainAI=t=>String(t||'').replace(/\s*\[\[[^\]]+\]\]/g,'').trim();
+$('#wChat').addEventListener('click',async e=>{ const b=e.target.closest('[data-act]'); if(!b) return; const m=chatLog[+b.dataset.i]; if(!m) return;
+  if(b.dataset.act==='copy'){ try{ await navigator.clipboard.writeText(plainAI(m.content)); toast('Copied 📋'); }catch{ toast('Could not copy here'); } }
+  if(b.dataset.act==='say'){ speakReply(m.content); }
+  if(b.dataset.act==='save'){ const f=$('#entryForm'); resetEditor(); f.title.value='From my chat with Adlieu AI'; f.body.value=plainAI(m.content); f.tags.value='adlieu ai, reflection'; if(isPhone()) closeW(); location.hash='today'; setTimeout(()=>{ f.scrollIntoView({behavior:'smooth',block:'start'}); f.body.focus(); },120); toast('Added to a new entry — edit and save ✍️'); }
+});
+let chatTimer=null;
+async function saveChat(){ try{ await Store.setChat(chatLog.filter(m=>m.content&&!m.error).slice(-40).map(m=>({role:m.role,content:String(m.content).slice(0,4000)}))); }catch{} }
+async function loadChat(){ try{ const log=await Store.getChat(); chatLog=Array.isArray(log)?log:[]; }catch{ chatLog=[]; } renderChat(); }
+
+/* ---------- floating Adlieu AI widget ---------- */
+let unread=0, voiceOn=false, tts=null;
+const wOpen=()=>!$('#wchat').classList.contains('hidden');
+const CHIPSETS={
+  '💭 Feelings':['I feel tired 😴','I need motivation 💪',"I'm happy today! 😊",'I feel stressed 😣','I feel lonely 🥺','Pagod ako ngayon'],
+  '🔍 Memories':['Summarize my week 📖','What made me smile lately? ✨','Kumusta ang mood ko this week?','What have I written about family? 👪','Which places do I write about most? 📍','Remind me of a happy memory 🌈'],
+  '✍️ Write':['Help me write today\'s entry ✍️','Give me a journaling prompt 📝','Guide me through a 3-question reflection 🌙','Turn this into a diary entry: ','Help me write a letter to my future self 💌'],
+  '🌱 Grow':['How can I sleep better tonight? 😴','Give me a 2-minute calming exercise 🧘','Help me plan a better tomorrow 📅','Ideas for a small act of kindness 💗','Tips para hindi ma-stress sa school 📚']};
+let chipCat=Object.keys(CHIPSETS)[0];
+function renderChips(){ $('#wCats').innerHTML=Object.keys(CHIPSETS).map(k=>`<button type="button" class="${k===chipCat?'on':''}">${k}</button>`).join('');
+  $$('#wCats button').forEach(b=>b.onclick=()=>{ chipCat=b.textContent; renderChips(); });
+  $('#wChips').innerHTML=CHIPSETS[chipCat].map(c=>`<button type="button">${esc(c)}</button>`).join(''); $('#wChips').scrollLeft=0;
+  $$('#wChips button').forEach(b=>b.onclick=()=>{ const t=b.textContent; if(t.endsWith(': ')){ $('#wInput').value=t; $('#wInput').focus(); } else ask(t); }); }
+renderChips();
+function openW(){ $('#fabTip').classList.add('hidden'); $('#wchat').classList.remove('hidden'); $('#navAI').classList.add('active'); placePanel(); unread=0; $('#fabBadge').classList.add('hidden'); renderChat(); if(matchMedia('(hover:hover) and (pointer:fine)').matches) setTimeout(()=>$('#wInput').focus(),60); }
+function closeW(){ $('#wchat').classList.add('hidden'); $('#navAI')?.classList.remove('active'); $('#wchat').classList.remove('big'); try{ tts?.stop(); }catch{} }
+/* drag the bubble anywhere */
+const FAB=$('#fab'); let fabDrag=null, justDragged=false;
+const isPhone=()=>matchMedia('(max-width:720px)').matches;
+function fabSize(){ return FAB.offsetWidth||64; }
+function clampFab(x,y){ const m=8, sz=fabSize(); return [Math.min(Math.max(m,x),innerWidth-sz-m), Math.min(Math.max(m,y),innerHeight-sz-m)]; }
+function setFab(x,y){ [x,y]=clampFab(x,y); FAB.style.left=x+'px'; FAB.style.top=y+'px'; FAB.style.right='auto'; FAB.style.bottom='auto'; }
+const EDGE=()=>isPhone()?22:36;
+function sideX(side){ return side==='left'? EDGE() : innerWidth-fabSize()-EDGE(); }
+function snapFab(animate){ const r=FAB.getBoundingClientRect(); const side=(r.left+r.width/2)<innerWidth/2?'left':'right';
+  if(animate){ FAB.classList.add('snapping'); setTimeout(()=>{ FAB.classList.remove('snapping'); if(wOpen()) placePanel(); },320); }
+  setFab(sideX(side),r.top); return side; }
+function saveFab(side){ const r=FAB.getBoundingClientRect(), sz=fabSize(); try{ localStorage.setItem('adlieu:fabpos',JSON.stringify({side,fy:r.top/Math.max(1,innerHeight-sz)})); }catch{} }
+function restoreFab(){ let p=null; try{ p=JSON.parse(localStorage.getItem('adlieu:fabpos')||'null'); }catch{} if(!p||!p.side) return; const sz=fabSize(); setFab(sideX(p.side),p.fy*(innerHeight-sz)); }
+FAB.addEventListener('pointerdown',e=>{ if(e.button>0) return; const r=FAB.getBoundingClientRect(); fabDrag={sx:e.clientX,sy:e.clientY,ox:e.clientX-r.left,oy:e.clientY-r.top,moved:false}; try{FAB.setPointerCapture(e.pointerId);}catch{} });
+FAB.addEventListener('pointermove',e=>{ if(!fabDrag) return; if(!fabDrag.moved && Math.hypot(e.clientX-fabDrag.sx,e.clientY-fabDrag.sy)<7) return;
+  if(!fabDrag.moved){ fabDrag.moved=true; FAB.classList.add('dragging'); $('#fabTip').classList.add('hidden'); }
+  setFab(e.clientX-fabDrag.ox,e.clientY-fabDrag.oy); if(wOpen()) placePanel(); e.preventDefault(); });
+const endDrag=()=>{ if(!fabDrag) return; if(fabDrag.moved){ justDragged=true; setTimeout(()=>justDragged=false,60); saveFab(snapFab(true)); try{localStorage.setItem('adlieu:fabtip','1');}catch{} } FAB.classList.remove('dragging'); fabDrag=null; };
+FAB.addEventListener('pointerup',endDrag); FAB.addEventListener('pointercancel',endDrag);
+FAB.addEventListener('click',e=>{ if(justDragged){ e.preventDefault(); return; } wOpen()? closeW(): openW(); });
+addEventListener('resize',()=>{ if(FAB.style.left) restoreFab(); if(wOpen()) placePanel(); });
+/* open the chat next to wherever the bubble is */
+function placePanel(){
+  const P=$('#wchat'); ['left','right','top','bottom','maxHeight'].forEach(k=>P.style[k]='');
+  if(isPhone() || !FAB.style.left) return;
+  const r=FAB.getBoundingClientRect(), gap=12, m=12, W=P.offsetWidth;
+  const cx=r.left+r.width/2, cy=r.top+r.height/2;
+  let left = cx>innerWidth/2 ? r.right-W : r.left; left=Math.min(Math.max(m,left),innerWidth-W-m); P.style.left=left+'px'; P.style.right='auto';
+  if(cy>innerHeight/2){ P.style.bottom=(innerHeight-r.top+gap)+'px'; P.style.top='auto'; P.style.maxHeight=(r.top-gap-m)+'px'; }
+  else { P.style.top=(r.bottom+gap)+'px'; P.style.bottom='auto'; P.style.maxHeight=(innerHeight-r.bottom-gap-m)+'px'; }
+  P.style.transformOrigin=(cy>innerHeight/2?'bottom ':'top ')+(cx>innerWidth/2?'right':'left');
+}
+function showFabTip(){ let seen=null; try{ seen=localStorage.getItem('adlieu:fabtip'); }catch{} if(seen||FAB.classList.contains('hidden')||wOpen()) return;
+  const r=FAB.getBoundingClientRect(), t=$('#fabTip'); t.classList.remove('hidden'); t.style.top=(r.top+r.height/2-15)+'px'; t.style.left=Math.max(8,r.left-t.offsetWidth-10)+'px';
+  setTimeout(()=>t.classList.add('hidden'),5000); }
+$('#wClose').onclick=closeW;
+$('#wMin').onclick=()=>{ $('#wchat').classList.add('hidden'); $('#navAI').classList.remove('active'); try{ tts?.stop(); }catch{} };
+$('#wLock').onclick=()=>{ const p=$('#wLockPanel'); p.classList.toggle('hidden'); $('#wLock').classList.toggle('on',!p.classList.contains('hidden')); };
+$('#wClear').onclick=()=>{ if(busy) return; chatLog=[]; saveChat(); try{ tts?.stop(); }catch{} renderChat(); $('#wLockPanel').classList.add('hidden'); $('#wLock').classList.remove('on'); };
+$('#wBig').onclick=()=>{ $('#wchat').classList.toggle('big'); placePanel(); };
+$('#wForm').addEventListener('submit',e=>{ e.preventDefault(); ask($('#wInput').value); });
+addEventListener('keydown',e=>{ if(e.key==='Escape' && wOpen() && $('#modal').classList.contains('hidden')) closeW(); });
+function fabVisibility(){ const show=!!profile; $('#fab').classList.toggle('hidden',!show); if(!show){ closeW(); $('#fabTip').classList.add('hidden'); } else { restoreFab(); setTimeout(showFabTip,1500); } }
+addEventListener('hashchange',fabVisibility);
+async function initVoice(){
+  try{ tts=await window.claude?.use?.('tts'); }catch{ tts=null; }
+  if(!tts) return;
+  $('#wSpeak').classList.remove('hidden');
+  tts.onState(({state,reason})=>{ const st=$('#wStatus'); if(state==='speaking'){ st.textContent='🔊 speaking…'; st.classList.add('speaking'); } else if(!busy){ st.textContent='● Active now'; st.classList.remove('speaking'); }
+    if(reason==='not_granted'){ voiceOn=false; $('#wSpeak').classList.add('hidden'); } });
+}
+$('#wSpeak').onclick=()=>{ voiceOn=!voiceOn; $('#wSpeak').classList.toggle('on',voiceOn); $('#wSpeak').title=voiceOn?'Voice replies on':'Read replies aloud';
+  if(!voiceOn){ try{ tts?.stop(); }catch{} } else { const last=[...chatLog].reverse().find(m=>m.role!=='user'&&m.content); if(last) speakReply(last.content); toast('Voice replies on 🔊'); } };
+function speakReply(t){ if(!tts) return; const plain=String(t).replace(/\[\[[^\]]+\]\]/g,'').slice(0,1900); tts.speak(plain,{voice:'airy'}).catch(()=>{}); }
+async function summarize(e){
+  const box=$('#mSummary'); const btn=$('#mSum'); btn.disabled=true; box.innerHTML='<div class="summary">Reading this entry…</div>';
+  const prompt=`Summarize this diary entry for its owner in 2 sentences, then list 2–4 key takeaways as short lines starting with "• ". Use only what is written; add no new facts. Address the owner as "you". Plain text.\n\nEntry (${e.date}${e.title?', "'+e.title+'"':''}):\n${(e.body||'').slice(0,6000)}`;
+  try{ const r=await ADLIEU_FB.summarize({ entryId:e.id, today:todayISO() }); box.firstChild.textContent=r.summary; }
+  catch(err){ box.firstChild.textContent= err?.code==='rate_limited'?'Please try again in a minute.': err?.code==='ai_unavailable'?'Adlieu AI isn\'t set up on this Firebase project yet.':'Couldn\'t summarize right now.'; }
+  btn.disabled=false;
+}
+
+resetEditor();
+boot();
+</script>
+</body>
+</html>

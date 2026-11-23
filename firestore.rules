@@ -1,0 +1,64 @@
+rules_version = '2';
+
+// ADLIEU security rules
+// Every diary lives under /users/{uid}. Only the signed-in owner of that uid can read or write it.
+// Nobody else — not other users, not visitors — can list, read or change it.
+service cloud.firestore {
+  match /databases/{database}/documents {
+
+    function isOwner(uid) {
+      return request.auth != null && request.auth.uid == uid;
+    }
+
+    // Profile: name, username, beneficiary, letter, preferences …
+    match /users/{uid} {
+      allow read, delete: if isOwner(uid);
+      allow create, update: if isOwner(uid)
+        && request.resource.data.username is string
+        && request.resource.data.username.size() <= 40
+        && request.resource.data.name is string
+        && request.resource.data.name.size() <= 60
+        && (!('legacyLetter' in request.resource.data) || request.resource.data.legacyLetter.size() <= 5000)
+        && (!('avatar' in request.resource.data) || request.resource.data.avatar.size() <= 400000);
+
+      // Owner entries, quick notes and mood check-ins
+      match /entries/{entryId} {
+        allow read, delete: if isOwner(uid);
+        allow create, update: if isOwner(uid)
+          && request.resource.data.type in ['entry', 'note']
+          && request.resource.data.body is string
+          && request.resource.data.body.size() <= 60000
+          && request.resource.data.visibility in ['private', 'family', 'beneficiary']
+          && request.resource.data.date is string
+          && request.resource.data.tags is list && request.resource.data.tags.size() <= 12
+          && request.resource.data.people is list && request.resource.data.people.size() <= 12
+          && request.resource.data.photos is list && request.resource.data.photos.size() <= 6;
+      }
+
+      // Compressed photos (stored as data URLs so the free Spark plan is enough)
+      match /photos/{photoId} {
+        allow read, delete: if isOwner(uid);
+        allow create, update: if isOwner(uid)
+          && request.resource.data.data is string
+          && request.resource.data.data.size() <= 400000
+          && request.resource.data.data.matches('^data:image/.*');
+      }
+
+      // Adlieu AI chat history
+      match /meta/{docId} {
+        allow read, write: if isOwner(uid);
+      }
+
+      // AI usage counter is written only by Cloud Functions
+      match /usage/{docId} {
+        allow read: if isOwner(uid);
+        allow write: if false;
+      }
+    }
+
+    // Everything else is closed.
+    match /{document=**} {
+      allow read, write: if false;
+    }
+  }
+}
