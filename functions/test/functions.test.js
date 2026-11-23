@@ -37,13 +37,13 @@ put(uidB, 'b1', { title: 'B only', body: 'not yours' });
 const call = (name, uid, data) => fns[name]({ auth: uid ? { uid } : null, data });
 
 test('chat requires login and a valid message', async () => {
-  await assert.rejects(call('adlieuChat', null, { message: 'hi' }), (e) => e.code === 'unauthenticated');
-  await assert.rejects(call('adlieuChat', uidA, { message: '' }), (e) => e.code === 'invalid-argument');
-  await assert.rejects(call('adlieuChat', uidA, { message: 'x'.repeat(601) }), (e) => e.code === 'invalid-argument');
+  await assert.rejects(call('adieuChat', null, { message: 'hi' }), (e) => e.code === 'unauthenticated');
+  await assert.rejects(call('adieuChat', uidA, { message: '' }), (e) => e.code === 'invalid-argument');
+  await assert.rejects(call('adieuChat', uidA, { message: 'x'.repeat(601) }), (e) => e.code === 'invalid-argument');
 });
 
 test('chat uses tools, cites only real ids, never sees sealed or other users\' entries', async () => {
-  const r = await call('adlieuChat', uidA, { message: 'Summarize my week', today: T, history: [{ role: 'assistant', content: 'hello' }, { role: 'user', content: 'a' }, { role: 'user', content: 'b' }, { role: 'evil', content: 'x' }] });
+  const r = await call('adieuChat', uidA, { message: 'Summarize my week', today: T, history: [{ role: 'assistant', content: 'hello' }, { role: 'user', content: 'a' }, { role: 'user', content: 'b' }, { role: 'evil', content: 'x' }] });
   assert.equal(r.usedTools, true);
   assert.match(r.text, /\[\[fam1\]\]/);
   assert.doesNotMatch(r.text, /invented-id/, 'invented citations are removed');
@@ -51,24 +51,24 @@ test('chat uses tools, cites only real ids, never sees sealed or other users\' e
 });
 
 test('allow filter: nothing permitted -> no citations', async () => {
-  const r = await call('adlieuChat', uidA, { message: 'hi', today: T, allow: ['beneficiary'] });
+  const r = await call('adieuChat', uidA, { message: 'hi', today: T, allow: ['beneficiary'] });
   assert.doesNotMatch(r.text, /\[\[/);
 });
 
 test('summarize: own entry ok, sealed and missing rejected, other user not reachable', async () => {
-  const r = await call('adlieuSummarize', uidA, { entryId: 'fam1', today: T });
+  const r = await call('adieuSummarize', uidA, { entryId: 'fam1', today: T });
   assert.ok(r.summary.length > 5);
-  await assert.rejects(call('adlieuSummarize', uidA, { entryId: 'cap1', today: T }), (e) => e.code === 'failed-precondition');
-  await assert.rejects(call('adlieuSummarize', uidA, { entryId: 'b1', today: T }), (e) => e.code === 'not-found');
-  await assert.rejects(call('adlieuSummarize', uidA, { entryId: '../x', today: T }), (e) => e.code === 'invalid-argument');
+  await assert.rejects(call('adieuSummarize', uidA, { entryId: 'cap1', today: T }), (e) => e.code === 'failed-precondition');
+  await assert.rejects(call('adieuSummarize', uidA, { entryId: 'b1', today: T }), (e) => e.code === 'not-found');
+  await assert.rejects(call('adieuSummarize', uidA, { entryId: '../x', today: T }), (e) => e.code === 'invalid-argument');
 });
 
 test('daily limit per user', async () => {
   // userA used 3 so far today (2 chats + 1 summary); the limit is 5
-  await call('adlieuChat', uidA, { message: 'four', today: T });
-  await call('adlieuChat', uidA, { message: 'five', today: T });
-  await assert.rejects(call('adlieuChat', uidA, { message: 'over', today: T }), (e) => e.code === 'resource-exhausted');
-  const next = await call('adlieuChat', uidA, { message: 'new day', today: '2026-11-23' });
+  await call('adieuChat', uidA, { message: 'four', today: T });
+  await call('adieuChat', uidA, { message: 'five', today: T });
+  await assert.rejects(call('adieuChat', uidA, { message: 'over', today: T }), (e) => e.code === 'resource-exhausted');
+  const next = await call('adieuChat', uidA, { message: 'new day', today: '2026-11-23' });
   assert.ok(next.text);
 });
 
@@ -76,5 +76,5 @@ test('without the API key and stub, AI reports not set up', async () => {
   delete require.cache[require.resolve('../index.js')];
   process.env.AI_FAKE = '';
   const real = require('../index.js');
-  await assert.rejects(real.adlieuChat({ auth: { uid: uidB }, data: { message: 'hi', today: T } }), (e) => e.code === 'failed-precondition');
+  await assert.rejects(real.adieuChat({ auth: { uid: uidB }, data: { message: 'hi', today: T } }), (e) => e.code === 'failed-precondition');
 });

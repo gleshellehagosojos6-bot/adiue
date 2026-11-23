@@ -1,6 +1,6 @@
 rules_version = '2';
 
-// ADLIEU security rules
+// ADIEU security rules
 // Every diary lives under /users/{uid}. Only the signed-in owner of that uid can read or write it.
 // Nobody else — not other users, not visitors — can list, read or change it.
 service cloud.firestore {
@@ -44,7 +44,7 @@ service cloud.firestore {
           && request.resource.data.data.matches('^data:image/.*');
       }
 
-      // Adlieu AI chat history
+      // Adieu AI chat history
       match /meta/{docId} {
         allow read, write: if isOwner(uid);
       }

@@ -1,6 +1,6 @@
 {
-  "name": "adlieu-functions",
-  "description": "Cloud Functions for ADLIEU — Adlieu AI with a server-side Perspective Lock",
+  "name": "adieu-functions",
+  "description": "Cloud Functions for ADIEU — Adieu AI with a server-side Perspective Lock",
   "main": "index.js",
   "engines": {
     "node": "20"

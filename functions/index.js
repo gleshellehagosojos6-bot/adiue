@@ -1,7 +1,7 @@
-/* ADLIEU — Cloud Functions
+/* ADIEU — Cloud Functions
  *
- * adlieuChat       Adlieu AI chat with tool use over the owner's diary.
- * adlieuSummarize  Summary of one entry.
+ * adieuChat       Adieu AI chat with tool use over the owner's diary.
+ * adieuSummarize  Summary of one entry.
  *
  * Perspective Lock: the model never receives the diary. It can only call the search tools below,
  * which run here (with the Admin SDK) over the signed-in owner's *permitted, unsealed* entries.
@@ -25,7 +25,7 @@ const ISO = /^\d{4}-\d{2}-\d{2}$/;
 
 /* ---------- helpers ---------- */
 function requireUser(req) {
-  if (!req.auth) throw new HttpsError('unauthenticated', 'Please log in to use Adlieu AI.');
+  if (!req.auth) throw new HttpsError('unauthenticated', 'Please log in to use Adieu AI.');
   return req.auth.uid;
 }
 const todayOf = (v) => (typeof v === 'string' && ISO.test(v) ? v : new Date().toISOString().slice(0, 10));
@@ -37,7 +37,7 @@ async function countUsage(uid, today) {
     const s = await t.get(ref);
     const d = s.exists ? s.data() : {};
     const n = d.day === today ? (d.count || 0) : 0;
-    if (n >= DAILY_LIMIT) throw new HttpsError('resource-exhausted', 'You reached today\'s Adlieu AI limit. Please try again tomorrow. 🌙');
+    if (n >= DAILY_LIMIT) throw new HttpsError('resource-exhausted', 'You reached today\'s Adieu AI limit. Please try again tomorrow. 🌙');
     t.set(ref, { day: today, count: n + 1, updatedAt: admin.firestore.FieldValue.serverTimestamp() });
   });
 }
@@ -50,7 +50,7 @@ async function loadEntries(uid) {
 function getClient() {
   if (FAKE) return fakeClient;
   const key = ANTHROPIC_API_KEY.value();
-  if (!key) throw new HttpsError('failed-precondition', 'Adlieu AI is not set up: add the ANTHROPIC_API_KEY secret.');
+  if (!key) throw new HttpsError('failed-precondition', 'Adieu AI is not set up: add the ANTHROPIC_API_KEY secret.');
   const sdk = require('@anthropic-ai/sdk');
   const Anthropic = sdk.default || sdk.Anthropic || sdk;
   return new Anthropic({ apiKey: key });
@@ -58,10 +58,10 @@ function getClient() {
 
 function aiFailure(err) {
   if (err instanceof HttpsError) return err;
-  if (err && (err.status === 429 || err.status === 529)) return new HttpsError('resource-exhausted', 'Adlieu AI is busy — please try again in a minute.');
+  if (err && (err.status === 429 || err.status === 529)) return new HttpsError('resource-exhausted', 'Adieu AI is busy — please try again in a minute.');
   if (err && err.status === 401) return new HttpsError('failed-precondition', 'The ANTHROPIC_API_KEY secret is invalid.');
-  console.error('Adlieu AI error', err);
-  return new HttpsError('internal', 'Adlieu AI had a problem. Please try again.');
+  console.error('Adieu AI error', err);
+  return new HttpsError('internal', 'Adieu AI had a problem. Please try again.');
 }
 
 /* ---------- tools (run on the server) ---------- */
@@ -124,7 +124,7 @@ function toolRunner(entries, seen) {
 }
 
 function systemPrompt(name, today) {
-  return `You are Adlieu AI, the warm, caring diary companion inside the ADLIEU personal diary app, chatting with ${name}.
+  return `You are Adieu AI, the warm, caring diary companion inside the ADIEU personal diary app, chatting with ${name}.
 PERSONALITY: kind, encouraging, a good listener — like a supportive friend. Chat style: short messages (usually 1–4 sentences, max ~120 words), at most one fitting emoji. Reply in the SAME language the owner uses (English, Filipino/Tagalog, Taglish or Bisaya). Plain text only.
 WHAT YOU CAN DO: listen and respond to feelings; give gentle general encouragement, ideas and practical tips; suggest diary prompts; help draft an entry when asked; and answer questions about their own memories using the diary tools.
 PERSPECTIVE LOCK — follow strictly:
@@ -135,8 +135,8 @@ PERSPECTIVE LOCK — follow strictly:
 Today's date is ${today}.`;
 }
 
-/* ---------- adlieuChat ---------- */
-exports.adlieuChat = onCall({ secrets: [ANTHROPIC_API_KEY], timeoutSeconds: 60, memory: '256MiB' }, async (req) => {
+/* ---------- adieuChat ---------- */
+exports.adieuChat = onCall({ secrets: [ANTHROPIC_API_KEY], timeoutSeconds: 60, memory: '256MiB' }, async (req) => {
   const uid = requireUser(req);
   const d = req.data || {};
   const message = String(d.message || '').trim();
@@ -182,8 +182,8 @@ exports.adlieuChat = onCall({ secrets: [ANTHROPIC_API_KEY], timeoutSeconds: 60, 
   return { text, usedTools };
 });
 
-/* ---------- adlieuSummarize ---------- */
-exports.adlieuSummarize = onCall({ secrets: [ANTHROPIC_API_KEY], timeoutSeconds: 60, memory: '256MiB' }, async (req) => {
+/* ---------- adieuSummarize ---------- */
+exports.adieuSummarize = onCall({ secrets: [ANTHROPIC_API_KEY], timeoutSeconds: 60, memory: '256MiB' }, async (req) => {
   const uid = requireUser(req);
   const id = String((req.data && req.data.entryId) || '');
   if (!/^[A-Za-z0-9_-]{1,64}$/.test(id)) throw new HttpsError('invalid-argument', 'Missing entry id.');

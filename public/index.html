@@ -7,8 +7,8 @@
 <meta name="mobile-web-app-capable" content="yes">
 <meta name="apple-mobile-web-app-capable" content="yes">
 <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
-<meta name="apple-mobile-web-app-title" content="ADLIEU">
-<title>ADLIEU — A Personal AI Diary</title>
+<meta name="apple-mobile-web-app-title" content="ADIEU">
+<title>ADIEU — A Personal AI Diary</title>
 <link rel="icon" href="icon.png">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700&family=Roboto:wght@400;500&family=Lora:ital,wght@0,400;0,500;1,400&display=swap" rel="stylesheet">
@@ -286,7 +286,7 @@ textarea.t{resize:vertical;font-family:Lora,serif;line-height:1.6}
 .pairs div{display:flex;justify-content:space-between;align-items:center;padding:7px 0;border-bottom:1px dashed var(--line);font-size:14px}
 .pairs span{color:var(--muted);font-size:12px}
 
-/* ---- v10 Adlieu AI ---- */
+/* ---- v10 Adieu AI ---- */
 .wcats{display:flex;gap:4px;padding:8px 12px 0;overflow-x:auto;scrollbar-width:none}
 .wcats::-webkit-scrollbar{display:none}
 .wcats button{flex:none;border:0;background:none;color:#a9b6ab;font-size:12px;font-weight:600;padding:5px 10px;border-radius:999px}
@@ -404,7 +404,7 @@ body.big-text .msg{font-size:16.5px}
 .typing{display:inline-flex;gap:4px;padding:4px 2px}.typing i{width:7px;height:7px;border-radius:50%;background:#b7b0ea;animation:bob 1.2s infinite}.typing i:nth-child(2){animation-delay:.15s}.typing i:nth-child(3){animation-delay:.3s}
 @keyframes bob{0%,60%,100%{transform:none;opacity:.5}30%{transform:translateY(-5px);opacity:1}}
 
-/* ---- Adlieu AI floating chat ---- */
+/* ---- Adieu AI floating chat ---- */
 :root{--violet:#8b7cf6;--violet2:#a99cff;--wbg:#242c27}
 .fab{position:fixed;right:36px;bottom:32px;z-index:35;width:66px;height:66px;border-radius:50%;border:0;padding:0;background:none;cursor:pointer;filter:drop-shadow(0 8px 22px rgba(122,12,27,.45));transition:transform .2s}
 .fab{touch-action:none;user-select:none;-webkit-user-select:none;cursor:grab;transition:transform .2s,filter .2s}
@@ -565,13 +565,13 @@ html,body{overflow-x:hidden;-webkit-tap-highlight-color:transparent}
 <div class="shoot"></div>
 
 <!-- Loading -->
-<div id="loading" class="gate"><div style="text-align:center"><div class="brand" style="font-size:48px">ADLIEU</div><div class="brand-sub">A PERSONAL AI DIARY</div><p style="color:var(--muted)">Opening your diary…</p></div></div>
+<div id="loading" class="gate"><div style="text-align:center"><div class="brand" style="font-size:48px">ADIEU</div><div class="brand-sub">A PERSONAL AI DIARY</div><p style="color:var(--muted)">Opening your diary…</p></div></div>
 
 <!-- Auth: Log in / Register -->
 <div id="auth" class="gate hidden">
   <div class="hearts" id="hearts"></div>
   <div class="paper torn">
-    <div class="brand">ADLIEU</div>
+    <div class="brand">ADIEU</div>
     <div class="brand-sub">A PERSONAL AI DIARY</div>
     <p style="text-align:center;margin:6px 0 14px;font-family:Lora,serif;font-style:italic">Your journal, your connections, always with you.</p>
     <div class="tabs"><button type="button" data-tab="login" class="on">Log In</button><button type="button" data-tab="register">Register Account</button></div>
@@ -613,14 +613,14 @@ html,body{overflow-x:hidden;-webkit-tap-highlight-color:transparent}
 
 <!-- App -->
 <div id="app" class="app hidden">
-  <header class="mtop"><div class="brand">ADLIEU</div><div class="row" style="gap:8px"><button class="ib" id="aboutMob" title="About ADLIEU">ⓘ</button><button class="logout" id="logoutBtn3">Log out</button></div></header>
+  <header class="mtop"><div class="brand">ADIEU</div><div class="row" style="gap:8px"><button class="ib" id="aboutMob" title="About ADIEU">ⓘ</button><button class="logout" id="logoutBtn3">Log out</button></div></header>
   <nav class="side">
-    <div class="brand">ADLIEU</div>
+    <div class="brand">ADIEU</div>
     <div class="brand-sub">A PERSONAL AI DIARY</div>
     <button class="navbtn" data-view="today"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="4"/><path d="M12 2v2M12 20v2M4.9 4.9l1.4 1.4M17.7 17.7l1.4 1.4M2 12h2M20 12h2M4.9 19.1l1.4-1.4M17.7 6.3l1.4-1.4"/></svg><span>Today</span></button>
     <button class="navbtn" data-view="journal"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M4 4h12a4 4 0 0 1 4 4v12H8a4 4 0 0 1-4-4z"/><path d="M8 8h8M8 12h6"/></svg><span>Journal</span></button>
     <button class="navbtn" data-view="constellation"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="5" cy="6" r="2"/><circle cx="18" cy="5" r="2"/><circle cx="12" cy="13" r="2"/><circle cx="19" cy="19" r="2"/><circle cx="5" cy="19" r="2"/><path d="M6.7 7.2l3.7 4.3M13.6 11.6l3-5M13.5 14.5l4 3.3M10.3 14.2l-3.6 3.6"/></svg><span>Constellation</span></button>
-    <button class="navbtn" data-view="assistant" id="navAI"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 3l1.8 4.7L18.5 9.5l-4.7 1.8L12 16l-1.8-4.7L5.5 9.5l4.7-1.8z"/><path d="M19 15l.8 2.2L22 18l-2.2.8L19 21l-.8-2.2L16 18l2.2-.8z"/></svg><span>Adlieu AI</span></button>
+    <button class="navbtn" data-view="assistant" id="navAI"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 3l1.8 4.7L18.5 9.5l-4.7 1.8L12 16l-1.8-4.7L5.5 9.5l4.7-1.8z"/><path d="M19 15l.8 2.2L22 18l-2.2.8L19 21l-.8-2.2L16 18l2.2-.8z"/></svg><span>Adieu AI</span></button>
     <button class="navbtn" data-view="profile"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="8" r="4"/><path d="M4 21c1-4 4.5-6 8-6s7 2 8 6"/></svg><span>Profile</span></button>
     <button class="navbtn nav-about" data-view="about"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="9"/><path d="M12 11v6M12 7.5v.01"/></svg><span>About</span></button>
     <div class="spacer"></div>
@@ -751,12 +751,12 @@ html,body{overflow-x:hidden;-webkit-tap-highlight-color:transparent}
     <!-- ABOUT -->
     <section id="v-about" class="view hidden">
       <div class="paper torn about-hero">
-        <div class="brand">ADLIEU</div>
+        <div class="brand">ADIEU</div>
         <div class="brand-sub" style="color:#2f7a52;margin-bottom:0">A PERSONAL AI DIARY</div>
         <p>A secure, AI-enhanced digital diary for personal reflection and family connection — a place to keep your story, understand yourself better, and one day pass your memories on to the people you love.</p>
       </div>
 
-      <h2 class="sec-h">Where ADLIEU is <span class="hl">headed</span></h2>
+      <h2 class="sec-h">Where ADIEU is <span class="hl">headed</span></h2>
       <div class="mv">
         <div class="paper tape"><h3>Mission</h3><p>To give every person a private, beautiful space to write their life down every day — and an AI companion that helps them reflect on it, without ever taking their story away from them.</p></div>
         <div class="paper tape"><h3>Vision</h3><p>A world where no family memory is lost: where today's quick notes become tomorrow's legacy, safely handed to a trusted beneficiary when the time comes.</p></div>
@@ -765,7 +765,7 @@ html,body{overflow-x:hidden;-webkit-tap-highlight-color:transparent}
       <h2 class="sec-h">Our <span class="hl">goals</span></h2>
       <div class="card dark"><ul style="margin:0;padding-left:20px;line-height:1.9;color:#e2e8e1">
         <li><b>Build the habit</b> — make writing quick and rewarding with daily notes, prompts, streaks and voice writing.</li>
-        <li><b>Help people understand themselves</b> — mood tracking, a mood calendar, Memory Lane and Adlieu AI summaries turn entries into insight.</li>
+        <li><b>Help people understand themselves</b> — mood tracking, a mood calendar, Memory Lane and Adieu AI summaries turn entries into insight.</li>
         <li><b>Connect memories</b> — the Constellation links stories by the people, places and themes they share.</li>
         <li><b>Protect privacy first</b> — hashed passwords, private storage per account, and an AI that can only see what the owner allows.</li>
         <li><b>Preserve a legacy</b> — time capsules and a registered beneficiary so memories can be passed on.</li>
@@ -784,18 +784,18 @@ html,body{overflow-x:hidden;-webkit-tap-highlight-color:transparent}
         <div class="card"><div class="ic">🔐</div><h4>Registration &amp; Login</h4><p>Personal accounts with hashed passwords, profile, beneficiary and auto log-out.</p></div>
         <div class="card"><div class="ic">✨</div><h4>Constellation</h4><p>Auto-generated memory stars linked by tags, places and people, with permission filters.</p></div>
         <div class="card"><div class="ic">📔</div><h4>Daily Notes &amp; Entries</h4><p>Quick notes, deep reflections, moods, tags, photos, favorites and time capsules.</p></div>
-        <div class="card"><div class="ic">🤖</div><h4>Adlieu AI</h4><p>Summaries and cited answers using only the owner's permitted entries — Perspective Lock.</p></div>
+        <div class="card"><div class="ic">🤖</div><h4>Adieu AI</h4><p>Summaries and cited answers using only the owner's permitted entries — Perspective Lock.</p></div>
       </div>
 
       <h2 class="sec-h">How your <span class="hl">privacy</span> is protected</h2>
       <div class="card dark" style="line-height:1.8;color:#e2e8e1;font-size:15px">
-        Your password is never stored — only a salted PBKDF2 hash. Each account's entries and photos live in private storage tied to your sign-in. Adlieu AI cannot read your diary directly: it can only call search tools over the entries you allow, it skips sealed time capsules, and it is instructed never to invent personal facts and to cite every claim.
+        Your password is never stored — only a salted PBKDF2 hash. Each account's entries and photos live in private storage tied to your sign-in. Adieu AI cannot read your diary directly: it can only call search tools over the entries you allow, it skips sealed time capsules, and it is instructed never to invent personal facts and to cite every claim.
       </div>
 
       <h2 class="sec-h">Roadmap — what <span class="hl">comes next</span></h2>
       <div class="road">
         <div class="ph done"><h4>Phase 1 · Foundation</h4><div class="tagline">Completed</div>
-          <ul><li>Register / log in accounts with profile and beneficiary</li><li>Daily notes and owner entries with tags, location, people and photos</li><li>Search, tag filters and the Constellation map</li><li>Adlieu AI with cited answers and Perspective Lock</li><li>Works on computer, tablet and phone</li></ul></div>
+          <ul><li>Register / log in accounts with profile and beneficiary</li><li>Daily notes and owner entries with tags, location, people and photos</li><li>Search, tag filters and the Constellation map</li><li>Adieu AI with cited answers and Perspective Lock</li><li>Works on computer, tablet and phone</li></ul></div>
         <div class="ph now"><h4>Phase 2 · Habit &amp; Insight</h4><div class="tagline">This version</div>
           <ul><li>Writing streaks, favorites and a weekly mood strip</li><li>Prompt of the day and Memory Lane throwbacks</li><li>Mood calendar view</li><li>Time capsules that stay sealed until a chosen date</li><li>Voice writing (dictation) and auto log-out</li></ul></div>
         <div class="ph"><h4>Phase 3 · Family Connection</h4><div class="tagline">Planned</div>
@@ -878,19 +878,19 @@ html,body{overflow-x:hidden;-webkit-tap-highlight-color:transparent}
 </div>
 
 
-<!-- Adlieu AI floating chat -->
-<button class="fab hidden" id="fab" title="Tap to chat · drag to move along the left or right side" aria-label="Open Adlieu AI"><span class="orb"><i class="logo"></i><i class="shine"></i><i class="dot"></i></span><span class="badge hidden" id="fabBadge">1</span></button>
+<!-- Adieu AI floating chat -->
+<button class="fab hidden" id="fab" title="Tap to chat · drag to move along the left or right side" aria-label="Open Adieu AI"><span class="orb"><i class="logo"></i><i class="shine"></i><i class="dot"></i></span><span class="badge hidden" id="fabBadge">1</span></button>
 <div class="fabtip hidden" id="fabTip">✨ Drag me up, down or to the other side · tap to chat</div>
-<div class="wchat hidden" id="wchat" role="dialog" aria-label="Adlieu AI chat">
+<div class="wchat hidden" id="wchat" role="dialog" aria-label="Adieu AI chat">
   <div class="whead"><span class="orb"><i class="logo"></i><i class="dot"></i></span>
-    <div class="nm"><b>Adlieu AI</b><span id="wStatus">● Active now</span></div>
+    <div class="nm"><b>Adieu AI</b><span id="wStatus">● Active now</span></div>
     <button class="wbtn" id="wLock" title="Perspective Lock settings"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="5" y="11" width="14" height="10" rx="2"/><path d="M8 11V8a4 4 0 0 1 8 0v3"/></svg></button>
     <button class="wbtn hidden" id="wSpeak" title="Read replies aloud"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M4 9v6h4l5 4V5L8 9z" fill="currentColor" stroke="none"/><path d="M16 8.5a4.5 4.5 0 0 1 0 7M18.5 6a8 8 0 0 1 0 12"/></svg></button>
     <button class="wbtn" id="wBig" title="Expand"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M14 4h6v6M10 20H4v-6M20 4l-7 7M4 20l7-7"/></svg></button>
     <button class="wbtn" id="wMin" title="Minimize"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><path d="M5 12h14"/></svg></button>
     <button class="wbtn" id="wClose" title="Close"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><path d="M6 6l12 12M18 6L6 18"/></svg></button>
   </div>
-  <div class="wlock hidden" id="wLockPanel">🔒 <b>Perspective Lock is on.</b> Adlieu AI can't read your vault directly — it only searches the entries you allow, never opens sealed time capsules, and won't invent personal facts.
+  <div class="wlock hidden" id="wLockPanel">🔒 <b>Perspective Lock is on.</b> Adieu AI can't read your vault directly — it only searches the entries you allow, never opens sealed time capsules, and won't invent personal facts.
     <div class="row" style="margin-top:8px;gap:14px"><span style="opacity:.7">Allow:</span>
       <label><input type="checkbox" class="aiVis" value="private" checked> Private</label>
       <label><input type="checkbox" class="aiVis" value="family" checked> Family</label>
@@ -901,17 +901,17 @@ html,body{overflow-x:hidden;-webkit-tap-highlight-color:transparent}
   <div class="wchips" id="wChips"></div>
   <form class="wform" id="wForm">
     <button type="button" class="wround wmic hidden" data-mic="wInput" title="Speak"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="9" y="3" width="6" height="11" rx="3"/><path d="M5 11a7 7 0 0 0 14 0M12 18v3"/></svg></button>
-    <input id="wInput" placeholder="Message Adlieu AI…" autocomplete="off" maxlength="600">
+    <input id="wInput" placeholder="Message Adieu AI…" autocomplete="off" maxlength="600">
     <button class="wround wsend" id="wSend" title="Send"><svg viewBox="0 0 24 24" fill="currentColor"><path d="M3.4 20.4l17.4-7.5a1 1 0 0 0 0-1.8L3.4 3.6a.9.9 0 0 0-1.3 1l2.1 6.4 9.3 1-9.3 1-2.1 6.4a.9.9 0 0 0 1.3 1z"/></svg></button>
   </form>
-  <div class="wfoot">Adlieu AI only sees the diary entries you allow · Perspective Lock on</div>
+  <div class="wfoot">Adieu AI only sees the diary entries you allow · Perspective Lock on</div>
 </div>
 <div id="modal" class="modal hidden"></div>
 <div id="toast" class="toast hidden"></div>
 
 <script src="vendor/firebase-bundle.js"></script>
 <script src="firebase-config.js"></script>
-<script src="adlieu-firebase.js"></script>
+<script src="adieu-firebase.js"></script>
 <script>
 /* ---------- helpers ---------- */
 const $ = s => document.querySelector(s), $$ = s => [...document.querySelectorAll(s)];
@@ -933,13 +933,13 @@ const cleanUser = u => String(u||'').trim().replace(/\s+/g,' ');
 const normUser = u => cleanUser(u).toLowerCase();
 const validUser = u => u.length>=1 && u.length<=40;
 /* any username (spaces, ñ, emoji…) maps to a safe storage key */
-async function userKey(u){ const b=await crypto.subtle.digest('SHA-256',new TextEncoder().encode('adlieu-user:'+normUser(u))); return hex(b).slice(0,40); }
+async function userKey(u){ const b=await crypto.subtle.digest('SHA-256',new TextEncoder().encode('adieu-user:'+normUser(u))); return hex(b).slice(0,40); }
 
 /* ---------- friendly error safety net ---------- */
 function friendlyError(e){ const c=e&&e.code;
   return c==='quota_exceeded'?'Your diary storage is full — remove some photos or old entries.'
     : c==='resource_exhausted'?'Too many changes at once — please wait a moment and try again.'
-    : c==='revoked'?'Your access to this diary changed. Please reopen ADLIEU.'
+    : c==='revoked'?'Your access to this diary changed. Please reopen ADIEU.'
     : c==='invalid_argument'?'That couldn\'t be saved here (it may be too large, or this view is read-only).'
     : c==='unavailable'?'Connection hiccup — please try again in a moment.'
     : 'Something went wrong — please try again.'; }
@@ -955,7 +955,7 @@ const Store = {
   mode:'local', db:null, uid:null, entries:[], onChange:()=>{},
   async init(){
     let db=null, user=null;
-    if (window.ADLIEU_FB && ADLIEU_FB.ready) { this.db=ADLIEU_FB.db; this.mode='cloud';
+    if (window.ADIEU_FB && ADIEU_FB.ready) { this.db=ADIEU_FB.db; this.mode='cloud';
     } else {
       $('#storeBanner').textContent = 'Firebase is not set up yet — saving to this browser only. Paste your Firebase config in firebase-config.js (see README).';
       $('#storeBanner').classList.remove('hidden');
@@ -963,7 +963,7 @@ const Store = {
   },
   /* account = one diary; all its data lives under acct-<username> */
   user:null, unsub:null,
-  local(k,v){ try{ if(v===undefined) return JSON.parse(localStorage.getItem('adlieu:'+k)||'null'); localStorage.setItem('adlieu:'+k,JSON.stringify(v)); }catch{ return null; } },
+  local(k,v){ try{ if(v===undefined) return JSON.parse(localStorage.getItem('adieu:'+k)||'null'); localStorage.setItem('adieu:'+k,JSON.stringify(v)); }catch{ return null; } },
   acctRef(u){ return this.db.doc('users/'+u); }, /* u = Firebase Auth uid */
   async getAccount(u){
     if(this.mode==='cloud'){ const s=await this.acctRef(u).get(); return s.exists? s.data(): null; }
@@ -978,7 +978,7 @@ const Store = {
   async getProfile(){ return this.getAccount(this.user); },
   async deleteAccount(){ for(const e of [...this.entries]) await this.deleteEntry(e.id);
     if(this.mode==='cloud'){ await this.root.collection('meta').doc('chat').delete(); await this.acctRef(this.user).delete(); }
-    else { try{ ['chat','entries'].forEach(k=>localStorage.removeItem('adlieu:'+this.user+':'+k)); localStorage.removeItem('adlieu:acct:'+this.user); }catch{} } },
+    else { try{ ['chat','entries'].forEach(k=>localStorage.removeItem('adieu:'+this.user+':'+k)); localStorage.removeItem('adieu:acct:'+this.user); }catch{} } },
   async getChat(){ if(this.mode==='cloud'){ const s=await this.root.collection('meta').doc('chat').get(); return s.exists? s.data().log : []; } return this.local(this.user+':chat')||[]; },
   async setChat(log){ if(this.mode==='cloud') return this.root.collection('meta').doc('chat').set({log,updatedAt:new Date().toISOString()}); this.local(this.user+':chat',log); },
   async setProfile(p){ return this.setAccount(this.user,p); },
@@ -1012,7 +1012,7 @@ const Store = {
   async getPhoto(id){ if(this.photoCache[id]) return this.photoCache[id];
     let d=null; if(this.mode==='cloud'){ const s=await this.root.collection('photos').doc(id).get(); d=s.exists?s.data().data:null; } else d=this.local(this.user+':photo:'+id);
     if(d) this.photoCache[id]=d; return d; },
-  async deletePhoto(id){ delete this.photoCache[id]; if(this.mode==='cloud') return this.root.collection('photos').doc(id).delete(); try{localStorage.removeItem('adlieu:'+this.user+':photo:'+id);}catch{} }
+  async deletePhoto(id){ delete this.photoCache[id]; if(this.mode==='cloud') return this.root.collection('photos').doc(id).delete(); try{localStorage.removeItem('adieu:'+this.user+':photo:'+id);}catch{} }
 };
 
 function shrinkImage(file, max=900, q=.72){
@@ -1031,7 +1031,7 @@ const dayOfYear = () => { const d=new Date(); return Math.floor((d-new Date(d.ge
 const shiftISO = (iso,days) => { const d=new Date(iso+'T00:00'); d.setDate(d.getDate()+days); return new Date(d-d.getTimezoneOffset()*6e4).toISOString().slice(0,10); };
 
 /* ---------- gate: log in & register account ---------- */
-const SESSION_KEY='adlieu:session';
+const SESSION_KEY='adieu:session';
 function getSession(){ try{ return sessionStorage.getItem(SESSION_KEY)||localStorage.getItem(SESSION_KEY); }catch{ return null; } }
 function setSession(u,remember){ try{ sessionStorage.setItem(SESSION_KEY,u); if(remember) localStorage.setItem(SESSION_KEY,u); else localStorage.removeItem(SESSION_KEY); }catch{} }
 function clearSession(){ try{ sessionStorage.removeItem(SESSION_KEY); localStorage.removeItem(SESSION_KEY); }catch{} }
@@ -1039,9 +1039,9 @@ function clearSession(){ try{ sessionStorage.removeItem(SESSION_KEY); localStora
 async function boot(){
   await Store.init();
   if(Store.mode==='cloud'){
-    const fuid=await ADLIEU_FB.onFirstAuthState();
+    const fuid=await ADIEU_FB.onFirstAuthState();
     $('#loading').classList.add('hidden');
-    if(fuid){ try{ const a=await Store.getAccount(fuid); if(a){ Store.use(fuid); profile=a; return enterApp(); } }catch{} await ADLIEU_FB.logout(); }
+    if(fuid){ try{ const a=await Store.getAccount(fuid); if(a){ Store.use(fuid); profile=a; return enterApp(); } }catch{} await ADIEU_FB.logout(); }
     return showAuth('login');
   }
   $('#loading').classList.add('hidden');
@@ -1072,12 +1072,12 @@ $('#regForm').addEventListener('submit', async ev=>{
   btn.disabled=true; btn.textContent='Creating account…';
   if(Store.mode==='cloud'){
     try{
-      const fuid=await ADLIEU_FB.register(display, f.password.value);
+      const fuid=await ADIEU_FB.register(display, f.password.value);
       const acct={ username:display, name:f.name.value.trim(), email:f.email.value.trim(), birthday:f.birthday.value||'', bio:'',
         beneficiary:{name:f.benName.value.trim(), relation:f.benRel.value.trim()}, createdAt:new Date().toISOString() };
-      try{ await Store.setAccount(fuid,acct); }catch(e){ await ADLIEU_FB.deleteLogin().catch(()=>{}); throw new Error('Could not create the account. Please try again.'); }
+      try{ await Store.setAccount(fuid,acct); }catch(e){ await ADIEU_FB.deleteLogin().catch(()=>{}); throw new Error('Could not create the account. Please try again.'); }
       Store.use(fuid); profile=acct; f.reset(); $('#pwMeter').style.width='0';
-      enterApp(); toast('Account created — welcome to ADLIEU, '+acct.name.split(' ')[0]+' ✨');
+      enterApp(); toast('Account created — welcome to ADIEU, '+acct.name.split(' ')[0]+' ✨');
     }catch(e){ err.textContent=e.message||'Could not create the account. Please try again.'; }
     finally{ btn.disabled=false; btn.textContent='Create Account'; }
     return;
@@ -1090,7 +1090,7 @@ $('#regForm').addEventListener('submit', async ev=>{
       beneficiary:{name:f.benName.value.trim(), relation:f.benRel.value.trim()}, passSalt:pw.salt, passHash:pw.hash, createdAt:new Date().toISOString() };
     await Store.setAccount(u,acct);
     Store.use(u); profile=acct; setSession(u,true); f.reset(); $('#pwMeter').style.width='0';
-    enterApp(); toast('Account created — welcome to ADLIEU, '+acct.name.split(' ')[0]+' ✨');
+    enterApp(); toast('Account created — welcome to ADIEU, '+acct.name.split(' ')[0]+' ✨');
   }catch(e){ err.textContent='Could not create the account. Please try again.'; }
   finally{ btn.disabled=false; btn.textContent='Create Account'; }
 });
@@ -1103,7 +1103,7 @@ $('#loginForm').addEventListener('submit', async ev=>{
   if(Store.mode==='cloud'){
     try{
       if(!validUser(display)) throw new Error('Incorrect username or password.');
-      const fuid=await ADLIEU_FB.login(display, f.password.value, f.remember.checked);
+      const fuid=await ADIEU_FB.login(display, f.password.value, f.remember.checked);
       let a=await Store.getAccount(fuid);
       if(!a){ a={ username:display, name:display, email:'', birthday:'', bio:'', beneficiary:{name:'',relation:''}, createdAt:new Date().toISOString() }; await Store.setAccount(fuid,a); }
       Store.use(fuid); profile=a; f.password.value='';
@@ -1126,7 +1126,7 @@ $('#loginForm').addEventListener('submit', async ev=>{
 
 function logout(){
   document.documentElement.style.removeProperty('--orange'); document.documentElement.style.removeProperty('--onacc'); document.body.classList.remove('big-text');
-  if(Store.mode==='cloud') ADLIEU_FB.logout();
+  if(Store.mode==='cloud') ADIEU_FB.logout();
   Store.logout(); clearSession(); profile=null; entries=[]; activeTag=null; activeDate=null; favOnly=false; skyState=null; if(dict?.active()) dict.stop().catch(()=>{}); chatLog=[]; seenIds=new Set();
   closeModal(); resetEditor(); closeW(); unread=0; $('#fabBadge').classList.add('hidden'); renderChat(); $('#fab').classList.add('hidden'); location.hash=''; showAuth('login'); toast('You have been logged out');
 }
@@ -1175,7 +1175,7 @@ function badgeList(){
     talk=chatLog.filter(m=>m.role==='user').length;
   return [['🌱','First page','Write your first memory',n,1],['✍️','Storyteller','Write 10 owner entries',ent,10],['📚','Chronicler','Keep 50 memories',n,50],['🔥','On a roll','Write 3 days in a row',ls,3],
     ['🏆','Habit hero','Write 7 days in a row',ls,7],['📷','Picture perfect','Attach your first photo',ph,1],['🌻','Grateful heart','Save gratitude 5 times',gr,5],['💗','In touch','Do 10 mood check-ins',ci,10],
-    ['🔒','Time traveler','Seal a time capsule',cap,1],['⭐','Treasured','Favorite 5 memories',fav,5],['🌌','Stargazer','Light up 10 tags, places or people',hubs,10],['🤖','Deep talk','Chat with Adlieu AI',talk,1]];
+    ['🔒','Time traveler','Seal a time capsule',cap,1],['⭐','Treasured','Favorite 5 memories',fav,5],['🌌','Stargazer','Light up 10 tags, places or people',hubs,10],['🤖','Deep talk','Chat with Adieu AI',talk,1]];
 }
 function renderProfileExtras(){
   if(!profile) return;
@@ -1203,11 +1203,11 @@ $('#avInput').addEventListener('change',async ev=>{ const f=ev.target.files[0]; 
 $('#copyDiary2').onclick=copyDiary;
 $('#delAcct').onclick=async()=>{ const err=$('#delErr'), b=$('#delAcct'); err.textContent='';
   const pw=$('#delPw').value; if(!pw) return err.textContent='Type your password first.';
-  if(Store.mode==='cloud'){ try{ await ADLIEU_FB.reauth(pw); }catch(e){ return err.textContent=/Incorrect/.test(e.message)?'That password is not correct.':e.message; } }
+  if(Store.mode==='cloud'){ try{ await ADIEU_FB.reauth(pw); }catch(e){ return err.textContent=/Incorrect/.test(e.message)?'That password is not correct.':e.message; } }
   else if((await hashPassword(pw,profile.passSalt)).hash!==profile.passHash) return err.textContent='That password is not correct.';
   if(b.dataset.c!=='1'){ b.dataset.c='1'; b.textContent='Tap again — delete everything'; return; }
   b.disabled=true; b.textContent='Deleting…';
-  try{ await Store.deleteAccount(); if(Store.mode==='cloud') await ADLIEU_FB.deleteLogin(); $('#delPw').value=''; b.dataset.c=''; b.textContent='Delete forever'; b.disabled=false; logout(); setTimeout(()=>toast('Your account and diary were deleted.'),60); }
+  try{ await Store.deleteAccount(); if(Store.mode==='cloud') await ADIEU_FB.deleteLogin(); $('#delPw').value=''; b.dataset.c=''; b.textContent='Delete forever'; b.disabled=false; logout(); setTimeout(()=>toast('Your account and diary were deleted.'),60); }
   catch{ err.textContent='Something went wrong — please try again.'; b.disabled=false; b.textContent='Delete forever'; b.dataset.c=''; }
 };
 $('#profForm').addEventListener('submit', async ev=>{
@@ -1220,7 +1220,7 @@ $('#pwForm').addEventListener('submit', async ev=>{
   if(Store.mode==='cloud'){
     if(f.password.value.length<6) return err.textContent='New password must be at least 6 characters.';
     if(f.password.value!==f.confirm.value) return err.textContent='New passwords do not match.';
-    try{ await ADLIEU_FB.changePassword(f.current.value, f.password.value); f.reset(); toast('Password updated'); }
+    try{ await ADIEU_FB.changePassword(f.current.value, f.password.value); f.reset(); toast('Password updated'); }
     catch(e){ err.textContent=/Incorrect/.test(e.message)?'Current password is incorrect.':e.message; }
     return;
   }
@@ -1247,7 +1247,7 @@ function renderTagSug(){ const f=$('#entryForm'); const cur=splitList(f.tags.val
 $('#tagSug').onclick=e=>{ const b=e.target.closest('button'); if(!b) return; const f=$('#entryForm'); const cur=splitList(f.tags.value); cur.push(b.dataset.t); f.tags.value=cur.join(', '); renderTagSug(); saveDraft(); };
 $('#entryForm').tags.addEventListener('input',renderTagSug);
 /* autosave draft (new entries only) */
-const draftKey=()=>'adlieu:draft:'+(Store.user||'');
+const draftKey=()=>'adieu:draft:'+(Store.user||'');
 let draftT=null;
 function saveDraft(){ const f=$('#entryForm'); if(f.id.value||!Store.user) return; clearTimeout(draftT); draftT=setTimeout(()=>{
   const d={title:f.title.value,body:f.body.value,tags:f.tags.value,location:f.location.value,people:f.people.value,mood:draftMood};
@@ -1433,7 +1433,7 @@ function renderInsights(){
 }
 function diaryText(){
   const list=[...entries].sort((a,b)=>(a.date+(a.createdAt||'')).localeCompare(b.date+(b.createdAt||'')));
-  return `ADLIEU — ${profile.name}'s diary\nExported ${fmtDate(todayISO())}\n\n`+list.map(e=>{
+  return `ADIEU — ${profile.name}'s diary\nExported ${fmtDate(todayISO())}\n\n`+list.map(e=>{
     const head=`${fmtDate(e.date)} — ${e.type==='entry'?e.title:(e.checkin?'Mood check-in':'Quick note')}${e.mood&&!isSealed(e)?' '+e.mood:''}`;
     const body=isSealed(e)?`[Time capsule — sealed until ${fmtDate(e.sealUntil)}]`:(e.body||'');
     const meta=[(e.tags||[]).map(t=>'#'+t).join(' '),e.location?'📍 '+e.location:'',(e.people||[]).length?'with '+e.people.join(', '):''].filter(Boolean).join(' · ');
@@ -1482,7 +1482,7 @@ function openEntry(id){
     <div id="mSummary"></div>
     <div class="row" style="justify-content:space-between;margin-top:16px">
       <button class="btn ghost sm" id="mDel" style="color:#a02b45">Delete</button>
-      <div class="row">${isSealed(e)?'<button class="btn ghost sm" id="mUnseal">Open early</button>':`${aiReady?'<button class="btn ghost sm" id="mSum">✨ Summarize with Adlieu AI</button>':''}<button class="btn sm" id="mEdit">Edit</button>`}</div></div></div>`;
+      <div class="row">${isSealed(e)?'<button class="btn ghost sm" id="mUnseal">Open early</button>':`${aiReady?'<button class="btn ghost sm" id="mSum">✨ Summarize with Adieu AI</button>':''}<button class="btn sm" id="mEdit">Edit</button>`}</div></div></div>`;
   $('#mClose').onclick=closeModal;
   if($('#mEdit')) $('#mEdit').onclick=()=>editEntry(e);
   $('#mFav').onclick=async()=>{ await toggleFav(e.id); setTimeout(()=>openEntry(e.id),150); };
@@ -1630,7 +1630,7 @@ const TOOLS=[
    execute(){ const p=permitted(), c=k=>{ const m={}; p.forEach(e=>[].concat(e[k]||[]).filter(Boolean).forEach(v=>m[v]=(m[v]||0)+1)); return Object.entries(m).sort((a,b)=>b[1]-a[1]).slice(0,12); };
      const ds=p.map(e=>e.date).sort(); return {total:p.length,entries:p.filter(e=>e.type==='entry').length,notes:p.filter(e=>e.type==='note').length,first:ds[0],last:ds.at(-1),today:todayISO(),top_tags:c('tags'),top_places:c('location'),top_people:c('people')}; }}
 ];
-const LOCK=`You are Adlieu AI, the warm, caring diary companion inside the ADLIEU personal diary app, chatting with ${'{NAME}'}.
+const LOCK=`You are Adieu AI, the warm, caring diary companion inside the ADIEU personal diary app, chatting with ${'{NAME}'}.
 PERSONALITY: kind, encouraging, a good listener — like a supportive friend. Chat style: short messages (usually 1–4 sentences, max ~120 words), at most one fitting emoji. Reply in the SAME language the owner uses (English, Filipino/Tagalog, Taglish or Bisaya). Plain text only, no markdown headings or bullet symbols unless asked for steps.
 WHAT YOU CAN DO: listen and respond to feelings; give gentle general encouragement, ideas and practical tips; suggest diary prompts; help draft an entry when asked; and answer questions about their own memories using the diary tools.
 PERSPECTIVE LOCK — follow strictly:
@@ -1652,8 +1652,8 @@ function renderChat(){
   [['#wChat',true]].forEach(([sel,w])=>{
     const c=$(sel); if(!c) return; c.innerHTML='';
     if(!chatLog.length){
-      c.innerHTML= w? `<div class="hello">${ORB}<b>Hi${first?', '+esc(first):''}! I'm Adlieu AI 🌙</b>${aiReady===false&&aiChecked?'I\'m not available in this browser right now. Your diary still works — try again later 💗':'How are you feeling today? I can listen, cheer you on, or look back at your memories with you.'}</div>`
-        : `<div style="color:var(--muted);text-align:center;margin:auto;max-width:380px;font-size:14px">Ask anything about your own story — Adlieu AI searches your permitted entries and cites what it finds.</div>`;
+      c.innerHTML= w? `<div class="hello">${ORB}<b>Hi${first?', '+esc(first):''}! I'm Adieu AI 🌙</b>${aiReady===false&&aiChecked?'I\'m not available in this browser right now. Your diary still works — try again later 💗':'How are you feeling today? I can listen, cheer you on, or look back at your memories with you.'}</div>`
+        : `<div style="color:var(--muted);text-align:center;margin:auto;max-width:380px;font-size:14px">Ask anything about your own story — Adieu AI searches your permitted entries and cites what it finds.</div>`;
       return; }
     chatLog.forEach(m=>{ const d=document.createElement('div'); d.className='msg '+(m.role==='user'?'u':'a');
       if(m.role==='user') d.textContent=m.content;
@@ -1667,7 +1667,7 @@ function renderChat(){
 }
 async function ask(text){
   const q=String(text ?? $('#wInput').value).trim(); if(!q||busy) return;
-  if(!sample){ toast('Adlieu AI isn\'t available in this view'); return; }
+  if(!sample){ toast('Adieu AI isn\'t available in this view'); return; }
   busy=true; $('#wSend').disabled=true; $('#wInput').value='';
   $('#wStatus').textContent='● typing…';
   chatLog.push({role:'user',content:q}); const ans={role:'assistant',content:'',tools:''}; chatLog.push(ans); renderChat();
@@ -1679,25 +1679,25 @@ async function ask(text){
   let win=alt.slice(-7); while(win.length && win[0].role!=='user') win=win.slice(1);
   const hist=win.map((m,i,arr)=>({role:m.role,content:(m.role==='user'&&i===arr.length-1? sys+'\n\nOwner says: ':'')+(m.content||'…')}));
   try{
-    const r=await ADLIEU_FB.chat({ message:q, history:win.slice(0,-1).map(m=>({role:m.role,content:String(m.content).slice(0,4000)})), allow:allowedVis(), today:todayISO() });
+    const r=await ADIEU_FB.chat({ message:q, history:win.slice(0,-1).map(m=>({role:m.role,content:String(m.content).slice(0,4000)})), allow:allowedVis(), today:todayISO() });
     if(r.usedTools){ ans.tools='📖 Looked at your diary'; }
     ans.content=r.text||ans.content||'I couldn\'t find anything about that in your diary.';
     if(wOpen() && voiceOn) speakReply(ans.content);
     if(!wOpen()){ unread++; $('#fabBadge').textContent=unread; $('#fabBadge').classList.remove('hidden'); }
-  }catch(e){ ans.content = e?.code==='rate_limited'?'I need a short breather — please try again in a minute. 🌙': e?.code==='not_granted'?'Please log in again to chat with Adlieu AI.': e?.code==='ai_unavailable'?'Adlieu AI isn\'t set up on this Firebase project yet (deploy the Cloud Functions and add the API key — see README).':'Sorry, something went wrong. Please try again.'; ans.tools=''; ans.error=true; }
+  }catch(e){ ans.content = e?.code==='rate_limited'?'I need a short breather — please try again in a minute. 🌙': e?.code==='not_granted'?'Please log in again to chat with Adieu AI.': e?.code==='ai_unavailable'?'Adieu AI isn\'t set up on this Firebase project yet (deploy the Cloud Functions and add the API key — see README).':'Sorry, something went wrong. Please try again.'; ans.tools=''; ans.error=true; }
   busy=false; $('#wSend').disabled=false; $('#wStatus').textContent='● Active now'; renderChat(); saveChat();
 }
 const plainAI=t=>String(t||'').replace(/\s*\[\[[^\]]+\]\]/g,'').trim();
 $('#wChat').addEventListener('click',async e=>{ const b=e.target.closest('[data-act]'); if(!b) return; const m=chatLog[+b.dataset.i]; if(!m) return;
   if(b.dataset.act==='copy'){ try{ await navigator.clipboard.writeText(plainAI(m.content)); toast('Copied 📋'); }catch{ toast('Could not copy here'); } }
   if(b.dataset.act==='say'){ speakReply(m.content); }
-  if(b.dataset.act==='save'){ const f=$('#entryForm'); resetEditor(); f.title.value='From my chat with Adlieu AI'; f.body.value=plainAI(m.content); f.tags.value='adlieu ai, reflection'; if(isPhone()) closeW(); location.hash='today'; setTimeout(()=>{ f.scrollIntoView({behavior:'smooth',block:'start'}); f.body.focus(); },120); toast('Added to a new entry — edit and save ✍️'); }
+  if(b.dataset.act==='save'){ const f=$('#entryForm'); resetEditor(); f.title.value='From my chat with Adieu AI'; f.body.value=plainAI(m.content); f.tags.value='adieu ai, reflection'; if(isPhone()) closeW(); location.hash='today'; setTimeout(()=>{ f.scrollIntoView({behavior:'smooth',block:'start'}); f.body.focus(); },120); toast('Added to a new entry — edit and save ✍️'); }
 });
 let chatTimer=null;
 async function saveChat(){ try{ await Store.setChat(chatLog.filter(m=>m.content&&!m.error).slice(-40).map(m=>({role:m.role,content:String(m.content).slice(0,4000)}))); }catch{} }
 async function loadChat(){ try{ const log=await Store.getChat(); chatLog=Array.isArray(log)?log:[]; }catch{ chatLog=[]; } renderChat(); }
 
-/* ---------- floating Adlieu AI widget ---------- */
+/* ---------- floating Adieu AI widget ---------- */
 let unread=0, voiceOn=false, tts=null;
 const wOpen=()=>!$('#wchat').classList.contains('hidden');
 const CHIPSETS={
@@ -1724,13 +1724,13 @@ function sideX(side){ return side==='left'? EDGE() : innerWidth-fabSize()-EDGE()
 function snapFab(animate){ const r=FAB.getBoundingClientRect(); const side=(r.left+r.width/2)<innerWidth/2?'left':'right';
   if(animate){ FAB.classList.add('snapping'); setTimeout(()=>{ FAB.classList.remove('snapping'); if(wOpen()) placePanel(); },320); }
   setFab(sideX(side),r.top); return side; }
-function saveFab(side){ const r=FAB.getBoundingClientRect(), sz=fabSize(); try{ localStorage.setItem('adlieu:fabpos',JSON.stringify({side,fy:r.top/Math.max(1,innerHeight-sz)})); }catch{} }
-function restoreFab(){ let p=null; try{ p=JSON.parse(localStorage.getItem('adlieu:fabpos')||'null'); }catch{} if(!p||!p.side) return; const sz=fabSize(); setFab(sideX(p.side),p.fy*(innerHeight-sz)); }
+function saveFab(side){ const r=FAB.getBoundingClientRect(), sz=fabSize(); try{ localStorage.setItem('adieu:fabpos',JSON.stringify({side,fy:r.top/Math.max(1,innerHeight-sz)})); }catch{} }
+function restoreFab(){ let p=null; try{ p=JSON.parse(localStorage.getItem('adieu:fabpos')||'null'); }catch{} if(!p||!p.side) return; const sz=fabSize(); setFab(sideX(p.side),p.fy*(innerHeight-sz)); }
 FAB.addEventListener('pointerdown',e=>{ if(e.button>0) return; const r=FAB.getBoundingClientRect(); fabDrag={sx:e.clientX,sy:e.clientY,ox:e.clientX-r.left,oy:e.clientY-r.top,moved:false}; try{FAB.setPointerCapture(e.pointerId);}catch{} });
 FAB.addEventListener('pointermove',e=>{ if(!fabDrag) return; if(!fabDrag.moved && Math.hypot(e.clientX-fabDrag.sx,e.clientY-fabDrag.sy)<7) return;
   if(!fabDrag.moved){ fabDrag.moved=true; FAB.classList.add('dragging'); $('#fabTip').classList.add('hidden'); }
   setFab(e.clientX-fabDrag.ox,e.clientY-fabDrag.oy); if(wOpen()) placePanel(); e.preventDefault(); });
-const endDrag=()=>{ if(!fabDrag) return; if(fabDrag.moved){ justDragged=true; setTimeout(()=>justDragged=false,60); saveFab(snapFab(true)); try{localStorage.setItem('adlieu:fabtip','1');}catch{} } FAB.classList.remove('dragging'); fabDrag=null; };
+const endDrag=()=>{ if(!fabDrag) return; if(fabDrag.moved){ justDragged=true; setTimeout(()=>justDragged=false,60); saveFab(snapFab(true)); try{localStorage.setItem('adieu:fabtip','1');}catch{} } FAB.classList.remove('dragging'); fabDrag=null; };
 FAB.addEventListener('pointerup',endDrag); FAB.addEventListener('pointercancel',endDrag);
 FAB.addEventListener('click',e=>{ if(justDragged){ e.preventDefault(); return; } wOpen()? closeW(): openW(); });
 addEventListener('resize',()=>{ if(FAB.style.left) restoreFab(); if(wOpen()) placePanel(); });
@@ -1745,7 +1745,7 @@ function placePanel(){
   else { P.style.top=(r.bottom+gap)+'px'; P.style.bottom='auto'; P.style.maxHeight=(innerHeight-r.bottom-gap-m)+'px'; }
   P.style.transformOrigin=(cy>innerHeight/2?'bottom ':'top ')+(cx>innerWidth/2?'right':'left');
 }
-function showFabTip(){ let seen=null; try{ seen=localStorage.getItem('adlieu:fabtip'); }catch{} if(seen||FAB.classList.contains('hidden')||wOpen()) return;
+function showFabTip(){ let seen=null; try{ seen=localStorage.getItem('adieu:fabtip'); }catch{} if(seen||FAB.classList.contains('hidden')||wOpen()) return;
   const r=FAB.getBoundingClientRect(), t=$('#fabTip'); t.classList.remove('hidden'); t.style.top=(r.top+r.height/2-15)+'px'; t.style.left=Math.max(8,r.left-t.offsetWidth-10)+'px';
   setTimeout(()=>t.classList.add('hidden'),5000); }
 $('#wClose').onclick=closeW;
@@ -1770,8 +1770,8 @@ function speakReply(t){ if(!tts) return; const plain=String(t).replace(/\[\[[^\]
 async function summarize(e){
   const box=$('#mSummary'); const btn=$('#mSum'); btn.disabled=true; box.innerHTML='<div class="summary">Reading this entry…</div>';
   const prompt=`Summarize this diary entry for its owner in 2 sentences, then list 2–4 key takeaways as short lines starting with "• ". Use only what is written; add no new facts. Address the owner as "you". Plain text.\n\nEntry (${e.date}${e.title?', "'+e.title+'"':''}):\n${(e.body||'').slice(0,6000)}`;
-  try{ const r=await ADLIEU_FB.summarize({ entryId:e.id, today:todayISO() }); box.firstChild.textContent=r.summary; }
-  catch(err){ box.firstChild.textContent= err?.code==='rate_limited'?'Please try again in a minute.': err?.code==='ai_unavailable'?'Adlieu AI isn\'t set up on this Firebase project yet.':'Couldn\'t summarize right now.'; }
+  try{ const r=await ADIEU_FB.summarize({ entryId:e.id, today:todayISO() }); box.firstChild.textContent=r.summary; }
+  catch(err){ box.firstChild.textContent= err?.code==='rate_limited'?'Please try again in a minute.': err?.code==='ai_unavailable'?'Adieu AI isn\'t set up on this Firebase project yet.':'Couldn\'t summarize right now.'; }
   btn.disabled=false;
 }
 
